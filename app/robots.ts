@@ -13,6 +13,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://fatima-and-mark-invitation.weddinginvitationrsvp.com/sitemap.xml",
+    sitemap: "https://mae-and-greggy.vercel.app/sitemap.xml",
   }
 }

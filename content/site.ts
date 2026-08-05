@@ -8,21 +8,21 @@ export const siteConfig = {
     bride: "Ruby Mae G. Vergara", //Noenyl Bryle M. Gonzaga
     brideNickname: "Mae", //Ltryl
     groom: "Khey Greggy P. Moyani",
-    groomNickname: "Greg",
+    groomNickname: "Greggy",
     monogram:"/monogram/monogram.png" ,//Ltryl
     backgroundMusic:"/background_music/Haley Reinhart - Can't Help Falling In Love (Official Audio).mp3"
   },
   googleAPI:{
-    messageForm: "https://docs.google.com/forms/d/e/1FAIpQLSclTqh4cauamcT6w78B_mold9SGtW7DMPCz0M_s6H00U0m88A/formResponse",   //done
-    message: "https://script.google.com/macros/s/AKfycbyqASaaewyRchEHx6lqAutX9y0hd74Pcdehgi13KLhLiDmAKp2wIqlOPOF9XsL_1v4QwA/exec",  //done
-    guestList: "https://script.google.com/macros/s/AKfycbzso7ueXNIhdx5y5dhyC2WeEkWZ_8hPjdt7doaZ1CYzyUPdtdon3hAJLATKg6a15I3eIQ/exec",  //done
-    guestRequest: "https://script.google.com/macros/s/AKfycbwbxvkCXMdkU6kdBgrakwdOL4AaS_1S-m_eElKn4qr6zUIa9vxUMat7NloV17Qh2dJfjg/exec",  //done
-    entourage: "https://script.google.com/macros/s/AKfycbwRBthbhmuAfG8iq5HSUUX7FFjRnsxIudlVW1BkHD0ZCN6Gnnq7i6Hmq3DcbZsS_A_zOQ/exec",  //done
-    sponsors: "https://script.google.com/macros/s/AKfycbwKBdY2Ejo4qVyDICrin5NsY0xipHpSi9K1jGYqNbjuRp66A6ozPkaSz52AHCZJ1aHQBw/exec",  //done
-    weddingDetails: "https://script.google.com/macros/s/AKfycbxaqI7i5obFras3OLFKWZglfBFDMv7uc-pLZ1bu494YNRWBOyi8GpDd-U3R2Q23dlhCVw/exec",   //done
+    messageForm: "https://docs.google.com/forms/d/e/1FAIpQLScg_biDuM8tjkVvDhZwxgbIjLTmdRkxtMY9kmtWNNDUdvvBIQ/formResponse",   //done
+    message: "https://script.google.com/macros/s/AKfycbxToP-CCmR1uNl_EQkcIDCVzApqkV9--jCjbl5534qUPUecEuR6nRfyVwX9FfeW-6PJ/exec",  //done
+    guestList: "https://script.google.com/macros/s/AKfycbxwUGCC0WgQio9cXwpAZM24RpYc9uFOQWYkfjYe9SwfzMulCNR5Lemn2570L5J5eh5O/exec",  //done
+    guestRequest: "https://script.google.com/macros/s/AKfycbxwi_bWSawEm6Dxa_kRDG_QNr8NSM1sPiNXhfUDZOKY9CnZbGc2b0txp8PGZRV26YJn/exec",  //done
+    entourage: "https://script.google.com/macros/s/AKfycbxbi9O4R3Zt1lsxw6pYvfhXgHw7bTwkwXehnBrVN32x5EyN1NiovCf59LO5Ar8ephBv/exec",  //done
+    sponsors: "https://script.google.com/macros/s/AKfycbxq7GenEBE2eWOySPlGA8uFk_qJzX9hjMZqaavRDZuSgPsTcFKwd5Y3cj-1k_s_qcJO/exec",  //done
+    weddingDetails: "https://script.google.com/macros/s/AKfycbxWoI4pTXoSeqOlyLF7mhXOUhxYZjHLlTZilUPOc-rLWJe1jDqt4z1zgqtH2f1CCtM/exec",   //done
     proposalResponses: "https://script.google.com/macros/s/AKfycbwSlPEGkg_9K_OY0lqPnlkLg7hnSdQP0ZASR06dJQW5tT5ADsobyVfIevQAfDoggVxO1Q/exec",  //done
 ////google share 
-    googleShare: "https://docs.google.com/spreadsheets/d/1f-Ny_VAsH9CI-zk46vauYS0H2XKphUN0_tYlDwz1j80/edit?usp=sharing", //done
+    googleShare: "https://docs.google.com/spreadsheets/d/1Dw0Sd88bnVLtxFHh-EEP8ViAK6duGqAemdXXYCsjFgM/edit?usp=sharing", //done
   },
   wedding: {
     date: "September 14, 2026",
@@ -148,7 +148,7 @@ Now, as they prepare to say yes before God and the people they love most, Cather
   },
   snapShare: {
     googleDriveLink:
-      "https://drive.google.com/drive/folders/1Ujxcr00PqehIxfjvSJDGXu9EIszZT6SQ?usp=sharing",
+      "https://drive.google.com/drive/folders/1guL3003TCXnxN5MaZzuGkA1yi3Ia8SIS?usp=sharing",
     albumQR: "/QR/AlbumQR.png",
     hashtag: [],
     instructions: "Please scan this QR Code and upload the photos and videos you have taken during our wedding reception. We are delighted to see your snaps too!",
