@@ -3,8 +3,7 @@
 import { useMemo, useState, type ReactNode } from "react"
 import type { SiteConfig } from "@/lib/site-config"
 import { ChevronDown } from "lucide-react"
-import { Section } from "@/components/section"
-import Image from "next/image"
+import { InvitationCard } from "@/components/invitation-card"
 import { NameConnector } from "@/components/couple-name-text"
 import { Cormorant_Garamond, Cinzel } from "next/font/google"
 import { useSiteConfig } from "@/hooks/use-site-config"
@@ -19,14 +18,23 @@ const cinzel = Cinzel({
   weight: ["400", "600"],
 })
 
-const CORNER_DECO_CLASS =
-  "w-auto h-auto max-w-[140px] sm:max-w-[180px] md:max-w-[220px] lg:max-w-[260px] opacity-80 drop-shadow-[0_10px_28px_rgba(0,0,0,0.35)]"
+const CORNER_DECORATIONS = [
+  { src: "/decoration/top-right-corner.png", className: "right-0 top-0" },
+  { src: "/decoration/bottom-left-new.png", className: "bottom-0 left-0" },
+] as const
 
-const GLASS_CARD_CLASS =
-  "relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/30 bg-white/15 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.22),0_4px_14px_rgba(0,0,0,0.14)] transition-all duration-300 hover:border-white/40"
+const invitationText = {
+  accent: "text-[#BB8A3D]",
+  heading: "text-[#6B5335]",
+  body: "text-[#7A6248]",
+  muted: "text-[#8B7355]",
+}
 
-const GLASS_INNER_CLASS =
-  "rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 transition-all duration-300"
+const FAQ_ITEM_CLASS =
+  "rounded-xl border border-[#BB8A3D]/20 bg-[#F5EDE0]/60 transition-all duration-300 hover:border-[#BB8A3D]/35 hover:bg-[#F5EDE0]/80 sm:rounded-2xl"
+
+const LINK_CLASS =
+  "font-semibold text-[#BB8A3D] underline transition-colors hover:text-[#A67A35]"
 
 function CoupleNameInline() {
   const { groomNickname, brideNickname } = useSiteConfig().couple
@@ -39,9 +47,6 @@ function CoupleNameInline() {
     </>
   )
 }
-
-const LINK_CLASS =
-  "underline font-semibold text-white transition-colors hover:text-white/75"
 
 interface FAQItem {
   question: string
@@ -113,11 +118,6 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
       answer:
         "Yes, parking is available at the venue, and parking attendants, along with our coordinators, will assist you on the day",
     },
-    // {
-    //   question: "Will there be a wedding gift registry?",
-    //   answer:
-    //     "With all that we have, we are truly blessed. Your presence and prayers are what we request most. However, if you desire to give nonetheless, a monetary gift to help us begin our new life together would be humbly appreciated. You can find our gift registry information in the Gift Guide section.",
-    // },
     {
       question: "Unplugged Ceremony",
       answer:
@@ -148,11 +148,6 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
       answer:
         "We adore your little ones — truly. However, we have lovingly planned this as an adults-only celebration so that every guest, including you, can fully relax, enjoy the program, and be present in the moment.\n\nWe kindly ask that you make childcare arrangements for the day. We hope you understand, and we are so grateful that you are celebrating this milestone with us.",
     },
-    // {
-    //   question: "What if I have dietary restrictions or allergies?",
-    //   answer:
-    //     "Please let us know about any dietary restrictions or allergies when you RSVP. We want to ensure everyone can enjoy the celebration comfortably.",
-    // },
     {
       question: "How can I help the couple have a great time during their wedding?",
       answer:
@@ -164,7 +159,7 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
 function FAQAnswer({ answer }: { answer: string | ReactNode }) {
   if (typeof answer === "string" && answer.includes("[RSVP_LINK]")) {
     return (
-      <p className={`${cormorant.className} text-sm sm:text-base text-white/90 leading-relaxed sm:leading-loose whitespace-pre-line`}>
+      <p className={`${cormorant.className} text-sm leading-relaxed whitespace-pre-line sm:text-base sm:leading-loose ${invitationText.body}`}>
         {answer.split("[RSVP_LINK]")[0]}
         <a
           href="#guest-list"
@@ -183,14 +178,14 @@ function FAQAnswer({ answer }: { answer: string | ReactNode }) {
 
   if (typeof answer === "string") {
     return (
-      <p className={`${cormorant.className} text-sm sm:text-base text-white/90 leading-relaxed sm:leading-loose whitespace-pre-line`}>
+      <p className={`${cormorant.className} text-sm leading-relaxed whitespace-pre-line sm:text-base sm:leading-loose ${invitationText.body}`}>
         {answer}
       </p>
     )
   }
 
   return (
-    <div className={`${cormorant.className} text-sm sm:text-base text-white/90 leading-relaxed sm:leading-loose whitespace-pre-line`}>
+    <div className={`${cormorant.className} text-sm leading-relaxed whitespace-pre-line sm:text-base sm:leading-loose ${invitationText.body}`}>
       {answer}
     </div>
   )
@@ -206,85 +201,49 @@ export function FAQ() {
   }
 
   return (
-    <Section
+    <section
       id="faq"
-      className="relative py-16 sm:py-20 md:py-24 lg:py-28 overflow-hidden"
+      className="relative flex w-full justify-center px-4 py-8 sm:px-6 sm:py-10 md:py-12"
     >
-      {/* Corner decorations — reflected to all four corners */}
-      {/* <div className="absolute right-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute right-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
+      <InvitationCard
+        decorations={CORNER_DECORATIONS}
+        className="w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px]"
+      >
+        <div className="space-y-6 sm:space-y-8">
+          <div className="flex flex-col items-center gap-3 text-center sm:gap-4 md:gap-5">
+            <p
+              className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] uppercase tracking-[0.28em] sm:text-xs md:text-sm ${invitationText.accent}`}
+            >
+              <CoupleNameInline />
+            </p>
 
-      {/* Header */}
-      <div className="relative z-10 flex flex-col items-center gap-4 sm:gap-5 md:gap-6 text-center mt-8 sm:mt-10 md:mt-12 mb-10 sm:mb-14 md:mb-16 px-4 sm:px-6">
-        <p
-          className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] sm:text-xs md:text-sm uppercase tracking-[0.28em] text-white/90`}
-        >
-          <CoupleNameInline />
-        </p>
+            <div
+              className="flex w-full max-w-[12rem] items-center justify-center gap-2 sm:max-w-[14rem] md:max-w-[16rem]"
+              aria-hidden="true"
+            >
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+              <div className="h-1 w-1 shrink-0 rounded-full bg-[#BB8A3D]/80" />
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+            </div>
 
-        <h2
-          className="font-[family-name:var(--font-safira-march)] flex flex-col items-center gap-2.5 sm:gap-3 text-[1.35rem] sm:text-[1.75rem] md:text-[2.15rem] lg:text-[2.5rem] leading-none tracking-[0.015em] sm:tracking-[0.01em] text-white px-2 sm:px-3 my-1 sm:my-1.5 [text-shadow:0_2px_14px_rgba(0,0,0,0.22)]"
-        >
-          <span className="block">Frequently</span>
-          <span className="block">Asked</span>
-          <span className="block">Questions</span>
-        </h2>
+            <h2
+              className={`flex flex-col items-center gap-2 px-2 font-[family-name:var(--font-safira-march)] text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:gap-2.5 sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
+            >
+              <span className="block">Frequently</span>
+              <span className="block">Asked</span>
+              <span className="block">Questions</span>
+            </h2>
 
-        <p
-          className={`${cormorant.className} text-xs sm:text-sm md:text-base italic text-white/90 max-w-xl mx-auto leading-relaxed px-2 sm:px-4 mt-0.5 sm:mt-1`}
-        >
-          Helpful notes so you can simply arrive, celebrate,{" "}
-          <NameConnector size="sm">and</NameConnector>{" "}
-          enjoy this new chapter with us.
-        </p>
-      </div>
+            <p
+              className={`${cormorant.className} mx-auto max-w-xl px-2 text-xs italic leading-relaxed sm:px-4 sm:text-sm md:text-base ${invitationText.muted}`}
+            >
+              Helpful notes so you can simply arrive, celebrate,{" "}
+              <NameConnector size="sm">and</NameConnector>{" "}
+              enjoy this new chapter with us.
+            </p>
+          </div>
 
-      {/* FAQ content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
-        <div className={GLASS_CARD_CLASS}>
-          <div className="p-3 sm:p-5 md:p-7 lg:p-9 space-y-2 sm:space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {faqItems.map((item, index) => {
               const isOpen = openIndex === index
               const contentId = `faq-item-${index}`
@@ -292,25 +251,25 @@ export function FAQ() {
               return (
                 <div
                   key={index}
-                  className={`${GLASS_INNER_CLASS} ${isOpen ? "border-white/35 bg-white/15" : "hover:border-white/30 hover:bg-white/12"}`}
+                  className={`${FAQ_ITEM_CLASS} ${isOpen ? "border-[#BB8A3D]/45 bg-[#F5EDE0]/90" : ""}`}
                 >
                   <button
                     onClick={() => toggleItem(index)}
-                    className="group w-full px-3 sm:px-4 md:px-5 py-3 sm:py-3.5 md:py-4 flex items-center justify-between text-left outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors"
+                    className="group flex w-full items-center justify-between px-3 py-3 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#BB8A3D]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] sm:px-4 sm:py-3.5 md:px-5 md:py-4"
                     aria-expanded={isOpen}
                     aria-controls={contentId}
                   >
                     <span
-                      className={`${cinzel.className} font-semibold pr-3 sm:pr-4 text-xs sm:text-sm md:text-base lg:text-lg leading-snug sm:leading-relaxed transition-colors duration-200 ${
-                        isOpen ? "text-white" : "text-white/95 group-hover:text-white"
+                      className={`${cinzel.className} pr-3 text-xs font-semibold leading-snug transition-colors duration-200 sm:pr-4 sm:text-sm sm:leading-relaxed md:text-base lg:text-lg ${
+                        isOpen ? invitationText.heading : `${invitationText.body} group-hover:text-[#6B5335]`
                       }`}
                     >
                       {item.question}
                     </span>
                     <ChevronDown
                       size={18}
-                      className={`flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 text-white/80 transition-transform duration-300 ${
-                        isOpen ? "rotate-180 text-white" : "group-hover:text-white"
+                      className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 sm:h-5 sm:w-5 ${invitationText.accent} ${
+                        isOpen ? "rotate-180" : ""
                       }`}
                       aria-hidden
                     />
@@ -324,7 +283,7 @@ export function FAQ() {
                     }`}
                   >
                     <div className="overflow-hidden">
-                      <div className="px-3 sm:px-4 md:px-5 pb-3 sm:pb-4 md:pb-5 pt-0 border-t border-white/15">
+                      <div className="border-t border-[#BB8A3D]/20 px-3 pb-3 pt-0 sm:px-4 sm:pb-4 md:px-5 md:pb-5">
                         <FAQAnswer answer={item.answer} />
                       </div>
                     </div>
@@ -334,7 +293,7 @@ export function FAQ() {
             })}
           </div>
         </div>
-      </div>
-    </Section>
+      </InvitationCard>
+    </section>
   )
 }

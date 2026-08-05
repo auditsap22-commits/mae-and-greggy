@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion } from "motion/react"
 import { Instagram, Facebook, Twitter, Share2, Copy, Download, Check } from "lucide-react"
-import { Section } from "@/components/section"
+import { InvitationCard } from "@/components/invitation-card"
 import { NameConnector } from "@/components/couple-name-text"
 import { QRCodeCanvas } from "qrcode.react"
 import { useSiteConfig } from "@/hooks/use-site-config"
@@ -19,11 +19,29 @@ const cinzel = Cinzel({
   weight: ["400", "600"],
 })
 
-const GLASS_CARD_CLASS =
-  "relative overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-[2rem] border border-white/25 bg-white/15 backdrop-blur-lg shadow-[0_20px_70px_rgba(0,0,0,0.12)]"
+const CORNER_DECORATIONS = [
+  { src: "/decoration/top-right-corner.png", className: "right-0 top-0" },
+  { src: "/decoration/bottom-left-new.png", className: "bottom-0 left-0" },
+] as const
+
+const invitationText = {
+  accent: "text-[#BB8A3D]",
+  heading: "text-[#6B5335]",
+  body: "text-[#7A6248]",
+  muted: "text-[#8B7355]",
+}
 
 const INNER_PANEL_CLASS =
-  "rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-7 lg:p-8 bg-white/10 backdrop-blur-sm"
+  "rounded-xl border border-[#BB8A3D]/25 bg-[#F5EDE0]/60 p-3 sm:rounded-2xl sm:p-5 md:p-7 lg:p-8"
+
+const primaryBtnClass =
+  "flex items-center justify-center gap-1.5 rounded-full border border-[#BB8A3D]/45 bg-[#BB8A3D] px-3 py-2 text-xs font-semibold uppercase text-[#FDFBF7] shadow-[0_4px_16px_rgba(139,111,71,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#BB8A3D]/65 hover:bg-[#A67A35] hover:shadow-xl sm:gap-2 sm:px-4 sm:py-2.5 sm:text-sm"
+
+const outlineBtnClass =
+  "flex items-center justify-center gap-1.5 rounded-full border border-[#BB8A3D]/35 bg-[#FDFBF7] px-3 py-2 text-xs font-semibold uppercase text-[#BB8A3D] shadow-sm transition-all duration-200 hover:border-[#BB8A3D]/55 hover:bg-[#F5EDE0]/80 hover:shadow-md sm:gap-2 sm:px-4 sm:py-2.5 sm:text-sm"
+
+const socialBtnClass =
+  "group flex items-center justify-center gap-1.5 rounded-lg border border-[#BB8A3D]/25 bg-[#F5EDE0]/60 px-3 py-2.5 text-[#6B5335] shadow-md transition-all duration-200 hover:border-[#BB8A3D]/40 hover:bg-[#F5EDE0]/90 hover:shadow-lg sm:gap-2 sm:px-4 sm:py-3"
 
 function CoupleNameInline() {
   const { groomNickname, brideNickname } = useSiteConfig().couple
@@ -37,23 +55,8 @@ function CoupleNameInline() {
   )
 }
 
-function GlassOverlay() {
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden>
-      <div
-        className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2"
-        style={{ background: "radial-gradient(circle at center, color-mix(in srgb, white 8%, transparent), transparent 60%)" }}
-      />
-      <div
-        className="absolute bottom-[-6rem] right-[-2rem] h-64 w-64"
-        style={{ background: "radial-gradient(circle at center, color-mix(in srgb, white 6%, transparent), transparent 60%)" }}
-      />
-    </div>
-  )
-}
-
 // QRCodeCanvas renders to <canvas> which cannot resolve CSS variables.
-const MOTIF_DEEP_HEX = "#3E2914"
+const MOTIF_DEEP_HEX = "#6B5335"
 
 export function SnapShare() {
   const siteConfig = useSiteConfig()
@@ -64,7 +67,6 @@ export function SnapShare() {
 
   const websiteUrl = typeof window !== "undefined" ? window.location.href : "https://example.com"
   const uploadLink = siteConfig.snapShare.googleDriveLink
-  // const hashtags = [siteConfig.snapShare.hashtag] (multiple hashtags)
   const hashtags = siteConfig.snapShare.hashtag
   const allHashtagsText = hashtags.join(" ")
   const groomNickname = siteConfig.couple.groomNickname
@@ -84,7 +86,6 @@ export function SnapShare() {
       window.removeEventListener("resize", checkMobile)
     }
   }, [])
-
 
   const shareOnSocial = (platform: "instagram" | "facebook" | "twitter" | "tiktok") => {
     const encodedUrl = encodeURIComponent(websiteUrl)
@@ -168,368 +169,327 @@ export function SnapShare() {
   }
 
   return (
-    <Section
+    <section
       id="snap-share"
-      className="relative overflow-hidden py-12 sm:py-16 md:py-20"
+      className="relative flex w-full justify-center px-4 py-8 sm:px-6 sm:py-10 md:py-12"
     >
-      <div className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 md:px-8">
-        <motion.div
-          className="flex flex-col items-center gap-4 sm:gap-5 md:gap-6 text-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 px-3 sm:px-4"
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <p
-            className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] sm:text-xs md:text-sm uppercase tracking-[0.28em] text-white/90`}
+      <InvitationCard
+        decorations={CORNER_DECORATIONS}
+        className="w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px]"
+      >
+        <div className="space-y-6 sm:space-y-8">
+          <motion.div
+            className="flex flex-col items-center gap-3 text-center sm:gap-4 md:gap-5"
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <CoupleNameInline />
-          </p>
-
-          <h2
-            className="font-[family-name:var(--font-safira-march)] flex flex-col items-center gap-2.5 sm:gap-3 text-[1.35rem] sm:text-[1.75rem] md:text-[2.15rem] lg:text-[2.5rem] leading-none tracking-[0.015em] sm:tracking-[0.01em] text-white px-2 sm:px-3 my-1 sm:my-1.5 [text-shadow:0_2px_14px_rgba(0,0,0,0.22)]"
-          >
-            <span className="block">Capture</span>
-            <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1.5">
-              <NameConnector size="sm">and</NameConnector>
-              <span className="mt-2">Share</span>
-            </span>
-            <span className="block">the Celebration</span>
-          </h2>
-
-          <p
-            className={`${cormorant.className} text-xs sm:text-sm md:text-base italic text-white/90 max-w-2xl mx-auto leading-relaxed px-2`}
-          >
-            Help us remember the little moments of{" "}
-            <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1 not-italic">
+            <p
+              className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] uppercase tracking-[0.28em] sm:text-xs md:text-sm ${invitationText.accent}`}
+            >
               <CoupleNameInline />
-            </span>
-            &apos;s day—every smile, embrace,{" "}
-            <NameConnector size="sm">and</NameConnector>{" "}
-            candid laugh. Your photos{" "}
-            <NameConnector size="sm">and</NameConnector>{" "}
-            clips complete our love story.
-          </p>
-        </motion.div>
+            </p>
 
-        <div className={`${GLASS_CARD_CLASS} max-w-2xl md:max-w-3xl mx-auto`}>
-          <GlassOverlay />
-          <div className="relative z-10 p-4 sm:p-5 md:p-6 lg:p-8">
-        <motion.div
-          className="space-y-3 sm:space-y-5 lg:space-y-6"
-          variants={staggerChildren}
-          initial="initial"
-          animate="animate"
-        >
-          <motion.div className="space-y-3 sm:space-y-5 lg:space-y-6 flex flex-col" variants={fadeInUp}>
-            <div className="flex-1">
-              <div className={`${INNER_PANEL_CLASS} text-center h-full flex flex-col`}>
-                <h4
-                  className={`${cinzel.className} text-base sm:text-lg md:text-xl font-semibold text-white mb-2 sm:mb-3 uppercase`}
-                  style={{ letterSpacing: "0.08em" }}
-                >
-                  Share Our Wedding Website
-                </h4>
-                <p
-                  className={`${cormorant.className} text-white/90 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed px-1`}
-                >
-                  Spread the word about{" "}
-                  <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
-                    <CoupleNameInline />
-                  </span>
-                  &apos;s wedding celebration. Share this QR code with friends and family so they can join the celebration.
-                </p>
-                <div className="mx-auto inline-flex flex-col items-center bg-white/90 backdrop-blur-sm p-2.5 sm:p-5 md:p-7 rounded-xl sm:rounded-2xl shadow-md border border-white/40 mb-3 sm:mb-4 flex-1 justify-center">
-                  <div className="mb-2 sm:mb-3 p-1.5 sm:p-3 rounded-lg sm:rounded-xl bg-white border border-white/80">
-                    <div className="bg-white p-1.5 sm:p-3 rounded-lg shadow-sm border border-white/80">
-                      <QRCodeCanvas 
-                        id="snapshare-qr" 
-                        value={websiteUrl} 
-                        size={isMobile ? 140 : 220} 
-                        includeMargin 
-                        className="bg-white" 
-                        fgColor={MOTIF_DEEP_HEX}
-                      />
-                    </div>
-                  </div>
-                  <button
-                    onClick={downloadQRCode}
-                    className="flex items-center gap-1.5 sm:gap-2 mx-auto px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-white text-[#7D7F2E] border border-white/80 shadow-[0_10px_28px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_38px_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all duration-200 text-xs sm:text-sm font-semibold"
-                  >
-                    <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span
-                      className={`${cormorant.className} uppercase font-semibold`}
-                      style={{ letterSpacing: "0.15em" }}
-                    >
-                      Download QR
-                    </span>
-                  </button>
-                </div>
-                <p
-                  className={`${cormorant.className} text-white/85 text-xs sm:text-sm mt-auto leading-relaxed`}
-                >
-                  Scan with any camera app to open the full invitation and schedule.
-                </p>
-              </div>
+            <div
+              className="flex w-full max-w-[12rem] items-center justify-center gap-2 sm:max-w-[14rem] md:max-w-[16rem]"
+              aria-hidden="true"
+            >
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+              <div className="h-1 w-1 shrink-0 rounded-full bg-[#BB8A3D]/80" />
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
             </div>
 
-            {hashtags.length > 0 && (
-            <div className={`${INNER_PANEL_CLASS} text-center`}>
-              {/* Compact header */}
-              <div className="flex items-center gap-2 mb-2.5 sm:mb-3 text-center">
-                <h5
-                  className={`${cinzel.className} text-xs sm:text-xs md:text-sm font-semibold text-white uppercase text-center mx-auto`}
-                  style={{ letterSpacing: "0.1em", textTransform: "uppercase" }}
-                >
-                  Wedding Hashtags
-                </h5>
+            <h2
+              className={`flex flex-col items-center gap-2 px-2 font-[family-name:var(--font-safira-march)] text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:gap-2.5 sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
+            >
+              <span className="block">Capture</span>
+              <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1.5">
+                <NameConnector size="sm">and</NameConnector>
+                <span className="mt-2">Share</span>
+              </span>
+              <span className="block">the Celebration</span>
+            </h2>
 
-              </div>
+            <p
+              className={`${cormorant.className} mx-auto max-w-xl px-2 text-xs italic leading-relaxed sm:text-sm md:text-base ${invitationText.muted}`}
+            >
+              Help us remember the little moments of{" "}
+              <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1 not-italic">
+                <CoupleNameInline />
+              </span>
+              &apos;s day—every smile, embrace,{" "}
+              <NameConnector size="sm">and</NameConnector>{" "}
+              candid laugh. Your photos{" "}
+              <NameConnector size="sm">and</NameConnector>{" "}
+              clips complete our love story.
+            </p>
+          </motion.div>
 
-              {/* Hashtag rows — full-width tap targets */}
-              <div className="space-y-1.5 mb-2.5 sm:mb-3">
-                {hashtags.map((hashtag, index) => (
-                  <motion.button
-                    key={index}
-                    onClick={() => copyHashtag(hashtag, index)}
-                    className={`w-full flex items-center justify-between gap-2 px-3 py-2 sm:py-2.5 rounded-lg border transition-all duration-200 active:scale-[0.98] ${
-                      copiedHashtagIndex === index
-                        ? "bg-white/20 border-white/50"
-                        : "bg-white/10 border-white/25 hover:border-white/40 hover:bg-white/15"
-                    }`}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.08 }}
+          <motion.div
+            className="space-y-3 sm:space-y-5 lg:space-y-6"
+            variants={staggerChildren}
+            initial="initial"
+            animate="animate"
+          >
+            <motion.div className="flex flex-col space-y-3 sm:space-y-5 lg:space-y-6" variants={fadeInUp}>
+              <div className="flex-1">
+                <div className={`${INNER_PANEL_CLASS} flex h-full flex-col text-center`}>
+                  <h4
+                    className={`${cinzel.className} mb-2 text-base font-semibold uppercase sm:mb-3 sm:text-lg md:text-xl ${invitationText.heading}`}
+                    style={{ letterSpacing: "0.08em" }}
                   >
-                    <span
-                      className={`${cormorant.className} font-semibold text-sm sm:text-base text-left truncate flex-1 ${
-                        copiedHashtagIndex === index ? "text-white" : "text-white/95"
-                      }`}
-                    >
-                      {hashtag}
-                    </span>
-                    <span
-                      className={`flex items-center gap-1 flex-shrink-0 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${
-                        copiedHashtagIndex === index ? "text-white" : "text-white/70"
-                      }`}
-                    >
-                      {copiedHashtagIndex === index
-                        ? <><Check className="w-3 h-3" /> Copied</>
-                        : <><Copy className="w-3 h-3" /> Copy</>}
-                    </span>
-                  </motion.button>
-                ))}
-              </div>
-
-              {/* Copy All — compact outline */}
-              <button
-                onClick={copyAllHashtags}
-                className={`w-full flex items-center justify-center gap-1.5 py-2 sm:py-2.5 rounded-lg border transition-all duration-200 active:scale-[0.98] ${
-                  copiedAllHashtags
-                    ? "bg-white/20 border-white/50 text-white"
-                    : "bg-white/10 border-white/30 text-white/95 hover:bg-white/20 hover:border-white/45"
-                }`}
-              >
-                {copiedAllHashtags ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span
-                  className={`${cormorant.className} text-xs sm:text-sm font-semibold uppercase`}
-                  style={{ letterSpacing: "0.12em" }}
-                >
-                  {copiedAllHashtags ? "All Copied!" : "Copy All"}
-                </span>
-              </button>
-            </div>
-            )}
-
-            <div className={INNER_PANEL_CLASS}>
-              <h5
-                className={`${cinzel.className} text-base sm:text-lg md:text-xl font-semibold text-white mb-2 sm:mb-3 text-center uppercase`}
-                style={{ letterSpacing: "0.08em" }}
-              >
-                Share on Social Media
-              </h5>
-              <p
-                className={`${cormorant.className} text-white/90 text-xs sm:text-sm text-center mb-3 sm:mb-4 leading-relaxed`}
-              >
-                Help spread the word about{" "}
-                <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
-                  <CoupleNameInline />
-                </span>
-                &apos;s wedding celebration. Share the event across your favorite platforms.
-              </p>
-              <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-                <button
-                  onClick={() => shareOnSocial("instagram")}
-                  className="group flex items-center justify-center gap-1.5 sm:gap-2 bg-white/15 border border-white/30 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg hover:bg-white/25 transition-all duration-200 shadow-md hover:shadow-lg hover:border-white/45"
-                >
-                  <Instagram className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform flex-shrink-0" />
-                  <span
-                    className={`${cormorant.className} font-semibold text-xs sm:text-sm uppercase`}
-                    style={{ letterSpacing: "0.18em" }}
-                  >
-                    Instagram
-                  </span>
-                </button>
-                <button
-                  onClick={() => shareOnSocial("facebook")}
-                  className="group flex items-center justify-center gap-1.5 sm:gap-2 bg-white/15 border border-white/30 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg hover:bg-white/25 transition-all duration-200 shadow-md hover:shadow-lg hover:border-white/45"
-                >
-                  <Facebook className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform flex-shrink-0" />
-                  <span
-                    className={`${cormorant.className} font-semibold text-xs sm:text-sm uppercase`}
-                    style={{ letterSpacing: "0.18em" }}
-                  >
-                    Facebook
-                  </span>
-                </button>
-                <button
-                  onClick={() => shareOnSocial("tiktok")}
-                  className="group flex items-center justify-center gap-1.5 sm:gap-2 bg-white/15 border border-white/30 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg hover:bg-white/25 transition-all duration-200 shadow-md hover:shadow-lg hover:border-white/45"
-                >
-                  <Share2 className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform flex-shrink-0" />
-                  <span
-                    className={`${cormorant.className} font-semibold text-xs sm:text-sm uppercase`}
-                    style={{ letterSpacing: "0.18em" }}
-                  >
-                    TikTok
-                  </span>
-                </button>
-                <button
-                  onClick={() => shareOnSocial("twitter")}
-                  className="group flex items-center justify-center gap-1.5 sm:gap-2 bg-white/15 border border-white/30 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg hover:bg-white/25 transition-all duration-200 shadow-md hover:shadow-lg hover:border-white/45"
-                >
-                  <Twitter className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform flex-shrink-0" />
-                  <span
-                    className={`${cormorant.className} font-semibold text-xs sm:text-sm uppercase`}
-                    style={{ letterSpacing: "0.18em" }}
-                  >
-                    Twitter
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            {uploadLink && (
-              <div>
-                <div className={`${INNER_PANEL_CLASS} text-center`}>
-                  <div
-                    className={`${cormorant.className} inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/30 bg-white/15 px-2.5 py-1 text-[10px] sm:text-xs uppercase text-white/90 mb-2 sm:mb-3`}
-                    style={{ letterSpacing: "0.28em" }}
-                  >
-                    Upload Your Photos{" "}
-                    <NameConnector size="sm">&</NameConnector>{" "}
-                    Videos
-                  </div>
+                    Share Our Wedding Website
+                  </h4>
                   <p
-                    className={`${cormorant.className} text-white/90 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 px-1`}
+                    className={`${cormorant.className} mb-3 px-1 text-xs leading-relaxed sm:mb-4 sm:text-sm ${invitationText.body}`}
                   >
-                    Help us capture our special day! Scan the QR or use the actions below to upload your photos{" "}
-                    <NameConnector size="sm">and</NameConnector>{" "}
-                    videos.
+                    Spread the word about{" "}
+                    <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
+                      <CoupleNameInline />
+                    </span>
+                    &apos;s wedding celebration. Share this QR code with friends and family so they can join the celebration.
                   </p>
-                  <div className="mx-auto inline-flex flex-col items-center bg-white/90 backdrop-blur-sm p-2.5 sm:p-5 rounded-xl sm:rounded-2xl shadow-md border border-white/40 mb-3 sm:mb-4">
-                    <div className="mb-2 sm:mb-3 p-1.5 sm:p-3 rounded-lg sm:rounded-xl bg-white border border-white/80">
-                      <div className="bg-white p-1.5 sm:p-3 rounded-lg shadow-sm border border-white/80">
+                  <div className="mx-auto mb-3 inline-flex flex-1 flex-col items-center justify-center rounded-xl border border-[#BB8A3D]/25 bg-white p-2.5 shadow-md sm:mb-4 sm:rounded-2xl sm:p-5 md:p-7">
+                    <div className="mb-2 rounded-lg border border-[#BB8A3D]/15 bg-white p-1.5 sm:mb-3 sm:rounded-xl sm:p-3">
+                      <div className="rounded-lg border border-[#BB8A3D]/10 bg-white p-1.5 shadow-sm sm:p-3">
                         <QRCodeCanvas
-                          id="album-qr"
-                          value={uploadLink}
-                          size={isMobile ? 150 : 220}
-                          level="H"
+                          id="snapshare-qr"
+                          value={websiteUrl}
+                          size={isMobile ? 140 : 220}
                           includeMargin
                           className="bg-white"
-                          fgColor="#000000"
+                          fgColor={MOTIF_DEEP_HEX}
                         />
                       </div>
                     </div>
-                    <p className={`${cormorant.className} text-[#7D7F2E] text-xs sm:text-sm`}>Scan with your camera app</p>
-                  </div>
-                  <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3">
-                    <button
-                      onClick={copyUploadLink}
-                      className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border shadow-sm hover:shadow-md text-xs sm:text-sm transition-all ${
-                        copiedDriveLink
-                          ? "bg-white/25 border-white/50 text-white"
-                          : "bg-white text-[#7D7F2E] border-white/80"
-                      }`}
-                    >
-                      {copiedDriveLink ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                          <span
-                            className={`${cormorant.className} uppercase font-semibold`}
-                            style={{ letterSpacing: "0.18em" }}
-                          >
-                            Copied!
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                          <span
-                            className={`${cormorant.className} uppercase font-semibold`}
-                            style={{ letterSpacing: "0.18em" }}
-                          >
-                            Copy Link
-                          </span>
-                        </>
-                      )}
+                    <button onClick={downloadQRCode} className={`${cormorant.className} ${primaryBtnClass} mx-auto`} style={{ letterSpacing: "0.15em" }}>
+                      <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      Download QR
                     </button>
-                    <button
-                      onClick={downloadAlbumQRCode}
-                      className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-white text-[#7D7F2E] border border-white/80 shadow-sm hover:shadow-md text-xs sm:text-sm transition-all font-semibold"
-                    >
-                      <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      <span
-                        className={`${cormorant.className} uppercase font-semibold`}
-                        style={{ letterSpacing: "0.18em" }}
-                      >
-                        Download QR
-                      </span>
-                    </button>
-                    <a
-                      href={uploadLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-white/15 border border-white/30 text-white shadow-sm hover:shadow-md hover:bg-white/25 text-xs sm:text-sm transition-all"
-                    >
-                      <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      <span
-                        className={`${cormorant.className} tracking-[0.15em] sm:tracking-[0.18em] uppercase font-semibold`}
-                      >
-                        Upload Photos
-                      </span>
-                    </a>
                   </div>
-                  <p className={`${cormorant.className} text-white/85 text-xs sm:text-sm mt-2 sm:mt-3 leading-relaxed`}>or tap &quot;Upload Photos&quot; below.</p>
+                  <p className={`${cormorant.className} mt-auto text-xs leading-relaxed sm:text-sm ${invitationText.muted}`}>
+                    Scan with any camera app to open the full invitation and schedule.
+                  </p>
                 </div>
               </div>
-            )}
-          </motion.div>
-        </motion.div>
 
-        <motion.div className="text-center mt-5 sm:mt-8" variants={fadeInUp}>
-          <div className={`${INNER_PANEL_CLASS} max-w-3xl mx-auto`}>
-            <p
-              className={`${cormorant.className} text-white/95 text-sm sm:text-base md:text-lg leading-relaxed mb-3 sm:mb-4 px-2`}
-            >
-              Thank you for helping make{" "}
-              <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
-                <CoupleNameInline />
-              </span>
-              &apos;s wedding celebration memorable. Your photos{" "}
-              <NameConnector size="sm">and</NameConnector>{" "}
-              messages create beautiful memories that we will treasure for a lifetime.
-            </p>
-            <div
-                className={`${cormorant.className} flex items-center justify-center gap-2 text-white/90 text-xs sm:text-sm uppercase`}
-              style={{ letterSpacing: "0.25em" }}
-            >
-              <span>Thank you for sharing the joy</span>
+              {hashtags.length > 0 && (
+                <div className={`${INNER_PANEL_CLASS} text-center`}>
+                  <div className="mb-2.5 flex items-center gap-2 text-center sm:mb-3">
+                    <h5
+                      className={`${cinzel.className} mx-auto text-center text-xs font-semibold uppercase sm:text-xs md:text-sm ${invitationText.heading}`}
+                      style={{ letterSpacing: "0.1em", textTransform: "uppercase" }}
+                    >
+                      Wedding Hashtags
+                    </h5>
+                  </div>
+
+                  <div className="mb-2.5 space-y-1.5 sm:mb-3">
+                    {hashtags.map((hashtag, index) => (
+                      <motion.button
+                        key={index}
+                        onClick={() => copyHashtag(hashtag, index)}
+                        className={`flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2 transition-all duration-200 active:scale-[0.98] sm:py-2.5 ${
+                          copiedHashtagIndex === index
+                            ? "border-[#BB8A3D]/45 bg-[#BB8A3D]/15"
+                            : "border-[#BB8A3D]/20 bg-[#FDFBF7]/80 hover:border-[#BB8A3D]/35 hover:bg-[#F5EDE0]/80"
+                        }`}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.08 }}
+                      >
+                        <span
+                          className={`${cormorant.className} flex-1 truncate text-left text-sm font-semibold sm:text-base ${
+                            copiedHashtagIndex === index ? invitationText.heading : invitationText.body
+                          }`}
+                        >
+                          {hashtag}
+                        </span>
+                        <span
+                          className={`flex flex-shrink-0 items-center gap-1 text-[10px] font-semibold uppercase tracking-wider sm:text-xs ${
+                            copiedHashtagIndex === index ? invitationText.accent : invitationText.muted
+                          }`}
+                        >
+                          {copiedHashtagIndex === index ? (
+                            <>
+                              <Check className="h-3 w-3" /> Copied
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-3 w-3" /> Copy
+                            </>
+                          )}
+                        </span>
+                      </motion.button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={copyAllHashtags}
+                    className={`flex w-full items-center justify-center gap-1.5 rounded-lg border py-2 transition-all duration-200 active:scale-[0.98] sm:py-2.5 ${
+                      copiedAllHashtags
+                        ? "border-[#BB8A3D]/45 bg-[#BB8A3D]/15 text-[#6B5335]"
+                        : "border-[#BB8A3D]/25 bg-[#FDFBF7]/80 text-[#7A6248] hover:border-[#BB8A3D]/40 hover:bg-[#F5EDE0]/80"
+                    }`}
+                  >
+                    {copiedAllHashtags ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                    <span
+                      className={`${cormorant.className} text-xs font-semibold uppercase sm:text-sm`}
+                      style={{ letterSpacing: "0.12em" }}
+                    >
+                      {copiedAllHashtags ? "All Copied!" : "Copy All"}
+                    </span>
+                  </button>
+                </div>
+              )}
+
+              <div className={INNER_PANEL_CLASS}>
+                <h5
+                  className={`${cinzel.className} mb-2 text-center text-base font-semibold uppercase sm:mb-3 sm:text-lg md:text-xl ${invitationText.heading}`}
+                  style={{ letterSpacing: "0.08em" }}
+                >
+                  Share on Social Media
+                </h5>
+                <p
+                  className={`${cormorant.className} mb-3 text-center text-xs leading-relaxed sm:mb-4 sm:text-sm ${invitationText.body}`}
+                >
+                  Help spread the word about{" "}
+                  <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
+                    <CoupleNameInline />
+                  </span>
+                  &apos;s wedding celebration. Share the event across your favorite platforms.
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+                  <button onClick={() => shareOnSocial("instagram")} className={socialBtnClass}>
+                    <Instagram className="h-4 w-4 flex-shrink-0 transition-transform group-hover:scale-110 sm:h-5 sm:w-5" />
+                    <span className={`${cormorant.className} text-xs font-semibold uppercase sm:text-sm`} style={{ letterSpacing: "0.18em" }}>
+                      Instagram
+                    </span>
+                  </button>
+                  <button onClick={() => shareOnSocial("facebook")} className={socialBtnClass}>
+                    <Facebook className="h-4 w-4 flex-shrink-0 transition-transform group-hover:scale-110 sm:h-5 sm:w-5" />
+                    <span className={`${cormorant.className} text-xs font-semibold uppercase sm:text-sm`} style={{ letterSpacing: "0.18em" }}>
+                      Facebook
+                    </span>
+                  </button>
+                  <button onClick={() => shareOnSocial("tiktok")} className={socialBtnClass}>
+                    <Share2 className="h-4 w-4 flex-shrink-0 transition-transform group-hover:scale-110 sm:h-5 sm:w-5" />
+                    <span className={`${cormorant.className} text-xs font-semibold uppercase sm:text-sm`} style={{ letterSpacing: "0.18em" }}>
+                      TikTok
+                    </span>
+                  </button>
+                  <button onClick={() => shareOnSocial("twitter")} className={socialBtnClass}>
+                    <Twitter className="h-4 w-4 flex-shrink-0 transition-transform group-hover:scale-110 sm:h-5 sm:w-5" />
+                    <span className={`${cormorant.className} text-xs font-semibold uppercase sm:text-sm`} style={{ letterSpacing: "0.18em" }}>
+                      Twitter
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {uploadLink && (
+                <div>
+                  <div className={`${INNER_PANEL_CLASS} text-center`}>
+                    <div
+                      className={`${cormorant.className} mb-2 inline-flex items-center gap-1.5 rounded-full border border-[#BB8A3D]/25 bg-[#F5EDE0]/80 px-2.5 py-1 text-[10px] uppercase sm:mb-3 sm:gap-2 sm:text-xs ${invitationText.muted}`}
+                      style={{ letterSpacing: "0.28em" }}
+                    >
+                      Upload Your Photos{" "}
+                      <NameConnector size="sm">&</NameConnector>{" "}
+                      Videos
+                    </div>
+                    <p
+                      className={`${cormorant.className} mb-3 px-1 text-xs leading-relaxed sm:mb-4 sm:text-sm ${invitationText.body}`}
+                    >
+                      Help us capture our special day! Scan the QR or use the actions below to upload your photos{" "}
+                      <NameConnector size="sm">and</NameConnector>{" "}
+                      videos.
+                    </p>
+                    <div className="mx-auto mb-3 inline-flex flex-col items-center rounded-xl border border-[#BB8A3D]/25 bg-white p-2.5 shadow-md sm:mb-4 sm:rounded-2xl sm:p-5">
+                      <div className="mb-2 rounded-lg border border-[#BB8A3D]/15 bg-white p-1.5 sm:mb-3 sm:rounded-xl sm:p-3">
+                        <div className="rounded-lg border border-[#BB8A3D]/10 bg-white p-1.5 shadow-sm sm:p-3">
+                          <QRCodeCanvas
+                            id="album-qr"
+                            value={uploadLink}
+                            size={isMobile ? 150 : 220}
+                            level="H"
+                            includeMargin
+                            className="bg-white"
+                            fgColor={MOTIF_DEEP_HEX}
+                          />
+                        </div>
+                      </div>
+                      <p className={`${cormorant.className} text-xs sm:text-sm ${invitationText.accent}`}>Scan with your camera app</p>
+                    </div>
+                    <div className="flex flex-col justify-center gap-2 sm:flex-row sm:gap-3">
+                      <button
+                        onClick={copyUploadLink}
+                        className={`${cormorant.className} ${
+                          copiedDriveLink
+                            ? "border-[#BB8A3D]/45 bg-[#BB8A3D]/15 text-[#6B5335]"
+                            : `${outlineBtnClass} text-[#BB8A3D]`
+                        }`}
+                        style={{ letterSpacing: "0.18em" }}
+                      >
+                        {copiedDriveLink ? (
+                          <>
+                            <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            Copied!
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            Copy Link
+                          </>
+                        )}
+                      </button>
+                      <button onClick={downloadAlbumQRCode} className={`${cormorant.className} ${primaryBtnClass}`} style={{ letterSpacing: "0.18em" }}>
+                        <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                        Download QR
+                      </button>
+                      <a
+                        href={uploadLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${cormorant.className} ${socialBtnClass} rounded-full sm:rounded-lg`}
+                        style={{ letterSpacing: "0.15em" }}
+                      >
+                        <Share2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                        Upload Photos
+                      </a>
+                    </div>
+                    <p className={`${cormorant.className} mt-2 text-xs leading-relaxed sm:mt-3 sm:text-sm ${invitationText.muted}`}>
+                      or tap &quot;Upload Photos&quot; below.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+
+          <motion.div className="text-center" variants={fadeInUp}>
+            <div className={`${INNER_PANEL_CLASS} mx-auto`}>
+              <p
+                className={`${cormorant.className} mb-3 px-2 text-sm leading-relaxed sm:mb-4 sm:text-base md:text-lg ${invitationText.body}`}
+              >
+                Thank you for helping make{" "}
+                <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
+                  <CoupleNameInline />
+                </span>
+                &apos;s wedding celebration memorable. Your photos{" "}
+                <NameConnector size="sm">and</NameConnector>{" "}
+                messages create beautiful memories that we will treasure for a lifetime.
+              </p>
+              <div
+                className={`${cormorant.className} flex items-center justify-center gap-2 text-xs uppercase sm:text-sm ${invitationText.muted}`}
+                style={{ letterSpacing: "0.25em" }}
+              >
+                <span>Thank you for sharing the joy</span>
+              </div>
             </div>
-          </div>
-        </motion.div>
-          </div>
+          </motion.div>
         </div>
-      </div>
-    </Section>
+      </InvitationCard>
+    </section>
   )
 }

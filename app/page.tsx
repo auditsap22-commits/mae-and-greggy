@@ -45,7 +45,7 @@ export default function Home() {
   return (
       <div
         className={`relative min-h-screen overflow-hidden font-sans text-charcoal selection:bg-birch selection:text-nut ${
-          enableDecor ? "bg-transparent" : "bg-[#A02C1D]"
+          enableDecor ? "bg-transparent" : "bg-[#E2CBAE]"
         }`}
       >
         {enableDecor && (
@@ -53,7 +53,7 @@ export default function Home() {
             <Silk
               speed={5}
               scale={1.1}
-              color="#A02C1D"
+              color="#E2CBAE"
               noiseIntensity={0.8}
               rotation={0.3}
             />
@@ -68,7 +68,7 @@ export default function Home() {
             <MainHero />
             <Welcome />             
             <Countdown />
-            <Gallery />
+ {/*  */}
             <Entourage />
             <Details />
             <GuestList />

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { createPortal } from "react-dom"
-import { Section } from "@/components/section"
+import { InvitationCard } from "@/components/invitation-card"
 import {
   Search,
   CheckCircle,
@@ -22,7 +22,6 @@ import {
 } from "lucide-react"
 import { Cormorant_Garamond, Cinzel } from "next/font/google"
 import { NameConnector } from "@/components/couple-name-text"
-import Image from "next/image"
 import { useSiteConfig } from "@/hooks/use-site-config"
 
 const cormorant = Cormorant_Garamond({
@@ -35,17 +34,26 @@ const cinzel = Cinzel({
   weight: ["400", "600"],
 })
 
-const CORNER_DECO_CLASS =
-  "w-auto h-auto max-w-[140px] sm:max-w-[180px] md:max-w-[220px] lg:max-w-[260px] opacity-80 drop-shadow-[0_10px_28px_rgba(0,0,0,0.35)]"
+const CORNER_DECORATIONS = [
+  { src: "/decoration/top-right-corner.png", className: "right-0 top-0" },
+  { src: "/decoration/bottom-left-new.png", className: "bottom-0 left-0" },
+] as const
 
-const GLASS_CARD_CLASS =
-  "relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/30 bg-white/15 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.22),0_4px_14px_rgba(0,0,0,0.14)] transition-all duration-300 hover:border-white/40"
+const invitationText = {
+  accent: "text-[#BB8A3D]",
+  heading: "text-[#6B5335]",
+  body: "text-[#7A6248]",
+  muted: "text-[#8B7355]",
+}
 
-const GLASS_INNER_CLASS =
-  "rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 p-3 sm:p-4 md:p-5"
+const INNER_CARD_CLASS =
+  "relative overflow-visible rounded-xl sm:rounded-2xl border border-[#BB8A3D]/30 bg-[#FDFBF7]/80 shadow-[0_4px_20px_rgba(139,111,71,0.12)] transition-all duration-300 hover:border-[#BB8A3D]/45"
+
+const INNER_BOX_CLASS =
+  "rounded-xl bg-[#F5EDE0]/60 border border-[#BB8A3D]/25 p-3 sm:p-4 md:p-5"
 
 const SUGGESTION_DROPDOWN_CLASS =
-  "fixed z-[9999] rounded-xl sm:rounded-2xl border border-white/60 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28),0_8px_24px_rgba(0,0,0,0.14)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200"
+  "fixed z-[9999] rounded-xl sm:rounded-2xl border border-[#BB8A3D]/25 bg-white shadow-[0_24px_64px_rgba(139,111,71,0.18),0_8px_24px_rgba(139,111,71,0.1)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200"
 
 function CoupleNameInline() {
   const { groomNickname, brideNickname } = useSiteConfig().couple
@@ -70,7 +78,7 @@ function highlightNameMatch(name: string, query: string) {
   return (
     <>
       {name.slice(0, matchIndex)}
-      <span className="font-bold text-[#7D7F2E]">
+      <span className="font-bold text-[#BB8A3D]">
         {name.slice(matchIndex, matchIndex + normalizedQuery.length)}
       </span>
       {name.slice(matchIndex + normalizedQuery.length)}
@@ -484,114 +492,82 @@ export function GuestList() {
   }
 
   return (
-    <Section
+    <>
+    <section
       id="guest-list"
-      className="relative z-20 py-16 sm:py-20 md:py-24 lg:py-28 overflow-visible"
+      className="relative flex w-full justify-center overflow-visible px-4 py-8 sm:px-6 sm:py-10 md:py-12"
     >
-      {/* Corner decorations — reflected to all four corners */}
-      {/* <div className="absolute right-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute right-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-
+      <InvitationCard
+        decorations={CORNER_DECORATIONS}
+        className="!overflow-visible w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px]"
+      >
+        <div className="space-y-6 sm:space-y-8 md:space-y-10">
       {/* Header */}
-      <div className="relative z-10 flex flex-col items-center gap-4 sm:gap-5 md:gap-6 text-center mt-8 sm:mt-10 md:mt-12 mb-10 sm:mb-14 md:mb-16 px-4 sm:px-6">
+      <div className="flex flex-col items-center gap-3 text-center sm:gap-4 md:gap-5">
         <p
-          className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] sm:text-xs md:text-sm uppercase tracking-[0.28em] text-white/90`}
+          className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] uppercase tracking-[0.28em] sm:text-xs md:text-sm ${invitationText.accent}`}
         >
           <CoupleNameInline />
         </p>
 
+        <div
+          className="flex w-full max-w-[12rem] items-center justify-center gap-2 sm:max-w-[14rem] md:max-w-[16rem]"
+          aria-hidden="true"
+        >
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+          <div className="h-1 w-1 shrink-0 rounded-full bg-[#BB8A3D]/80" />
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+        </div>
+
         <h2
-          className="font-[family-name:var(--font-safira-march)] text-[1.75rem] sm:text-[2.25rem] md:text-[2.75rem] lg:text-[3.25rem] xl:text-[3.75rem] leading-none tracking-[0.015em] sm:tracking-[0.01em] text-white px-2 sm:px-3 my-1 sm:my-1.5 [text-shadow:0_2px_14px_rgba(0,0,0,0.22)]"
+          className={`font-[family-name:var(--font-safira-march)] px-2 text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
         >
           RSVP
         </h2>
 
         <p
-          className={`${cormorant.className} text-xs sm:text-sm md:text-base italic text-white/90 max-w-xl mx-auto leading-relaxed px-2 sm:px-4 mt-0.5 sm:mt-1`}
+          className={`${cormorant.className} mx-auto max-w-xl px-2 text-xs italic leading-relaxed sm:px-4 sm:text-sm md:text-base ${invitationText.muted}`}
         >
           Confirm your attendance for our special day.
         </p>
 
-        <div className="flex flex-col gap-3 sm:gap-4 max-w-xl mx-auto px-4">
-          <p className={`${cormorant.className} text-sm sm:text-base md:text-lg text-white/90 font-light leading-relaxed`}>
+        <div className="mx-auto flex max-w-xl flex-col gap-3 px-2 sm:gap-4 sm:px-4">
+          <p className={`${cormorant.className} text-sm font-light leading-relaxed sm:text-base md:text-lg ${invitationText.body}`}>
             To help us plan a beautiful{" "}
             <NameConnector size="sm">and</NameConnector>{" "}
             intimate celebration, we kindly ask that you confirm your attendance. Please search for your name below to confirm your presence at our special day.
           </p>
-          <p className={`${cormorant.className} text-sm sm:text-base md:text-lg text-white/90 font-light leading-relaxed`}>
+          <p className={`${cormorant.className} text-sm font-light leading-relaxed sm:text-base md:text-lg ${invitationText.body}`}>
             If we do not receive your response by the deadline, we will assume you are unable to attend. Thank you for your love{" "}
             <NameConnector size="sm">and</NameConnector>{" "}
             support. We truly look forward to celebrating this special day with you.
           </p>
-          <p className={`${cormorant.className} text-sm sm:text-base md:text-lg text-white font-semibold leading-relaxed tracking-[0.08em] sm:tracking-[0.1em]`}>
+          <p className={`${cormorant.className} text-sm font-semibold leading-relaxed tracking-[0.08em] sm:text-base sm:tracking-[0.1em] md:text-lg ${invitationText.accent}`}>
             RSVP Deadline: {siteConfig.details.rsvp.deadline}
           </p>
         </div>
       </div>
 
       {/* Search Section */}
-      <div className="relative z-30 max-w-2xl mx-auto px-4 sm:px-6">
-        <div className={`${GLASS_CARD_CLASS} !overflow-visible`}>
-          <div className="relative p-3 sm:p-5 md:p-7 lg:p-9">
-            <div className={`${GLASS_INNER_CLASS} space-y-3 sm:space-y-4`}>
+      <div className={INNER_CARD_CLASS}>
+          <div className="relative p-3 sm:p-5 md:p-6">
+            <div className={`${INNER_BOX_CLASS} space-y-3 sm:space-y-4`}>
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="bg-white/20 p-1.5 sm:p-2 rounded-lg border border-white/30">
-                  <Search className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
+                <div className="rounded-lg border border-[#BB8A3D]/30 bg-[#F5EDE0]/80 p-1.5 sm:p-2">
+                  <Search className={`h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5 ${invitationText.accent}`} />
                 </div>
                 <div>
-                  <label className={`block text-xs sm:text-sm md:text-base font-semibold text-white mb-0.5 sm:mb-1 ${cinzel.className} tracking-wide uppercase`}>
+                  <label className={`mb-0.5 block text-xs font-semibold uppercase tracking-wide sm:mb-1 sm:text-sm md:text-base ${cinzel.className} ${invitationText.heading}`}>
                     Find Your Name
                   </label>
-                  <p className={`text-[10px] sm:text-xs text-white/80 ${cormorant.className}`}>
+                  <p className={`text-[10px] sm:text-xs ${cormorant.className} ${invitationText.muted}`}>
                     Type as you search to see instant results
                   </p>
                 </div>
               </div>
               <div ref={searchRef} className="relative">
                 <div className="relative">
-                  <Search className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#7D7F2E]/70 pointer-events-none transition-colors duration-200" />
+                  <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#BB8A3D]/70 transition-colors duration-200 sm:left-3 sm:h-4 sm:w-4" />
                   <input
                     ref={inputRef}
                     type="text"
@@ -599,7 +575,7 @@ export function GuestList() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={updateDropdownPosition}
                     placeholder="Type your name..."
-                    className="w-full pl-8 sm:pl-10 pr-2.5 sm:pr-3 py-2 sm:py-2.5 md:py-3 border border-white/40 focus:border-white/60 rounded-lg text-xs sm:text-sm font-sans text-[#3E2914] placeholder:text-[#7D7F2E]/60 transition-all duration-300 hover:border-white/50 focus:ring-2 focus:ring-white/20 bg-white/95 shadow-sm focus:shadow-md"
+                    className="w-full rounded-lg border border-[#BB8A3D]/30 bg-white py-2 pl-8 pr-2.5 font-sans text-xs text-[#3E2914] shadow-sm transition-all duration-300 placeholder:text-[#BB8A3D]/60 hover:border-[#BB8A3D]/45 focus:border-[#BB8A3D]/60 focus:shadow-md focus:ring-2 focus:ring-[#BB8A3D]/15 sm:pl-10 sm:pr-3 sm:py-2.5 sm:text-sm md:py-3"
                     aria-expanded={showDropdown}
                     aria-haspopup="listbox"
                     autoComplete="off"
@@ -608,8 +584,10 @@ export function GuestList() {
               </div>
             </div>
           </div>
-        </div>
       </div>
+        </div>
+      </InvitationCard>
+    </section>
 
       {/* Portaled suggestion dropdown — escapes section overflow & stacks above next section */}
       {mounted && showDropdown && dropdownPos && createPortal(
@@ -625,11 +603,11 @@ export function GuestList() {
         >
           {showSuggestions ? (
             <>
-              <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 border-b border-[#7D7F2E]/10 bg-gradient-to-r from-[#7D7F2E]/8 to-transparent">
-                <p className={`${cinzel.className} text-[10px] sm:text-xs uppercase tracking-[0.18em] text-[#7D7F2E] font-semibold`}>
+              <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 border-b border-[#BB8A3D]/10 bg-gradient-to-r from-[#BB8A3D]/8 to-transparent">
+                <p className={`${cinzel.className} text-[10px] sm:text-xs uppercase tracking-[0.18em] text-[#BB8A3D] font-semibold`}>
                   Matching Guests
                 </p>
-                <span className={`${cormorant.className} text-[10px] sm:text-xs text-[#7D7F2E]/70`}>
+                <span className={`${cormorant.className} text-[10px] sm:text-xs text-[#BB8A3D]/70`}>
                   {filteredGuests.length} found
                 </span>
               </div>
@@ -640,10 +618,10 @@ export function GuestList() {
                       type="button"
                       role="option"
                       onClick={() => handleSearchSelect(guest)}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-left hover:bg-[#7D7F2E]/8 active:bg-[#7D7F2E]/12 transition-all duration-200 flex items-center gap-3 sm:gap-4 group"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-left hover:bg-[#BB8A3D]/8 active:bg-[#BB8A3D]/12 transition-all duration-200 flex items-center gap-3 sm:gap-4 group"
                     >
                       <div className="relative flex-shrink-0">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#7D7F2E] to-[#6a6c27] flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#BB8A3D] to-[#A67A35] flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
                           <User className="h-4 w-4 sm:h-[18px] sm:w-[18px] text-white" />
                         </div>
                       </div>
@@ -652,13 +630,13 @@ export function GuestList() {
                           {highlightNameMatch(guest.Name, searchQuery)}
                         </div>
                         {guest.Email && guest.Email !== "Pending" && (
-                          <div className={`${cormorant.className} text-[10px] sm:text-xs text-[#7D7F2E]/75 truncate mt-0.5 flex items-center gap-1`}>
+                          <div className={`${cormorant.className} text-[10px] sm:text-xs text-[#BB8A3D]/75 truncate mt-0.5 flex items-center gap-1`}>
                             <Mail className="h-3 w-3 flex-shrink-0 opacity-70" />
                             {guest.Email}
                           </div>
                         )}
                       </div>
-                      <ChevronRight className="h-4 w-4 text-[#7D7F2E]/50 group-hover:text-[#7D7F2E] group-hover:translate-x-0.5 transition-all duration-200 flex-shrink-0" />
+                      <ChevronRight className="h-4 w-4 text-[#BB8A3D]/50 group-hover:text-[#BB8A3D] group-hover:translate-x-0.5 transition-all duration-200 flex-shrink-0" />
                     </button>
                   </li>
                 ))}
@@ -667,14 +645,14 @@ export function GuestList() {
           ) : (
             <div className="p-3 sm:p-4 md:p-5">
               <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#7D7F2E] to-[#6a6c27] flex items-center justify-center flex-shrink-0 shadow-md">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#BB8A3D] to-[#A67A35] flex items-center justify-center flex-shrink-0 shadow-md">
                   <UserPlus className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                 </div>
                 <div className="flex-1">
                   <h4 className={`${cinzel.className} text-sm sm:text-base text-[#3E2914] mb-1 tracking-wide`}>
                     Not finding your name?
                   </h4>
-                  <p className={`${cormorant.className} text-xs sm:text-sm text-[#7D7F2E]/90 leading-relaxed`}>
+                  <p className={`${cormorant.className} text-xs sm:text-sm text-[#BB8A3D]/90 leading-relaxed`}>
                     We&apos;d love to have you with us! Send a request to join the celebration.
                   </p>
                 </div>
@@ -685,7 +663,7 @@ export function GuestList() {
                   setRequestFormData({ ...requestFormData, Name: searchQuery })
                   setShowRequestModal(true)
                 }}
-                className="w-full bg-[#7D7F2E] hover:bg-[#6a6c27] text-white py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold shadow-[0_8px_24px_rgba(125,127,46,0.35)] transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
+                className="w-full bg-[#BB8A3D] hover:bg-[#A67A35] text-white py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold shadow-[0_8px_24px_rgba(187,138,61,0.35)] transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
               >
                 <UserPlus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 Request to Join
@@ -1310,6 +1288,6 @@ export function GuestList() {
           </div>
         </div>
       )}
-    </Section>
+    </>
   )
 }

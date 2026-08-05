@@ -1,7 +1,7 @@
 "use client"
 
-import { Section } from "@/components/section"
 import { NameConnector } from "@/components/couple-name-text"
+import { InvitationCard } from "@/components/invitation-card"
 import { useState, useEffect } from "react"
 import { QRCodeSVG } from "qrcode.react"
 import { useSiteConfig } from "@/hooks/use-site-config"
@@ -31,20 +31,29 @@ const cinzel = Cinzel({
   weight: ["400", "600"],
 })
 
-const CORNER_DECO_CLASS =
-  "w-auto h-auto max-w-[140px] sm:max-w-[180px] md:max-w-[220px] lg:max-w-[260px] opacity-80 drop-shadow-[0_10px_28px_rgba(0,0,0,0.35)]"
+const CORNER_DECORATIONS = [
+  { src: "/decoration/top-right-corner.png", className: "right-0 top-0" },
+  { src: "/decoration/bottom-left-new.png", className: "bottom-0 left-0" },
+] as const
 
-const GLASS_CARD_CLASS =
-  "relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/30 bg-white/15 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.22),0_4px_14px_rgba(0,0,0,0.14)] transition-all duration-300 hover:border-white/40"
+const invitationText = {
+  accent: "text-[#BB8A3D]",
+  heading: "text-[#6B5335]",
+  body: "text-[#7A6248]",
+  muted: "text-[#8B7355]",
+}
 
-const GLASS_INNER_CLASS =
-  "rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 p-3 sm:p-4 md:p-5"
+const INNER_CARD_CLASS =
+  "relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#BB8A3D]/30 bg-[#FDFBF7]/80 shadow-[0_4px_20px_rgba(139,111,71,0.12)] transition-all duration-300 hover:border-[#BB8A3D]/45"
+
+const INNER_BOX_CLASS =
+  "rounded-xl bg-[#F5EDE0]/60 border border-[#BB8A3D]/25 p-3 sm:p-4 md:p-5"
 
 const BTN_PRIMARY =
-  "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2 sm:py-2.5 md:py-3 bg-white hover:bg-white/90 text-[#7D7F2E] rounded-lg font-[family-name:var(--font-crimson)] font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
+  "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2 sm:py-2.5 md:py-3 bg-[#BB8A3D] hover:bg-[#A67A35] text-[#FDFBF7] rounded-lg font-[family-name:var(--font-crimson)] font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_16px_rgba(139,111,71,0.2)]"
 
 const BTN_SECONDARY =
-  "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2 sm:py-2.5 md:py-3 bg-white/15 border border-white/30 hover:border-white/45 hover:bg-white/25 text-white rounded-lg font-[family-name:var(--font-crimson)] font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+  "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2 sm:py-2.5 md:py-3 bg-transparent border border-[#BB8A3D]/45 hover:border-[#BB8A3D]/65 hover:bg-[#BB8A3D]/10 text-[#6B5335] rounded-lg font-[family-name:var(--font-crimson)] font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
 
 function CoupleNameInline() {
   const { groomNickname, brideNickname } = useSiteConfig().couple
@@ -135,83 +144,52 @@ export function Details() {
 
 
   return (
-    <Section
+    <>
+    <section
       id="details"
-      className="relative py-16 sm:py-20 md:py-24 lg:py-28 overflow-hidden"
+      className="relative flex w-full justify-center px-4 py-8 sm:px-6 sm:py-10 md:py-12"
     >
-      {/* Corner decorations — reflected to all four corners */}
-      {/* <div className="absolute right-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute right-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-
+      <InvitationCard
+        decorations={CORNER_DECORATIONS}
+        className="w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px]"
+      >
+        <div className="space-y-8 sm:space-y-10 md:space-y-12">
       {/* Header */}
-      <div className="relative z-10 flex flex-col items-center gap-4 sm:gap-5 md:gap-6 text-center mt-8 sm:mt-10 md:mt-12 mb-10 sm:mb-14 md:mb-16 px-4 sm:px-6">
+      <div className="flex flex-col items-center gap-3 text-center sm:gap-4 md:gap-5">
         <p
-          className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] sm:text-xs md:text-sm uppercase tracking-[0.28em] text-white/90`}
+          className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] uppercase tracking-[0.28em] sm:text-xs md:text-sm ${invitationText.accent}`}
         >
           <CoupleNameInline />
         </p>
 
+        <div
+          className="flex w-full max-w-[12rem] items-center justify-center gap-2 sm:max-w-[14rem] md:max-w-[16rem]"
+          aria-hidden="true"
+        >
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+          <div className="h-1 w-1 shrink-0 rounded-full bg-[#BB8A3D]/80" />
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+        </div>
+
         <h2
-          className="font-[family-name:var(--font-safira-march)] text-[clamp(1.6rem,5.8vw,2rem)] sm:text-[2.85rem] md:text-[3.55rem] lg:text-[4.1rem] xl:text-[4.6rem] leading-none tracking-[0.015em] sm:tracking-[0.01em] text-white px-2 sm:px-3 my-1 sm:my-1.5 [text-shadow:0_2px_14px_rgba(0,0,0,0.22)]"
+          className={`font-[family-name:var(--font-safira-march)] px-2 text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
         >
           Event Details
         </h2>
 
         <p
-          className={`${cormorant.className} text-xs sm:text-sm md:text-base italic text-white/90 max-w-xl mx-auto leading-relaxed px-2 sm:px-3 mt-0.5 sm:mt-1`}
+          className={`${cormorant.className} mx-auto max-w-xl px-2 text-xs italic leading-relaxed sm:text-sm md:text-base ${invitationText.muted}`}
         >
           Everything you need to know about our special day.
         </p>
       </div>
 
       {/* Venue and Event Information */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12 md:mb-16 space-y-6 sm:space-y-10 md:space-y-14">
+      <div className="space-y-6 sm:space-y-8 md:space-y-10">
         
         {/* Ceremony Card */}
         <div className="relative group">
-          <div className={GLASS_CARD_CLASS}>
+          <div className={INNER_CARD_CLASS}>
             {/* Venue Image */}
             <div className="relative w-full h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[30rem] overflow-hidden">
               <Image
@@ -239,58 +217,53 @@ export function Details() {
             <div className="p-3 sm:p-5 md:p-7 lg:p-9">
               {/* Date Section */}
               <div className="text-center mb-5 sm:mb-8 md:mb-10">
-                {/* Day name */}
-                <p className={`${cinzel.className} text-[10px] sm:text-xs md:text-sm font-semibold text-white/90 uppercase tracking-[0.2em] mb-2 sm:mb-3`}>
+                <p className={`${cinzel.className} text-[10px] sm:text-xs md:text-sm font-semibold uppercase tracking-[0.2em] mb-2 sm:mb-3 ${invitationText.muted}`}>
                   {siteConfig.ceremony.day}
                 </p>
-                
-                {/* Month - Script style with warm gold */}
+
                 <div className="mb-2 sm:mb-4">
-                  <p className={`${cinzel.className} text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white/90 leading-none`}>
+                  <p className={`${cinzel.className} text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-none ${invitationText.accent}`}>
                   {new Date(siteConfig.ceremony.date).toLocaleString('default', { month: 'long' })}
                   </p>
                 </div>
-                
-                {/* Day and Year */}
+
                 <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-7">
-                  <p className={`${cinzel.className} text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-none`}>
+                  <p className={`${cinzel.className} text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal leading-none ${invitationText.heading}`}>
                   {new Date(siteConfig.ceremony.date).getDate()}
                   </p>
-                  <div className="h-10 sm:h-12 md:h-16 lg:h-20 w-[2px] bg-gradient-to-b from-white/30 via-white/70 to-white/30" />
-                  <p className={`${cinzel.className} text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light text-white leading-none`}>
+                  <div className="h-10 sm:h-12 md:h-16 lg:h-20 w-[2px] bg-gradient-to-b from-[#BB8A3D]/30 via-[#BB8A3D]/70 to-[#BB8A3D]/30" />
+                  <p className={`${cinzel.className} text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light leading-none ${invitationText.heading}`}>
                   {new Date(siteConfig.ceremony.date).getFullYear()}
                   </p>
                 </div>
 
-                {/* Time */}
-                <p className={`${cinzel.className} text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white tracking-wide`}>
+                <p className={`${cinzel.className} text-sm sm:text-base md:text-lg lg:text-xl font-semibold tracking-wide ${invitationText.body}`}>
                   {siteConfig.ceremony.time}
                 </p>
               </div>
 
               {/* Location Details */}
-              <div className={`${GLASS_INNER_CLASS} mb-4 sm:mb-6`}>
+              <div className={`${INNER_BOX_CLASS} mb-4 sm:mb-6`}>
                 <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white mt-0.5 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm md:text-base font-[family-name:var(--font-crimson)] font-semibold text-white mb-1.5 sm:mb-2 uppercase tracking-wide">
+                  <MapPin className={`mt-0.5 h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5 md:h-6 md:w-6 ${invitationText.accent}`} />
+                  <div className="min-w-0 flex-1">
+                    <p className={`mb-1.5 text-xs font-[family-name:var(--font-crimson)] font-semibold uppercase tracking-wide sm:mb-2 sm:text-sm md:text-base ${invitationText.accent}`}>
                       Location
                     </p>
-                    <p className={`${cinzel.className} text-xs sm:text-sm md:text-base lg:text-lg font-[family-name:var(--font-crimson)] text-white leading-relaxed`}>
+                    <p className={`${cinzel.className} text-xs font-[family-name:var(--font-crimson)] leading-relaxed sm:text-sm md:text-base lg:text-lg ${invitationText.heading}`}>
                       {ceremonyVenueName}
                     </p>
                     {ceremonyVenueDetail && (
-                      <p className={`${cinzel.className} text-[10px] sm:text-xs md:text-sm font-[family-name:var(--font-crimson)] text-white/75 leading-relaxed mt-1`}>
+                      <p className={`${cinzel.className} mt-1 text-[10px] font-[family-name:var(--font-crimson)] leading-relaxed sm:text-xs md:text-sm ${invitationText.muted}`}>
                         {ceremonyVenueDetail}
                       </p>
                     )}
-                    <p className={`${cinzel.className} text-[10px] sm:text-xs md:text-sm font-[family-name:var(--font-crimson)] text-white/70 leading-relaxed`}>
+                    <p className={`${cinzel.className} text-[10px] font-[family-name:var(--font-crimson)] leading-relaxed sm:text-xs md:text-sm ${invitationText.muted}`}>
                       {ceremonyAddress}
                     </p>
                   </div>
-                  {/* QR Code for Ceremony - Right side */}
-                  <div className="flex flex-col items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                    <div className="bg-white/90 p-1.5 sm:p-2 md:p-2.5 rounded-lg border border-white/40 shadow-sm">
+                  <div className="flex flex-shrink-0 flex-col items-center gap-1.5 sm:gap-2">
+                    <div className="rounded-lg border border-[#BB8A3D]/30 bg-white p-1.5 shadow-sm sm:p-2 md:p-2.5">
                       <QRCodeSVG
                         value={ceremonyMapsLink}
                         size={80}
@@ -300,7 +273,7 @@ export function Details() {
                         bgColor="#FFFFFF"
                       />
                     </div>
-                    <p className="text-[9px] sm:text-[10px] md:text-xs font-[family-name:var(--font-crimson)] text-white/60 italic text-center max-w-[80px]">
+                    <p className={`max-w-[80px] text-center text-[9px] italic sm:text-[10px] md:text-xs ${invitationText.muted}`}>
                       Scan for directions
                     </p>
                   </div>
@@ -323,7 +296,7 @@ export function Details() {
                   aria-label="Copy ceremony venue address"
                 >
                   {copiedItems.has('ceremony') ? (
-                    <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 flex-shrink-0 text-white" />
+                    <Check className="h-3.5 w-3.5 flex-shrink-0 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                   ) : (
                     <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 flex-shrink-0" />
                   )}
@@ -336,7 +309,7 @@ export function Details() {
 
         {/* Reception Card */}
         <div className="relative group">
-          <div className={GLASS_CARD_CLASS}>
+          <div className={INNER_CARD_CLASS}>
        
             <div className="relative w-full h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[30rem] overflow-hidden">
               {receptionImages.map((src, index) => (
@@ -374,7 +347,7 @@ export function Details() {
          
               <div className="text-center mb-5 sm:mb-8">
                 {siteConfig.reception.time === "To follow after the ceremony" ? (
-                  <p className={`${cinzel.className} text-sm sm:text-base md:text-lg lg:text-xl font-[family-name:var(--font-crimson)]  font-semibold text-white tracking-wide`}>
+                  <p className={`${cinzel.className} text-sm sm:text-base font-[family-name:var(--font-crimson)] font-semibold tracking-wide md:text-lg lg:text-xl ${invitationText.body}`}>
                     To follow after the ceremony
                   </p>
                 ) : (
@@ -390,28 +363,28 @@ export function Details() {
               </div>
 
         
-              <div className={`${GLASS_INNER_CLASS} mb-4 sm:mb-6`}>
+              <div className={`${INNER_BOX_CLASS} mb-4 sm:mb-6`}>
                 <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white mt-0.5 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm md:text-base font-[family-name:var(--font-crimson)] font-semibold text-white mb-1.5 sm:mb-2 uppercase tracking-wide">
+                  <MapPin className={`mt-0.5 h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5 md:h-6 md:w-6 ${invitationText.accent}`} />
+                  <div className="min-w-0 flex-1">
+                    <p className={`mb-1.5 text-xs font-[family-name:var(--font-crimson)] font-semibold uppercase tracking-wide sm:mb-2 sm:text-sm md:text-base ${invitationText.accent}`}>
                       Location
                     </p>
-                    <p className={`${cinzel.className} text-xs sm:text-sm md:text-base lg:text-lg font-[family-name:var(--font-crimson)] text-white leading-relaxed`}>
+                    <p className={`${cinzel.className} text-xs font-[family-name:var(--font-crimson)] leading-relaxed sm:text-sm md:text-base lg:text-lg ${invitationText.heading}`}>
                       {receptionVenueName}
                     </p>
                     {receptionVenueDetail && (
-                    <p className={`${cinzel.className} text-[10px] sm:text-xs md:text-sm font-[family-name:var(--font-crimson)] text-white/70 leading-relaxed mt-1`}>
+                    <p className={`${cinzel.className} mt-1 text-[10px] font-[family-name:var(--font-crimson)] leading-relaxed sm:text-xs md:text-sm ${invitationText.muted}`}>
                         {receptionVenueDetail}
                       </p>
                     )}
-                    <p className={`${cinzel.className} text-[10px] sm:text-xs md:text-sm font-[family-name:var(--font-crimson)] text-white/70 leading-relaxed`}>
+                    <p className={`${cinzel.className} text-[10px] font-[family-name:var(--font-crimson)] leading-relaxed sm:text-xs md:text-sm ${invitationText.muted}`}>
                       {receptionAddress}
                     </p>
                   </div>
-              
-                  <div className="flex flex-col items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                    <div className="bg-white/90 p-1.5 sm:p-2 md:p-2.5 rounded-lg border border-white/40 shadow-sm">
+
+                  <div className="flex flex-shrink-0 flex-col items-center gap-1.5 sm:gap-2">
+                    <div className="rounded-lg border border-[#BB8A3D]/30 bg-white p-1.5 shadow-sm sm:p-2 md:p-2.5">
                       <QRCodeSVG
                         value={receptionMapsLink}
                         size={80}
@@ -421,7 +394,7 @@ export function Details() {
                         bgColor="#FFFFFF"
                       />
                     </div>
-                    <p className="text-[9px] sm:text-[10px] md:text-xs font-[family-name:var(--font-crimson)] text-white/60 italic text-center max-w-[80px]">
+                    <p className={`max-w-[80px] text-center text-[9px] italic sm:text-[10px] md:text-xs ${invitationText.muted}`}>
                       Scan for directions
                     </p>
                   </div>
@@ -444,7 +417,7 @@ export function Details() {
                   aria-label="Copy reception venue address"
                 >
                   {copiedItems.has('reception') ? (
-                    <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 flex-shrink-0 text-white" />
+                    <Check className="h-3.5 w-3.5 flex-shrink-0 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                   ) : (
                     <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 flex-shrink-0" />
                   )}
@@ -457,107 +430,64 @@ export function Details() {
       </div>
 
       {/* Attire Guide */}
-      <div className="relative z-10 text-center mb-8 sm:mb-10 md:mb-12 px-4 sm:px-6">
-        <div className="flex items-center justify-center mb-4 sm:mb-5">
-          <Shirt className="w-5 h-5 sm:w-6 sm:h-6 text-white/80" aria-hidden />
+      <div className="text-center">
+        <div className="mb-4 flex items-center justify-center sm:mb-5">
+          <Shirt className={`h-5 w-5 sm:h-6 sm:w-6 ${invitationText.accent}`} aria-hidden />
         </div>
-        <h3 className="font-[family-name:var(--font-safira-march)] text-[1.2rem] sm:text-[1.45rem] md:text-[1.65rem] leading-none tracking-[0.01em] text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.2)]">
+        <h3 className={`font-[family-name:var(--font-safira-march)] text-[1.2rem] leading-none tracking-[0.01em] sm:text-[1.45rem] md:text-[1.65rem] ${invitationText.heading}`}>
           Attire Guide
         </h3>
       </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 md:mb-10">
-        <div className={GLASS_CARD_CLASS}>
-          <div className="px-4 sm:px-6 md:px-8 py-5 sm:py-7 space-y-8 sm:space-y-10">
-            {/* Principal Sponsors */}
-            <div>
-              <h4 className="font-[family-name:var(--font-safira-march)] text-[1rem] sm:text-[1.15rem] md:text-[1.3rem] leading-none tracking-[0.01em] text-white text-center mb-4 sm:mb-5 [text-shadow:0_2px_10px_rgba(0,0,0,0.2)]">
-                Principal Sponsors
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 max-w-2xl mx-auto">
-                <div className="relative w-full aspect-[4/3] rounded-lg sm:rounded-xl overflow-hidden border border-white/25">
+      <div className={INNER_CARD_CLASS}>
+          <div className="space-y-6 px-4 py-5 sm:space-y-8 sm:px-6 sm:py-7 md:px-8">
+            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+              <div>
+                <h4 className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
+                  Principal Sponsors
+                </h4>
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#BB8A3D]/25 sm:rounded-xl">
                   <Image
-                    src="/Details/sponsorsnew.png"
+                    src="/Details/sponsors.png"
                     alt="Principal sponsors attire guide"
                     fill
                     className="object-contain bg-[#FFF7F6]/50 p-2 sm:p-3"
                     sizes="(max-width: 640px) 100vw, 50vw"
                   />
                 </div>
-                <div className="relative w-full aspect-[4/3] rounded-lg sm:rounded-xl overflow-hidden border border-white/25">
+                <div className={`${INNER_BOX_CLASS} mt-3 px-3 py-3 sm:mt-4 sm:px-4 sm:py-3.5`}>
+                  <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base ${invitationText.body}`}>
+                    Ninang in beige or champagne dress. Ninong in Classic Barong Tagalog with white undershirt{" "}
+                    <NameConnector size="sm">and</NameConnector>{" "}
+                    black slacks.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h4 className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
+                  Guests
+                </h4>
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#BB8A3D]/25 sm:rounded-xl">
                   <Image
-                    src="/Details/sponsors2.png"
-                    alt="Principal sponsors attire guide"
+                    src="/Details/debutAttire.png"
+                    alt="Guest attire guide"
                     fill
                     className="object-contain bg-[#FFF7F6]/50 p-2 sm:p-3"
                     sizes="(max-width: 640px) 100vw, 50vw"
                   />
                 </div>
-              </div>
-              <div className={`${GLASS_INNER_CLASS} mt-5 sm:mt-6 px-3 py-3 sm:px-4 sm:py-3.5`}>
-                <p className={`${cormorant.className} text-left text-sm sm:text-base text-white leading-snug sm:leading-relaxed`}>
-                  We humbly request the honor of our Ninang&apos;s presence in elegant beige or champagne-colored dresses,{" "}
-                  <NameConnector size="sm">and</NameConnector>{" "}
-                  our Ninong&apos;s presence in a Classic Barong Tagalog with a white undershirt paired with black slacks.
-                </p>
-              </div>
-            </div>
-
-            {/* Guests */}
-            <div className="pt-6 sm:pt-8 border-t border-white/20">
-              <h4 className="font-[family-name:var(--font-safira-march)] text-[1rem] sm:text-[1.15rem] md:text-[1.3rem] leading-none tracking-[0.01em] text-white text-center mb-3 sm:mb-4 [text-shadow:0_2px_10px_rgba(0,0,0,0.2)]">
-                Guests
-              </h4>
-              <p className={`${cormorant.className} text-center text-sm sm:text-base text-white/90 mb-6 sm:mb-8 leading-snug sm:leading-relaxed`}>
-                We kindly request our guests to dress in semi-formal attire.
-              </p>
-
-              <div className="space-y-6 sm:space-y-8">
-                <div>
-                  <h5 className={`${cinzel.className} text-xs sm:text-sm md:text-base font-semibold tracking-[0.12em] uppercase text-white text-center mb-3 sm:mb-4`}>
-                    Ladies
-                  </h5>
-                  <div className="relative w-full aspect-[4/3] sm:aspect-[3/2] max-w-xl mx-auto rounded-lg sm:rounded-xl overflow-hidden border border-white/25 mb-4 sm:mb-5">
-                    <Image
-                      src="/Details/guestone.png"
-                      alt="Guest attire for ladies"
-                      fill
-                      className="object-contain bg-[#FFF7F6]/50 p-2 sm:p-3"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 576px"
-                    />
-                  </div>
-                  <div className={`${GLASS_INNER_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
-                    <p className={`${cormorant.className} text-left text-sm sm:text-base text-white leading-snug sm:leading-relaxed`}>
-                      May wear a semi-formal dress paired with flats, sandals, or heels that you are comfortable wearing.
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <h5 className={`${cinzel.className} text-xs sm:text-sm md:text-base font-semibold tracking-[0.12em] uppercase text-white text-center mb-3 sm:mb-4`}>
-                    Gentlemen
-                  </h5>
-                  <div className="relative w-full aspect-[4/3] sm:aspect-[3/2] max-w-xl mx-auto rounded-lg sm:rounded-xl overflow-hidden border border-white/25 mb-4 sm:mb-5">
-                    <Image
-                      src="/Details/guest.png"
-                      alt="Guest attire for gentlemen"
-                      fill
-                      className="object-contain bg-[#FFF7F6]/50 p-2 sm:p-3"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 576px"
-                    />
-                  </div>
-                  <div className={`${GLASS_INNER_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
-                    <p className={`${cormorant.className} text-left text-sm sm:text-base text-white leading-snug sm:leading-relaxed`}>
-                      May wear long sleeves or a button-down polo paired with pants. For gentlemen, we respectfully ask that no maong (denim jeans) or open-toe shoes be worn.
-                    </p>
-                  </div>
+                <div className={`${INNER_BOX_CLASS} mt-3 px-3 py-3 sm:mt-4 sm:px-4 sm:py-3.5`}>
+                  <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base ${invitationText.body}`}>
+                    Semi-formal attire. Ladies: dress with comfortable footwear. Gentlemen: long sleeves or polo with pants—no denim or open-toe shoes.
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="pt-6 sm:pt-8 border-t border-white/20">
-              <div className="flex flex-col items-center mb-4 sm:mb-5">
-                <p className="font-[family-name:var(--font-safira-march)] text-[1rem] sm:text-[1.15rem] md:text-[1.3rem] leading-none tracking-[0.01em] text-white text-center mb-3 sm:mb-4 [text-shadow:0_2px_10px_rgba(0,0,0,0.2)]">
+            <div className="border-t border-[#BB8A3D]/20 pt-6 sm:pt-8">
+              <div className="mb-4 flex flex-col items-center sm:mb-5">
+                <p className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
                   Gift Guide
                 </p>
                 <Image
@@ -565,19 +495,20 @@ export function Details() {
                   alt="Gift guide"
                   width={288}
                   height={288}
-                  className="w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 object-contain brightness-0 invert opacity-90"
+                  className="h-48 w-48 object-contain opacity-90 sm:h-60 sm:w-60 md:h-72 md:w-72"
+                  style={{ filter: "brightness(0) saturate(100%) invert(46%) sepia(18%) saturate(749%) hue-rotate(358deg) brightness(91%) contrast(89%)" }}
                 />
               </div>
-              <div className={`${GLASS_INNER_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
-                <p className={`${cormorant.className} text-left text-sm sm:text-base text-white leading-snug sm:leading-relaxed`}>
+              <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
+                <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base sm:leading-relaxed ${invitationText.body}`}>
                   Your presence at our wedding is the greatest gift we could ask for. Your love, laughter, and company on our special day are more than enough. Should you wish to honor us with a gift, a monetary contribution toward our future together would be deeply appreciated and gratefully received.
                 </p>
               </div>
             </div>
 
-            <div className="pt-6 sm:pt-8 border-t border-white/20">
-              <div className="flex flex-col items-center mb-4 sm:mb-5">
-                <p className="font-[family-name:var(--font-safira-march)] text-[1rem] sm:text-[1.15rem] md:text-[1.3rem] leading-none tracking-[0.01em] text-white text-center mb-3 sm:mb-4 [text-shadow:0_2px_10px_rgba(0,0,0,0.2)]">
+            <div className="border-t border-[#BB8A3D]/20 pt-6 sm:pt-8">
+              <div className="mb-4 flex flex-col items-center sm:mb-5">
+                <p className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
                   Friendly Reminder
                 </p>
                 <Image
@@ -585,12 +516,13 @@ export function Details() {
                   alt=""
                   width={288}
                   height={288}
-                  className="w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 object-contain brightness-0 invert opacity-90"
+                  className="h-48 w-48 object-contain opacity-90 sm:h-60 sm:w-60 md:h-72 md:w-72"
+                  style={{ filter: "brightness(0) saturate(100%) invert(46%) sepia(18%) saturate(749%) hue-rotate(358deg) brightness(91%) contrast(89%)" }}
                   aria-hidden
                 />
               </div>
-              <div className={`${GLASS_INNER_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
-                <p className={`${cormorant.className} text-left text-sm sm:text-base text-white leading-snug sm:leading-relaxed`}>
+              <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
+                <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base sm:leading-relaxed ${invitationText.body}`}>
                   We warmly invite you to capture special moments of our wedding. As the ceremony begins, we kindly ask that phones{" "}
                   <NameConnector size="sm">and</NameConnector>{" "}
                   cameras remain out of the aisle. Feel free to take photos discreetly from your seat, allowing our photographers to capture each moment without obstruction.
@@ -599,7 +531,9 @@ export function Details() {
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </InvitationCard>
+    </section>
 
       {/* Enhanced Image Modal */}
       {showImageModal && (
@@ -804,6 +738,6 @@ export function Details() {
           </div>
         </div>
       )}
-    </Section>
+    </>
   )
 }

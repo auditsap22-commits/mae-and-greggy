@@ -4,9 +4,9 @@ import { useState, useEffect, useMemo } from "react"
 import { motion } from "motion/react"
 import { Instagram, Twitter, Facebook, MapPin, Calendar, Clock, Heart, Music2 } from "lucide-react"
 import { useSiteConfig } from "@/hooks/use-site-config"
+import { InvitationCard } from "@/components/invitation-card"
 import { NameConnector, StyledName } from "@/components/couple-name-text"
 import { Cormorant_Garamond, Cinzel } from "next/font/google"
-import Image from "next/image"
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -18,17 +18,29 @@ const cinzel = Cinzel({
   weight: ["400", "600"],
 })
 
-const CORNER_DECO_CLASS =
-  "w-auto h-auto max-w-[140px] sm:max-w-[180px] md:max-w-[220px] lg:max-w-[260px] opacity-80 drop-shadow-[0_10px_28px_rgba(0,0,0,0.35)]"
+const CORNER_DECORATIONS = [
+  { src: "/decoration/top-right-corner.png", className: "right-0 top-0" },
+  { src: "/decoration/bottom-left-new.png", className: "bottom-0 left-0" },
+] as const
 
-const GLASS_CARD_CLASS =
-  "relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/30 bg-white/15 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.22),0_4px_14px_rgba(0,0,0,0.14)] transition-all duration-300 hover:border-white/40"
+const invitationText = {
+  accent: "text-[#BB8A3D]",
+  heading: "text-[#6B5335]",
+  body: "text-[#7A6248]",
+  muted: "text-[#8B7355]",
+}
 
-const GLASS_INNER_CLASS =
-  "rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 p-3 sm:p-4 md:p-5 transition-all duration-300 hover:border-white/30 hover:bg-white/12"
+const INNER_PANEL_CLASS =
+  "rounded-xl border border-[#BB8A3D]/25 bg-[#F5EDE0]/60 p-3 transition-all duration-300 hover:border-[#BB8A3D]/35 hover:bg-[#F5EDE0]/80 sm:rounded-2xl sm:p-4 md:p-5"
 
 const ICON_WRAP_CLASS =
-  "w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-white/15 border border-white/25 flex items-center justify-center flex-shrink-0"
+  "flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#BB8A3D]/30 bg-[#F5EDE0]/80 sm:h-9 sm:w-9 md:h-10 md:w-10"
+
+const LINK_CLASS =
+  "font-semibold text-[#BB8A3D] underline transition-colors hover:text-[#A67A35]"
+
+const SOCIAL_BTN_CLASS =
+  "inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#BB8A3D]/25 bg-[#F5EDE0]/60 text-[#BB8A3D] transition-all duration-200 hover:scale-110 hover:border-[#BB8A3D]/40 hover:bg-[#F5EDE0]/90 sm:h-11 sm:w-11"
 
 const toTitleCase = (str: string) =>
   str
@@ -125,269 +137,220 @@ export function Footer() {
   const groomNickname = siteConfig.couple.groomNickname
 
   return (
-    <footer className="relative mt-12 sm:mt-16 py-16 sm:py-20 md:py-24 lg:py-28 overflow-hidden">
-      {/* Corner decorations */}
-      {/* <div className="absolute right-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute right-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-
-      {/* Monogram & couple header */}
-      <div className="relative z-10 flex flex-col items-center mb-10 sm:mb-12 md:mb-16 px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 opacity-95 drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
-        >
-          <Image
-            src={siteConfig.couple.monogram}
-            alt={`${groomNickname} and ${brideNickname} monogram`}
-            fill
-            className="object-contain brightness-0 invert opacity-90"
-            priority={false}
-          />
-        </motion.div>
-
-        <div className="mt-4 sm:mt-5 text-center w-full max-w-[18rem] sm:max-w-[22rem] md:max-w-none mx-auto px-2 sm:px-0">
-          <p className="font-[family-name:var(--font-safira-march)] inline-flex flex-wrap items-baseline justify-center gap-x-0 gap-y-0.5 sm:gap-y-1 text-[0.78rem] sm:text-[1rem] md:text-[1.3rem] lg:text-[1.6rem] leading-none tracking-[0.02em] sm:tracking-[0.03em] text-white [text-shadow:0_3px_16px_rgba(0,0,0,0.25)]">
-            <StyledName name={groomNickname} />
-            <NameConnector size="sm">and</NameConnector>
-            <StyledName name={brideNickname} />
-          </p>
-          <p className={`${cormorant.className} text-sm sm:text-base md:text-lg text-white/90 mt-2 sm:mt-3 tracking-[0.08em]`}>
-            {ceremonyDate}
-          </p>
-          <p className={`${cormorant.className} text-xs sm:text-sm md:text-base text-white/75 mt-1`}>
-            {combinedVenue ?? ceremonyVenue}
-          </p>
-        </div>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-6 sm:pb-8 md:pb-10">
-        <div className={GLASS_CARD_CLASS}>
-          <div className="p-3 sm:p-5 md:p-7 lg:p-9">
+    <footer className="relative flex w-full justify-center px-4 py-8 sm:px-6 sm:py-10 md:py-12">
+      <InvitationCard
+        decorations={CORNER_DECORATIONS}
+        className="w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px]"
+      >
+        <div className="space-y-6 sm:space-y-8">
+          {/* Monogram & couple header */}
+          <div className="flex flex-col items-center text-center">
             <motion.div
-              className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8"
-              variants={staggerChildren}
-              initial="initial"
-              animate="animate"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="relative mx-auto h-32 w-32 sm:h-40 sm:w-40 md:h-48 md:w-48"
+              role="img"
+              aria-label={`${groomNickname} and ${brideNickname} monogram`}
             >
-              {/* Couple info + quote */}
-              <motion.div className="lg:col-span-2" variants={fadeInUp}>
-                <div className="mb-4 sm:mb-5">
-                  <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3 mb-3 sm:mb-4">
-                    {/* <div className={`${ICON_WRAP_CLASS} w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 shrink-0`}>
-                      <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-white fill-white/80" />
-                    </div> */}
-                    <h3 className="font-[family-name:var(--font-safira-march)] inline-flex flex-wrap items-baseline mt-3 gap-y-0.5 max-w-full text-[0.78rem] sm:text-[0.95rem] md:text-[1.1rem] lg:text-[1.25rem] text-white leading-none tracking-[0.02em] sm:tracking-[0.03em] [text-shadow:0_2px_10px_rgba(0,0,0,0.2)]">
-                      <StyledName name={groomNickname} />
-                      <NameConnector size="sm">and</NameConnector>
-                      <StyledName name={brideNickname} />
-                    </h3>
-                  </div>
-                  <div className="space-y-2 sm:space-y-2.5">
-                    <div className={`flex items-center gap-2 sm:gap-3 ${cormorant.className} text-white/85`}>
-                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 text-white/70" />
-                      <span className="text-sm sm:text-base">{ceremonyDate}</span>
-                    </div>
-                    <div className={`flex items-center gap-2 sm:gap-3 ${cormorant.className} text-white/85`}>
-                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 text-white/70" />
-                      <span className="text-xs sm:text-sm leading-relaxed">{toTitleCase(ceremonyVenue)}</span>
-                    </div>
-                  </div>
+              <div
+                className="absolute inset-0 bg-[#796347]"
+                style={{
+                  WebkitMaskImage: `url(${siteConfig.couple.monogram})`,
+                  maskImage: `url(${siteConfig.couple.monogram})`,
+                  WebkitMaskSize: "contain",
+                  maskSize: "contain",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskPosition: "center",
+                  maskPosition: "center",
+                }}
+              />
+            </motion.div>
+
+            <div className="mt-4 w-full max-w-[18rem] px-2 sm:mt-5 sm:max-w-[22rem] md:max-w-none">
+              <p className={`font-[family-name:var(--font-safira-march)] inline-flex flex-wrap items-baseline justify-center gap-x-0 gap-y-0.5 text-[0.78rem] leading-none tracking-[0.02em] sm:gap-y-1 sm:text-[1rem] sm:tracking-[0.03em] md:text-[1.3rem] lg:text-[1.6rem] ${invitationText.heading}`}>
+                <StyledName name={groomNickname} />
+                <NameConnector size="sm">and</NameConnector>
+                <StyledName name={brideNickname} />
+              </p>
+              <p className={`${cormorant.className} mt-2 text-sm tracking-[0.08em] sm:mt-3 sm:text-base md:text-lg ${invitationText.body}`}>
+                {ceremonyDate}
+              </p>
+              <p className={`${cormorant.className} mt-1 text-xs sm:text-sm md:text-base ${invitationText.muted}`}>
+                {combinedVenue ?? ceremonyVenue}
+              </p>
+            </div>
+          </div>
+
+          <motion.div
+            className="space-y-4 sm:space-y-5"
+            variants={staggerChildren}
+            initial="initial"
+            animate="animate"
+          >
+            {/* Couple info + quote */}
+            <motion.div className="space-y-4" variants={fadeInUp}>
+              <div className="space-y-2 sm:space-y-2.5">
+                <div className={`flex items-center gap-2 sm:gap-3 ${cormorant.className} ${invitationText.body}`}>
+                  <Calendar className={`h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5 ${invitationText.accent}`} />
+                  <span className="text-sm sm:text-base">{ceremonyDate}</span>
                 </div>
+                <div className={`flex items-center gap-2 sm:gap-3 ${cormorant.className} ${invitationText.body}`}>
+                  <MapPin className={`h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5 ${invitationText.accent}`} />
+                  <span className="text-xs leading-relaxed sm:text-sm">{toTitleCase(ceremonyVenue)}</span>
+                </div>
+              </div>
 
-                <motion.div className={GLASS_INNER_CLASS} whileHover={{ scale: 1.01 }} transition={{ duration: 0.3 }}>
-                  <blockquote className={`${cormorant.className} italic text-sm sm:text-base md:text-lg leading-relaxed min-h-[60px] sm:min-h-[70px] text-white/90`}>
-                    &quot;{displayedText}
-                    <span className="inline-block w-0.5 h-4 sm:h-5 bg-white/70 ml-1 animate-pulse">|</span>&quot;
-                  </blockquote>
-                </motion.div>
+              <motion.div className={INNER_PANEL_CLASS} whileHover={{ scale: 1.01 }} transition={{ duration: 0.3 }}>
+                <blockquote className={`${cormorant.className} min-h-[60px] text-sm italic leading-relaxed sm:min-h-[70px] sm:text-base md:text-lg ${invitationText.body}`}>
+                  &quot;{displayedText}
+                  <span className={`ml-1 inline-block h-4 w-0.5 animate-pulse bg-[#BB8A3D]/70 sm:h-5`}>|</span>&quot;
+                </blockquote>
               </motion.div>
+            </motion.div>
 
-              {/* Event details */}
-              <motion.div className="space-y-3 sm:space-y-4" variants={fadeInUp}>
-                {isSameVenue ? (
-                  <motion.div className={GLASS_INNER_CLASS} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
-                    <div className="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-3">
+            {/* Event details */}
+            <motion.div className="space-y-3 sm:space-y-4" variants={fadeInUp}>
+              {isSameVenue ? (
+                <motion.div className={INNER_PANEL_CLASS} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                  <div className="mb-2.5 flex items-center gap-2 sm:mb-3 sm:gap-3">
+                    <div className={ICON_WRAP_CLASS}>
+                      <MapPin className={`h-4 w-4 ${invitationText.accent}`} />
+                    </div>
+                    <h4 className={`${cinzel.className} inline-flex flex-wrap items-baseline gap-y-1 text-sm font-semibold sm:text-base md:text-lg ${invitationText.heading}`}>
+                      Ceremony
+                      <NameConnector size="sm">and</NameConnector>
+                      Reception
+                    </h4>
+                  </div>
+                  <div className={`space-y-2 ${cormorant.className} text-xs leading-relaxed sm:text-sm ${invitationText.body}`}>
+                    <div className="flex items-start gap-2 sm:gap-3">
+                      <MapPin className={`mt-0.5 h-3.5 w-3.5 flex-shrink-0 ${invitationText.muted}`} />
+                      <span>{toTitleCase(combinedVenue ?? ceremonyVenue)}</span>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <Clock className={`h-3.5 w-3.5 flex-shrink-0 ${invitationText.muted}`} />
+                      <span>Ceremony {ceremonyTime} · Reception {receptionTime}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <>
+                  <motion.div className={INNER_PANEL_CLASS} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                    <div className="mb-2.5 flex items-center gap-2 sm:mb-3 sm:gap-3">
                       <div className={ICON_WRAP_CLASS}>
-                        <MapPin className="w-4 h-4 text-white" />
+                        <Clock className={`h-4 w-4 ${invitationText.accent}`} />
                       </div>
-                      <h4 className={`${cinzel.className} font-semibold text-sm sm:text-base md:text-lg text-white inline-flex flex-wrap items-baseline gap-y-1`}>
+                      <h4 className={`${cinzel.className} text-sm font-semibold sm:text-base md:text-lg ${invitationText.heading}`}>
                         Ceremony
-                        <NameConnector size="sm">and</NameConnector>
-                        Reception
                       </h4>
                     </div>
-                    <div className={`space-y-2 ${cormorant.className} text-xs sm:text-sm text-white/85 leading-relaxed`}>
+                    <div className={`space-y-2 ${cormorant.className} text-xs leading-relaxed sm:text-sm ${invitationText.body}`}>
                       <div className="flex items-start gap-2 sm:gap-3">
-                        <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-white/70" />
-                        <span>{toTitleCase(combinedVenue ?? ceremonyVenue)}</span>
+                        <MapPin className={`mt-0.5 h-3.5 w-3.5 flex-shrink-0 ${invitationText.muted}`} />
+                        <span>{toTitleCase(ceremonyVenue)}</span>
                       </div>
                       <div className="flex items-center gap-2 sm:gap-3">
-                        <Clock className="w-3.5 h-3.5 flex-shrink-0 text-white/70" />
-                        <span>Ceremony {ceremonyTime} · Reception {receptionTime}</span>
+                        <Clock className={`h-3.5 w-3.5 flex-shrink-0 ${invitationText.muted}`} />
+                        <span>{ceremonyTime}</span>
                       </div>
                     </div>
                   </motion.div>
-                ) : (
-                  <>
-                    <motion.div className={GLASS_INNER_CLASS} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
-                      <div className="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-3">
-                        <div className={ICON_WRAP_CLASS}>
-                          <Clock className="w-4 h-4 text-white" />
-                        </div>
-                        <h4 className={`${cinzel.className} font-semibold text-sm sm:text-base md:text-lg text-white`}>
-                          Ceremony
-                        </h4>
+                  <motion.div className={INNER_PANEL_CLASS} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                    <div className="mb-2.5 flex items-center gap-2 sm:mb-3 sm:gap-3">
+                      <div className={ICON_WRAP_CLASS}>
+                        <Heart className={`h-4 w-4 fill-[#BB8A3D]/30 ${invitationText.accent}`} />
                       </div>
-                      <div className={`space-y-2 ${cormorant.className} text-xs sm:text-sm text-white/85 leading-relaxed`}>
-                        <div className="flex items-start gap-2 sm:gap-3">
-                          <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-white/70" />
-                          <span>{toTitleCase(ceremonyVenue)}</span>
-                        </div>
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <Clock className="w-3.5 h-3.5 flex-shrink-0 text-white/70" />
-                          <span>{ceremonyTime}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                    <motion.div className={GLASS_INNER_CLASS} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
-                      <div className="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-3">
-                        <div className={ICON_WRAP_CLASS}>
-                          <Heart className="w-4 h-4 text-white fill-white/80" />
-                        </div>
-                        <h4 className={`${cinzel.className} font-semibold text-sm sm:text-base md:text-lg text-white`}>
-                          Reception
-                        </h4>
-                      </div>
-                      <div className={`space-y-2 ${cormorant.className} text-xs sm:text-sm text-white/85 leading-relaxed`}>
-                        <div className="flex items-start gap-2 sm:gap-3">
-                          <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-white/70" />
-                          <span>{toTitleCase(receptionVenue)}</span>
-                        </div>
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <Clock className="w-3.5 h-3.5 flex-shrink-0 text-white/70" />
-                          <span>{receptionTime}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </>
-                )}
-
-                <motion.div className={GLASS_INNER_CLASS} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
-                  <div className="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-3">
-                    <div className={ICON_WRAP_CLASS}>
-                      <Calendar className="w-4 h-4 text-white" />
+                      <h4 className={`${cinzel.className} text-sm font-semibold sm:text-base md:text-lg ${invitationText.heading}`}>
+                        Reception
+                      </h4>
                     </div>
-                    <h4 className={`${cinzel.className} font-semibold text-sm sm:text-base md:text-lg text-white`}>
-                      RSVP Deadline
-                    </h4>
-                  </div>
-                  <div className={`space-y-2 ${cormorant.className} text-xs sm:text-sm text-white/85 leading-relaxed`}>
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <Clock className="w-3.5 h-3.5 flex-shrink-0 text-white/70" />
-                      <span>{siteConfig.details.rsvp.deadline}</span>
+                    <div className={`space-y-2 ${cormorant.className} text-xs leading-relaxed sm:text-sm ${invitationText.body}`}>
+                      <div className="flex items-start gap-2 sm:gap-3">
+                        <MapPin className={`mt-0.5 h-3.5 w-3.5 flex-shrink-0 ${invitationText.muted}`} />
+                        <span>{toTitleCase(receptionVenue)}</span>
+                      </div>
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <Clock className={`h-3.5 w-3.5 flex-shrink-0 ${invitationText.muted}`} />
+                        <span>{receptionTime}</span>
+                      </div>
                     </div>
-                    <p className="text-white/70">Please confirm your attendance by this date.</p>
-                  </div>
-                </motion.div>
-              </motion.div>
+                  </motion.div>
+                </>
+              )}
 
-              {/* Social + quick links */}
-              <motion.div className="space-y-5 sm:space-y-6" variants={fadeInUp}>
-                <div>
-                  <h4 className={`${cinzel.className} font-semibold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 flex items-center gap-2 text-white`}>
-                    <span className="h-5 w-1 rounded-full bg-white/50 sm:h-6" />
-                    Follow Us
+              <motion.div className={INNER_PANEL_CLASS} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                <div className="mb-2.5 flex items-center gap-2 sm:mb-3 sm:gap-3">
+                  <div className={ICON_WRAP_CLASS}>
+                    <Calendar className={`h-4 w-4 ${invitationText.accent}`} />
+                  </div>
+                  <h4 className={`${cinzel.className} text-sm font-semibold sm:text-base md:text-lg ${invitationText.heading}`}>
+                    RSVP Deadline
                   </h4>
-                  <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                    {[
-                      { href: "https://www.facebook.com", label: "Facebook", Icon: Facebook },
-                      { href: "https://www.instagram.com/", label: "Instagram", Icon: Instagram },
-                      { href: "https://www.youtube.com", label: "YouTube", Icon: Music2 },
-                      { href: "https://x.com/", label: "Twitter", Icon: Twitter },
-                    ].map(({ href, label, Icon }) => (
-                      <a
-                        key={label}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white/15 border border-white/25 text-white transition-all duration-200 hover:bg-white/25 hover:scale-110"
-                        aria-label={label}
-                      >
-                        <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </a>
-                    ))}
-                  </div>
                 </div>
-
-                <div className={GLASS_INNER_CLASS}>
-                  <h5 className={`${cinzel.className} font-semibold text-sm sm:text-base mb-2.5 sm:mb-3 text-white`}>
-                    Quick Links
-                  </h5>
-                  <div className="space-y-1.5 sm:space-y-2">
-                    {nav.map((item) => (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        className={`block transition-colors duration-200 ${cormorant.className} text-xs sm:text-sm text-white/80 hover:text-white`}
-                      >
-                        {item.label}
-                      </a>
-                    ))}
+                <div className={`space-y-2 ${cormorant.className} text-xs leading-relaxed sm:text-sm ${invitationText.body}`}>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Clock className={`h-3.5 w-3.5 flex-shrink-0 ${invitationText.muted}`} />
+                    <span>{siteConfig.details.rsvp.deadline}</span>
                   </div>
+                  <p className={invitationText.muted}>Please confirm your attendance by this date.</p>
                 </div>
               </motion.div>
             </motion.div>
 
+            {/* Social + quick links */}
+            <motion.div className="space-y-4 sm:space-y-5" variants={fadeInUp}>
+              <div>
+                <h4 className={`${cinzel.className} mb-3 flex items-center gap-2 text-sm font-semibold sm:mb-4 sm:text-base md:text-lg ${invitationText.heading}`}>
+                  <span className="h-5 w-1 rounded-full bg-[#BB8A3D]/50 sm:h-6" />
+                  Follow Us
+                </h4>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  {[
+                    { href: "https://www.facebook.com", label: "Facebook", Icon: Facebook },
+                    { href: "https://www.instagram.com/", label: "Instagram", Icon: Instagram },
+                    { href: "https://www.youtube.com", label: "YouTube", Icon: Music2 },
+                    { href: "https://x.com/", label: "Twitter", Icon: Twitter },
+                  ].map(({ href, label, Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={SOCIAL_BTN_CLASS}
+                      aria-label={label}
+                    >
+                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className={INNER_PANEL_CLASS}>
+                <h5 className={`${cinzel.className} mb-2.5 text-sm font-semibold sm:mb-3 sm:text-base ${invitationText.heading}`}>
+                  Quick Links
+                </h5>
+                <div className="space-y-1.5 sm:space-y-2">
+                  {nav.map((item) => (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className={`block text-xs transition-colors duration-200 sm:text-sm ${cormorant.className} ${invitationText.muted} hover:text-[#BB8A3D]`}
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
             {/* Bottom row */}
             <motion.div variants={fadeInUp} initial="initial" animate="animate">
-              <div className="pt-5 sm:pt-6 border-t border-white/20">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 md:gap-5">
-                  <div className="text-center md:text-left">
-                    <p className={`${cormorant.className} text-xs sm:text-sm text-white/80 leading-relaxed`}>
+              <div className="border-t border-[#BB8A3D]/20 pt-5 sm:pt-6">
+                <div className="flex flex-col items-center justify-between gap-3 sm:gap-4 md:gap-5">
+                  <div className="text-center">
+                    <p className={`${cormorant.className} text-xs leading-relaxed sm:text-sm ${invitationText.body}`}>
                       © {year}{" "}
                       <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
                         <CoupleNameInline />
@@ -396,29 +359,29 @@ export function Footer() {
                       <NameConnector size="sm">and</NameConnector>{" "}
                       gratitude.
                     </p>
-                    <p className={`${cormorant.className} text-xs sm:text-sm mt-1 text-white/70 leading-relaxed`}>
+                    <p className={`${cormorant.className} mt-1 text-xs leading-relaxed sm:text-sm ${invitationText.muted}`}>
                       This celebration site was designed to share our story and joy with you.
                     </p>
                   </div>
-                  <div className="text-center md:text-right space-y-1">
-                    <p className={`${cormorant.className} text-xs sm:text-sm text-white/70`}>
+                  <div className="space-y-1 text-center">
+                    <p className={`${cormorant.className} text-xs sm:text-sm ${invitationText.muted}`}>
                       Developed by{" "}
                       <a
                         href="https://lance28-beep.github.io/portfolio-website/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline text-white hover:text-white/80 transition-colors"
+                        className={LINK_CLASS}
                       >
                         Lance Valle
                       </a>
                     </p>
-                    <p className={`${cormorant.className} text-xs sm:text-sm text-white/70`}>
+                    <p className={`${cormorant.className} text-xs sm:text-sm ${invitationText.muted}`}>
                       Want a website like this? Visit{" "}
                       <a
                         href="https://www.facebook.com/WeddingInvitationNaga"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline text-white hover:text-white/80 transition-colors"
+                        className={LINK_CLASS}
                       >
                         Wedding Invitation Naga
                       </a>
@@ -427,9 +390,9 @@ export function Footer() {
                 </div>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </InvitationCard>
     </footer>
   )
 }

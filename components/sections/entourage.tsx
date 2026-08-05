@@ -6,7 +6,7 @@ import { entourage as staticEntourage, principalSponsors as staticSponsors } fro
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { Loader2, Users } from "lucide-react"
 import { Cormorant_Garamond, Cinzel } from "next/font/google"
-import Image from "next/image"
+import { InvitationCard } from "@/components/invitation-card"
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -49,11 +49,17 @@ function principalSponsorFromApi(row: Record<string, unknown>): PrincipalSponsor
   }
 }
 
-const cardTextColor = "white"
-const accentColor = "rgba(255,255,255,0.85)"
+const CORNER_DECORATIONS = [
+  { src: "/decoration/top-right-corner.png", className: "right-0 top-0" },
+  { src: "/decoration/bottom-left-new.png", className: "bottom-0 left-0" },
+] as const
 
-const CORNER_DECO_CLASS =
-  "w-auto h-auto max-w-[140px] sm:max-w-[180px] md:max-w-[220px] lg:max-w-[260px] opacity-80 drop-shadow-[0_10px_28px_rgba(0,0,0,0.35)]"
+const invitationText = {
+  accent: "text-[#BB8A3D]",
+  heading: "text-[#6B5335]",
+  body: "text-[#7A6248]",
+  muted: "text-[#8B7355]",
+}
 
 function mapStaticEntourage(): EntourageMember[] {
   const roleToCategory: Record<string, string> = {
@@ -305,8 +311,7 @@ export function Entourage() {
       align === "right" ? "text-right" : align === "left" ? "text-left" : "text-center"
     return (
       <h3
-        className={`relative ${cinzel.className} text-[0.7rem] sm:text-[0.85rem] md:text-base lg:text-lg tracking-[0.2em] uppercase mb-2 sm:mb-2.5 md:mb-3 ${textAlign} ${className} transition-all duration-300 whitespace-nowrap text-white/95`}
-        style={{ textShadow: "0 1px 10px rgba(0,0,0,0.15)" }}
+        className={`relative ${cinzel.className} text-[0.7rem] sm:text-[0.85rem] md:text-base lg:text-lg tracking-[0.2em] uppercase mb-2 sm:mb-2.5 md:mb-3 ${textAlign} ${className} transition-all duration-300 whitespace-nowrap ${invitationText.accent}`}
       >
         {children}
       </h3>
@@ -332,19 +337,17 @@ export function Entourage() {
         className={`relative flex flex-col ${containerAlign} justify-center py-0.5 sm:py-1 md:py-1 leading-snug sm:leading-snug group/item transition-all duration-300 hover:scale-[1.02] sm:hover:scale-[1.03]`}
       >
         <div
-          className="absolute inset-0 bg-gradient-to-r from-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 rounded-md"
-          style={{ background: 'color-mix(in srgb, white 12%, transparent)' }}
+          className="absolute inset-0 rounded-md bg-gradient-to-r from-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover/item:opacity-100"
+          style={{ background: "color-mix(in srgb, #BB8A3D 10%, transparent)" }}
         />
         <p
-          className={`relative text-[10px] sm:text-[11.5px] md:text-[12.5px] lg:text-[13.5px] font-semibold ${textAlign} transition-all duration-300`}
-          style={{ color: cardTextColor }}
+          className={`relative text-[10px] sm:text-[11.5px] md:text-[12.5px] lg:text-[13.5px] font-semibold ${textAlign} transition-all duration-300 ${invitationText.heading}`}
         >
           {toTitleCaseDisplayName(member.name)}
         </p>
         {showRole && member.roleTitle && (
           <p
-            className={`relative text-[9px] sm:text-[10px] md:text-[10px] lg:text-xs font-medium mt-0 leading-tight ${textAlign} tracking-wide uppercase transition-colors duration-300 opacity-80`}
-            style={{ color: cardTextColor }}
+            className={`relative text-[9px] sm:text-[10px] md:text-[10px] lg:text-xs font-medium mt-0 leading-tight ${textAlign} tracking-wide uppercase transition-colors duration-300 ${invitationText.muted}`}
           >
             {member.roleTitle}
           </p>
@@ -400,127 +403,81 @@ export function Entourage() {
       <section
         ref={sectionRef}
         id="entourage"
-        className="relative z-10 py-12 sm:py-16 md:py-20 overflow-hidden"
+        className="relative flex w-full justify-center px-4 py-8 sm:px-6 sm:py-10 md:py-12"
       >
-      {/* Corner decorations — reflected to all four corners */}
-      {/* <div className="absolute right-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 top-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/right-top-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute left-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={CORNER_DECO_CLASS}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-      {/* <div className="absolute right-0 bottom-0 z-0 pointer-events-none">
-        <Image
-          src="/decoration/left-bottom-deco.png"
-          alt=""
-          width={300}
-          height={300}
-          className={`${CORNER_DECO_CLASS} scale-x-[-1]`}
-          priority={false}
-          aria-hidden
-        />
-      </div> */}
-
-      {/* Section Header */}
-      <div
-        className={`relative z-30 flex flex-col items-center gap-4 sm:gap-5 md:gap-6 text-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 px-3 sm:px-4 transition-all duration-1000 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"
-        }`}
-      >
-        <p
-          className={`${cormorant.className} text-[0.7rem] sm:text-xs md:text-sm uppercase tracking-[0.28em] text-white/90 max-w-xs sm:max-w-sm leading-relaxed`}
+        <InvitationCard
+          decorations={CORNER_DECORATIONS}
+          className={`w-full max-w-[440px] transition-all duration-1000 md:max-w-[500px] lg:max-w-[540px] ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
         >
-          <span className="block">Those who stand with</span>
-          <span className="block mt-1 tracking-[0.22em] sm:tracking-[0.24em]">
-            {siteConfig.couple.groomNickname} &amp; {siteConfig.couple.brideNickname}
-          </span>
-        </p>
-
-        <h2
-          className="font-[family-name:var(--font-safira-march)] text-[clamp(1.6rem,5.8vw,2rem)] sm:text-[2.85rem] md:text-[3.55rem] lg:text-[4.1rem] xl:text-[4.6rem] leading-none tracking-[0.015em] sm:tracking-[0.01em] text-white px-2 sm:px-3 my-1 sm:my-1.5 [text-shadow:0_2px_14px_rgba(0,0,0,0.22)]"
-        >
-          Wedding Entourage
-        </h2>
-
-        <p
-          className={`${cormorant.className} text-xs sm:text-sm md:text-base italic text-white/90 max-w-xl mx-auto leading-relaxed px-2 sm:px-3 mt-0.5 sm:mt-1`}
-        >
-          Honoring those who share in our joy
-        </p>
-      </div>
-
-      {/* Central Card Container */}
-      <div
-        className={`relative z-30 max-w-4xl mx-auto px-3 sm:px-5 transition-all duration-1000 delay-300 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}
-      >
-        <div
-          className="relative overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-[2rem] border border-white/25 bg-white/15 backdrop-blur-lg shadow-[0_20px_70px_rgba(0,0,0,0.12)] transition-all duration-500 group"
-        >
-          <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <div className="space-y-6 sm:space-y-8 md:space-y-10">
+            {/* Section Header */}
             <div
-              className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2"
-              style={{ background: 'radial-gradient(circle at center, color-mix(in srgb, white 8%, transparent), transparent 60%)' }}
-            />
+              className={`flex flex-col items-center gap-3 text-center transition-all duration-1000 sm:gap-4 md:gap-5 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"
+              }`}
+            >
+              <p
+                className={`${cormorant.className} max-w-xs text-[0.7rem] uppercase leading-relaxed tracking-[0.28em] sm:max-w-sm sm:text-xs md:text-sm ${invitationText.muted}`}
+              >
+                <span className="block">Those who stand with</span>
+                <span className={`mt-1 block tracking-[0.22em] sm:tracking-[0.24em] ${invitationText.accent}`}>
+                  {siteConfig.couple.groomNickname} &amp; {siteConfig.couple.brideNickname}
+                </span>
+              </p>
+
+              <div
+                className="flex w-full max-w-[12rem] items-center justify-center gap-2 sm:max-w-[14rem] md:max-w-[16rem]"
+                aria-hidden="true"
+              >
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+                <div className="h-1 w-1 shrink-0 rounded-full bg-[#BB8A3D]/80" />
+                <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+              </div>
+
+              <h2
+                className={`font-[family-name:var(--font-safira-march)] px-2 text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
+              >
+                Wedding Entourage
+              </h2>
+
+              <p
+                className={`${cormorant.className} mx-auto max-w-xl px-2 text-xs italic leading-relaxed sm:text-sm md:text-base ${invitationText.muted}`}
+              >
+                Honoring those who share in our joy
+              </p>
+            </div>
+
+            {/* Entourage list */}
             <div
-              className="absolute bottom-[-6rem] right-[-2rem] h-64 w-64"
-              style={{ background: 'radial-gradient(circle at center, color-mix(in srgb, white 6%, transparent), transparent 60%)' }}
-            />
-          </div>
-          {/* Card content */}
-          <div className="relative z-10 p-4 sm:p-5 md:p-6 lg:p-8">
+              className={`transition-all duration-1000 delay-300 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              }`}
+            >
             {isLoading ? (
-              <div className="flex items-center justify-center py-24 sm:py-28 md:py-32">
+              <div className="flex items-center justify-center py-16 sm:py-20 md:py-24">
                 <div className="flex flex-col items-center gap-4">
-                  <Loader2 className="h-10 w-10 sm:h-12 sm:w-12 animate-spin opacity-70" style={{ color: cardTextColor }} />
-                  <span className="font-serif text-base sm:text-lg opacity-80" style={{ color: cardTextColor }}>Loading entourage...</span>
+                  <Loader2 className={`h-10 w-10 animate-spin sm:h-12 sm:w-12 ${invitationText.accent}`} />
+                  <span className={`font-serif text-base sm:text-lg ${invitationText.muted}`}>Loading entourage...</span>
                 </div>
               </div>
             ) : error ? (
-              <div className="flex items-center justify-center py-24 sm:py-28 md:py-32">
+              <div className="flex items-center justify-center py-16 sm:py-20 md:py-24">
                 <div className="text-center">
-                  <p className="font-serif text-base sm:text-lg mb-3" style={{ color: cardTextColor }}>{error}</p>
+                  <p className={`font-serif text-base sm:text-lg mb-3 ${invitationText.body}`}>{error}</p>
                   <button
                     onClick={fetchEntourage}
-                    className="font-serif underline transition-colors duration-200 opacity-90 hover:opacity-100"
-                    style={{ color: accentColor }}
+                    className={`font-serif underline transition-colors duration-200 hover:opacity-80 ${invitationText.accent}`}
                   >
                     Try again
                   </button>
                 </div>
               </div>
             ) : entourage.length === 0 ? (
-              <div className="text-center py-24 sm:py-28 md:py-32">
-                <Users className="h-14 w-14 sm:h-16 sm:w-16 mx-auto mb-4 opacity-30" style={{ color: accentColor }} />
-                <p className="font-serif text-base sm:text-lg opacity-60" style={{ color: cardTextColor }}>No entourage members yet</p>
+              <div className="text-center py-16 sm:py-20 md:py-24">
+                <Users className={`h-14 w-14 mx-auto mb-4 opacity-40 sm:h-16 sm:w-16 ${invitationText.accent}`} />
+                <p className={`font-serif text-base sm:text-lg ${invitationText.muted}`}>No entourage members yet</p>
               </div>
             ) : (
             <div className="flex flex-col gap-6 sm:gap-8 md:gap-10">
@@ -952,9 +909,9 @@ export function Entourage() {
               })}
             </div>
             )}
+            </div>
           </div>
-        </div>
-      </div>
+        </InvitationCard>
       </section>
     </div>
   )

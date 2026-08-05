@@ -2,7 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react"
 import { MessageCircle, Heart, Sparkles, Send } from "lucide-react"
-import { Section } from "@/components/section"
+import { InvitationCard } from "@/components/invitation-card"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -18,26 +18,23 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500", "600"],
 })
 
-const GLASS_CARD_CLASS =
-  "relative overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-[2rem] border border-white/25 bg-white/15 backdrop-blur-lg shadow-[0_20px_70px_rgba(0,0,0,0.12)]"
+const CORNER_DECORATIONS = [
+  { src: "/decoration/top-right-corner.png", className: "right-0 top-0" },
+  { src: "/decoration/bottom-left-new.png", className: "bottom-0 left-0" },
+] as const
 
-function GlassOverlay() {
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden>
-      <div
-        className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2"
-        style={{ background: "radial-gradient(circle at center, color-mix(in srgb, white 8%, transparent), transparent 60%)" }}
-      />
-      <div
-        className="absolute bottom-[-6rem] right-[-2rem] h-64 w-64"
-        style={{ background: "radial-gradient(circle at center, color-mix(in srgb, white 6%, transparent), transparent 60%)" }}
-      />
-    </div>
-  )
+const invitationText = {
+  accent: "text-[#BB8A3D]",
+  heading: "text-[#6B5335]",
+  body: "text-[#7A6248]",
+  muted: "text-[#8B7355]",
 }
 
+const INNER_CARD_CLASS =
+  "relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#BB8A3D]/30 bg-[#FDFBF7]/80 shadow-[0_4px_20px_rgba(139,111,71,0.12)] transition-all duration-300 hover:border-[#BB8A3D]/45"
+
 const primaryBtnClass =
-  "cursor-pointer rounded-full border border-white/40 bg-white px-5 py-3 text-[9px] font-bold tracking-[0.16em] uppercase text-[#7D7F2E] shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-white/90 hover:border-white/60 hover:shadow-xl hover:-translate-y-0.5 sm:px-7 sm:py-3.5 sm:text-[10px] sm:tracking-[0.18em] md:px-8 md:py-4 md:text-[11px]"
+  "cursor-pointer rounded-full border border-[#BB8A3D]/45 bg-[#BB8A3D] px-5 py-3 text-[9px] font-bold tracking-[0.16em] uppercase text-[#FDFBF7] shadow-[0_4px_16px_rgba(139,111,71,0.2)] transition-all duration-300 hover:bg-[#A67A35] hover:border-[#BB8A3D]/65 hover:shadow-xl hover:-translate-y-0.5 sm:px-7 sm:py-3.5 sm:text-[10px] sm:tracking-[0.18em] md:px-8 md:py-4 md:text-[11px]"
 
 function CoupleNameInline() {
   const { groomNickname, brideNickname } = useSiteConfig().couple
@@ -126,8 +123,7 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
   }
 
   return (
-    <div className="relative w-full max-w-md mx-auto px-3 sm:px-0">
-      {/* Style to override placeholder color */}
+    <div className="relative mx-auto w-full max-w-md px-3 sm:px-0">
       <style>{`
         .message-form-input::placeholder {
           color: #9CA3AF !important;
@@ -138,42 +134,30 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
           opacity: 1 !important;
         }
       `}</style>
-      
-      {/* Decorative background elements */}
-      <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-white/15 blur-sm animate-pulse-slow" />
-      <div className="absolute -bottom-4 -right-4 w-12 h-12 rounded-full bg-white/10 blur-md animate-pulse-slow" />
-      
-      <Card className={`${GLASS_CARD_CLASS} w-full transition-all duration-500 group ${
-        isFocused ? "scale-[1.01] border-white/40" : "hover:border-white/35"
-      } ${isSubmitted ? "animate-bounce" : ""}`}
-      >
-        <GlassOverlay />
-        
-        {/* Success animation overlay */}
+
+      <Card className={`${INNER_CARD_CLASS} w-full group ${isFocused ? "scale-[1.01] border-[#BB8A3D]/50" : ""} ${isSubmitted ? "animate-bounce" : ""}`}>
         {isSubmitted && (
-          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none bg-[#7D7F2E]/80 backdrop-blur-sm">
-            <div className="flex flex-col items-center gap-2 animate-pulse">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-white/20 border border-white/30">
-                <Sparkles className="h-8 w-8 text-white" />
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#BB8A3D]/80 backdrop-blur-sm pointer-events-none">
+            <div className="flex animate-pulse flex-col items-center gap-2">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#BB8A3D]/30 bg-[#FDFBF7] shadow-lg">
+                <Sparkles className={`h-8 w-8 ${invitationText.accent}`} />
               </div>
-              <p className="font-semibold text-lg text-white">Sent!</p>
+              <p className={`text-lg font-semibold ${invitationText.heading}`}>Sent!</p>
             </div>
           </div>
         )}
-        
-        <CardContent className="relative z-10 p-4 sm:p-5 md:p-6 lg:p-8">
-          {/* Header with icon */}
-          <div className="text-center mb-3 sm:mb-4 md:mb-5 lg:mb-6">
-            <div className="relative inline-block mb-2 sm:mb-3 md:mb-4">
-              <div className="absolute inset-0 rounded-full bg-white/20 blur-lg scale-150" />
-              <div className="relative w-9 h-9 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full flex items-center justify-center mx-auto shadow-lg bg-white/20 border border-white/30">
-                <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-white" />
+
+        <CardContent className="relative z-10 p-4 sm:p-5 md:p-6">
+          <div className="mb-3 text-center sm:mb-4 md:mb-5">
+            <div className="relative mb-2 inline-block sm:mb-3">
+              <div className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-[#BB8A3D]/30 bg-[#F5EDE0]/80 shadow-lg sm:h-11 sm:w-11 md:h-14 md:w-14">
+                <MessageCircle className={`h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 ${invitationText.accent}`} />
               </div>
             </div>
-            <h3 className="font-[family-name:var(--font-safira-march)] flex flex-col items-center gap-2 sm:gap-2.5 text-lg sm:text-xl md:text-[1.35rem] leading-none tracking-[0.01em] mb-1.5 sm:mb-2 text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.2)]">
+            <h3 className={`mb-1.5 font-[family-name:var(--font-safira-march)] text-lg leading-none tracking-[0.01em] sm:mb-2 sm:text-xl md:text-[1.35rem] ${invitationText.heading}`}>
               Share Your Love
             </h3>
-            <p className={`${cormorant.className} text-[10px] sm:text-xs md:text-sm text-white/90`}>
+            <p className={`${cormorant.className} text-[10px] sm:text-xs md:text-sm ${invitationText.muted}`}>
               Your words will be part of{" "}
               <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
                 <CoupleNameInline />
@@ -191,9 +175,9 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
           >
             {/* Name Field */}
             <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
-              <label className={`${cormorant.className} block text-xs sm:text-sm md:text-base font-medium flex items-center gap-1.5 sm:gap-2 text-white/95`}>
-                <div className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center transition-all duration-300 bg-white/15 ${focusedField === 'name' ? 'scale-110' : ''}`}>
-                  <Heart className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4 text-white" />
+              <label className={`${cormorant.className} flex items-center gap-1.5 text-xs font-medium sm:gap-2 sm:text-sm md:text-base ${invitationText.body}`}>
+                <div className={`flex h-4 w-4 items-center justify-center rounded-full bg-[#F5EDE0]/80 transition-all duration-300 sm:h-5 sm:w-5 md:h-6 md:w-6 ${focusedField === "name" ? "scale-110" : ""}`}>
+                  <Heart className={`h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4 ${invitationText.accent}`} />
                 </div>
                 Your Name
               </label>
@@ -206,10 +190,10 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
                   onFocus={() => setFocusedField('name')}
                   onBlur={() => setFocusedField(null)}
                   placeholder="Full Name"
-                  className={`${cormorant.className} message-form-input w-full border-2 rounded-xl py-2 sm:py-2.5 md:py-3 lg:py-3.5 px-3 sm:px-4 md:px-5 text-xs sm:text-sm md:text-base text-black placeholder:italic transition-all duration-300 bg-white shadow-sm hover:shadow-md focus:shadow-lg ${
-                    focusedField === 'name' 
-                      ? 'border-motif-deep focus:border-motif-deep focus:ring-4 focus:ring-motif-accent/25 shadow-lg' 
-                      : 'border-motif-deep/40 hover:border-motif-deep/50'
+                  className={`${cormorant.className} message-form-input w-full rounded-xl border-2 px-3 py-2 text-xs text-black shadow-sm transition-all duration-300 placeholder:italic hover:shadow-md focus:shadow-lg sm:px-4 sm:py-2.5 sm:text-sm md:px-5 md:py-3 md:text-base ${
+                    focusedField === "name"
+                      ? "border-[#BB8A3D] focus:border-[#BB8A3D] focus:ring-4 focus:ring-[#BB8A3D]/15 shadow-lg"
+                      : "border-[#BB8A3D]/35 hover:border-[#BB8A3D]/50"
                   }`}
                 />
                 {nameValue && (
@@ -223,14 +207,14 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
             {/* Message Field */}
             <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
               <div className="flex items-center justify-between">
-                <label className={`${cormorant.className} block text-xs sm:text-sm md:text-base font-medium flex items-center gap-1.5 sm:gap-2 text-white/95`}>
-                  <div className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center transition-all duration-300 bg-white/15 ${focusedField === 'message' ? 'scale-110' : ''}`}>
-                    <MessageCircle className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4 text-white" />
+                <label className={`${cormorant.className} flex items-center gap-1.5 text-xs font-medium sm:gap-2 sm:text-sm md:text-base ${invitationText.body}`}>
+                  <div className={`flex h-4 w-4 items-center justify-center rounded-full bg-[#F5EDE0]/80 transition-all duration-300 sm:h-5 sm:w-5 md:h-6 md:w-6 ${focusedField === "message" ? "scale-110" : ""}`}>
+                    <MessageCircle className={`h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4 ${invitationText.accent}`} />
                   </div>
                   Your Message
                 </label>
                 {messageValue && (
-                  <span className={`${cormorant.className} text-[10px] sm:text-xs transition-colors ${messageValue.length > 500 ? 'text-red-300' : 'text-white/60'}`}>
+                  <span className={`${cormorant.className} text-[10px] transition-colors sm:text-xs ${messageValue.length > 500 ? "text-red-500" : invitationText.muted}`}>
                     {messageValue.length}/500
                   </span>
                 )}
@@ -248,10 +232,10 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
                   onFocus={() => setFocusedField('message')}
                   onBlur={() => setFocusedField(null)}
                   placeholder={`Write a heartfelt message for ${groomNickname} and ${brideNickname}... share your wishes, memories, or words of love that will be treasured forever 💕`}
-                  className={`${cormorant.className} message-form-textarea w-full border-2 rounded-xl min-h-[80px] sm:min-h-[100px] md:min-h-[120px] text-xs sm:text-sm md:text-base text-black placeholder:italic placeholder:leading-relaxed transition-all duration-300 resize-none bg-white shadow-sm hover:shadow-md focus:shadow-lg py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-5 ${
-                    focusedField === 'message' 
-                      ? 'border-motif-deep focus:border-motif-deep focus:ring-4 focus:ring-motif-accent/25 shadow-lg' 
-                      : 'border-motif-deep/40 hover:border-motif-deep/50'
+                  className={`${cormorant.className} message-form-textarea w-full resize-none rounded-xl border-2 bg-white px-3 py-2 text-xs text-black shadow-sm transition-all duration-300 placeholder:italic placeholder:leading-relaxed hover:shadow-md focus:shadow-lg sm:min-h-[100px] sm:px-4 sm:py-3 sm:text-sm md:min-h-[120px] md:px-5 md:py-4 md:text-base min-h-[80px] ${
+                    focusedField === "message"
+                      ? "border-[#BB8A3D] focus:border-[#BB8A3D] focus:ring-4 focus:ring-[#BB8A3D]/15 shadow-lg"
+                      : "border-[#BB8A3D]/35 hover:border-[#BB8A3D]/50"
                   }`}
                 />
                 {messageValue && (
@@ -328,20 +312,33 @@ export function Messages() {
   }, [fetchMessages])
 
   return (
-    <Section
+    <section
       id="messages"
-      className="relative overflow-hidden py-12 sm:py-16 md:py-20"
+      className="relative flex w-full justify-center px-4 py-8 sm:px-6 sm:py-10 md:py-12"
     >
-      <div className="relative z-10 max-w-6xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
-        {/* Header Section */}
-        <div className="flex flex-col items-center gap-4 sm:gap-5 md:gap-6 text-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 px-4 sm:px-6">
+      <InvitationCard
+        decorations={CORNER_DECORATIONS}
+        className="w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px]"
+      >
+        <div className="space-y-6 sm:space-y-8">
+        <div className="flex flex-col items-center gap-3 text-center sm:gap-4 md:gap-5">
           <p
-            className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] sm:text-xs md:text-sm uppercase tracking-[0.28em] text-white/90`}
+            className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] uppercase tracking-[0.28em] sm:text-xs md:text-sm ${invitationText.accent}`}
           >
             <CoupleNameInline />
           </p>
+
+          <div
+            className="flex w-full max-w-[12rem] items-center justify-center gap-2 sm:max-w-[14rem] md:max-w-[16rem]"
+            aria-hidden="true"
+          >
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+            <div className="h-1 w-1 shrink-0 rounded-full bg-[#BB8A3D]/80" />
+            <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+          </div>
+
           <h2
-            className="font-[family-name:var(--font-safira-march)] flex flex-col items-center gap-2.5 sm:gap-3 text-[1.35rem] sm:text-[1.75rem] md:text-[2.15rem] lg:text-[2.5rem] leading-none tracking-[0.015em] sm:tracking-[0.01em] text-white px-2 sm:px-3 my-1 sm:my-1.5 [text-shadow:0_2px_14px_rgba(0,0,0,0.22)]"
+            className={`font-[family-name:var(--font-safira-march)] flex flex-col items-center gap-2 px-2 text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:gap-2.5 sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
           >
             <span className="block">Love notes</span>
             <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1">
@@ -350,7 +347,7 @@ export function Messages() {
             </span>
           </h2>
           <p
-            className={`${cormorant.className} text-xs sm:text-sm md:text-base italic text-white/90 max-w-3xl mx-auto leading-relaxed px-2 sm:px-4 mt-0.5 sm:mt-1`}
+            className={`${cormorant.className} mx-auto max-w-xl px-2 text-xs italic leading-relaxed sm:px-4 sm:text-sm md:text-base ${invitationText.muted}`}
           >
             Leave a short note for{" "}
             <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1 not-italic">
@@ -362,54 +359,36 @@ export function Messages() {
           </p>
         </div>
 
-        {/* Form Section */}
-        <div className="flex justify-center mb-4 sm:mb-6 md:mb-8 lg:mb-10">
-          <div className="relative max-w-xl w-full">
-            {/* Card halo */}
-            {/* <div className="absolute -inset-3 bg-gradient-to-br from-[#B28383]/25 via-[#EDD6AC]/20 to-transparent rounded-3xl blur-2xl opacity-70" />
-            <div className="absolute -inset-1 bg-gradient-to-br from-[#A78256]/15 via-transparent to-transparent rounded-3xl blur-md opacity-80" /> */}
-            <MessageForm onMessageSent={fetchMessages} />
-            {/* Corner sparkles */}
-            {/* <div className="pointer-events-none">
-              <div className="absolute -top-1 -left-1 w-3 h-3 bg-[#BB8A3D] rounded-full blur-[2px] opacity-80" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#CDAC77] rounded-full blur-[2px] opacity-80" />
-              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-[#CDAC77] rounded-full blur-[2px] opacity-70" />
-              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-[#BB8A3D] rounded-full blur-[2px] opacity-70" />
-            </div> */}
-          </div>
-        </div>
+        <MessageForm onMessageSent={fetchMessages} />
 
-        {/* Messages Display Section */}
-        <div className={`relative max-w-4xl mx-auto ${GLASS_CARD_CLASS}`}>
-          <GlassOverlay />
-          <div className="relative z-10 p-4 sm:p-5 md:p-6 lg:p-8">
-          <div className="text-center mb-4 sm:mb-6 md:mb-8">
-            <div className="relative inline-block mb-3 sm:mb-4 md:mb-6">
-              <div className="absolute inset-0 rounded-full bg-white/20 blur-xl scale-150 animate-pulse-slow" />
-              <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center mx-auto shadow-lg hover:scale-110 transition-transform duration-300 bg-white/20 border border-white/30">
-                <MessageCircle className="h-4 w-4 sm:h-6 sm:h-6 md:h-8 md:w-8 text-white" />
+        <div className={INNER_CARD_CLASS}>
+          <div className="p-4 sm:p-5 md:p-6">
+          <div className="mb-4 text-center sm:mb-6 md:mb-8">
+            <div className="relative mb-3 inline-block sm:mb-4 md:mb-6">
+              <div className="relative mx-auto flex h-8 w-8 items-center justify-center rounded-full border border-[#BB8A3D]/30 bg-[#F5EDE0]/80 shadow-lg transition-transform duration-300 hover:scale-110 sm:h-10 sm:w-10 md:h-14 md:w-14">
+                <MessageCircle className={`h-4 w-4 sm:h-6 sm:w-6 md:h-8 md:w-8 ${invitationText.accent}`} />
               </div>
             </div>
             <h3
-              className="font-[family-name:var(--font-safira-march)] flex flex-col items-center gap-2 sm:gap-2.5 text-[1.2rem] sm:text-[1.45rem] md:text-[1.65rem] leading-none tracking-[0.01em] mb-1.5 sm:mb-2 md:mb-3 text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.2)]"
+              className={`mb-1.5 flex flex-col items-center gap-2 font-[family-name:var(--font-safira-march)] text-[1.2rem] leading-none tracking-[0.01em] sm:mb-2 sm:gap-2.5 sm:text-[1.45rem] md:mb-3 md:text-[1.65rem] ${invitationText.heading}`}
             >
               <span className="block">Messages from</span>
               <span className="block">Loved Ones</span>
             </h3>
             <p
-              className={`${cormorant.className} text-xs sm:text-sm md:text-base max-w-2xl mx-auto px-2 sm:px-4 text-white/90`}
+              className={`${cormorant.className} mx-auto max-w-2xl px-2 text-xs sm:px-4 sm:text-sm md:text-base ${invitationText.muted}`}
             >
               Read the beautiful messages shared by family{" "}
               <NameConnector size="sm">and</NameConnector>{" "}
               friends
             </p>
           </div>
-          
+
           <MessageWallDisplay messages={messages} loading={loading} />
           </div>
         </div>
-
-      </div>
-    </Section>
+        </div>
+      </InvitationCard>
+    </section>
   )
 }

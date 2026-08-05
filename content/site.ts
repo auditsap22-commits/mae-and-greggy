@@ -5,11 +5,11 @@ import {
 
 export const siteConfig = {
   couple: {
-    bride: "Fatima Calbay", //Noenyl Bryle M. Gonzaga
-    brideNickname: "Fatima", //Ltryl
-    groom: "Benson Mariñas",
-    groomNickname: "Benson",
-    monogram:"/monogram/monog.png" ,//Ltryl
+    bride: "Ruby Mae G. Vergara", //Noenyl Bryle M. Gonzaga
+    brideNickname: "Mae", //Ltryl
+    groom: "Khey Greggy P. Moyani",
+    groomNickname: "Greg",
+    monogram:"/monogram/monogram.png" ,//Ltryl
     backgroundMusic:"/background_music/Haley Reinhart - Can't Help Falling In Love (Official Audio).mp3"
   },
   googleAPI:{
@@ -25,9 +25,9 @@ export const siteConfig = {
     googleShare: "https://docs.google.com/spreadsheets/d/1f-Ny_VAsH9CI-zk46vauYS0H2XKphUN0_tYlDwz1j80/edit?usp=sharing", //done
   },
   wedding: {
-    date: "August 09, 2026",
-    time: "1:00 PM",
-    venue: "Diocesan Shrine & Parish of Sagrado Corazon de Jesus",
+    date: "September 14, 2026",
+    time: "2:00 PM",
+    venue: "Lupit Church",
     tagline: "are getting married!",
     theme: "Our wedding palette is inspired by timeless elegance and warmth.Motif Colors: Champagne Gold, Soft Beige, Warm Soft Brown",
     motif: "#BBCED5, #B9C3A8, #F3D8C5, #D1C4D4, #ECD8BA, #F4E8D8, #E1DCCF",
@@ -40,49 +40,50 @@ export const siteConfig = {
   },
   details: {
     rsvp: {
-      deadline: "July 26, 2026",
-      contact: "Karla Kaye Bastida",
-      phone: "+63 956 482 5255",
+      deadline: "September 10, 2026",
+      contact: "Ruby Mae G. Vergara",
+      phone: "to be announced",
     },
   },
   contact: {
-    bridePhone: "+63 956 482 5255",
-    groomPhone: "",
-    email: "",
+    bridePhone: "to be announced",
+    groomPhone: "to be announced",
+    email: "to be announced",
   },
   giftRegistry: {
     QR_1:{
-    id: "BPI",
-    src: "/monogram/BPI.png",
-    label: "BPI",
-    accountNumber: "TE*I NI***E A GU******O",
-    },
-    QR_2:{
-    id: "Zelle",
-    src: "/monogram/Zelle.png",
-    label: "Zelle",
-    accountNumber: "Patrick: xxx-xxx-0009",
+    id: "Gcash",
+    src: "/QR/Gcash.png",
+    label: "Gcash",
+    accountNumber: "RU*Y M** V. : 0998 860 ****",
     }
+    // ,
+    // QR_2:{
+    // id: "Zelle",
+    // src: "/monogram/Zelle.png",
+    // label: "Zelle",
+    // accountNumber: "Patrick: xxx-xxx-0009",
+    // }
   },
   ceremony: {
-    location: "Diocesan Shrine & Parish of Sagrado Corazon de Jesus",
-    venue: " Diocesan Shrine & Parish of Sagrado Corazon de Jesus, San Rafael, Bulacan",
-    map: "https://maps.app.goo.gl/6iBR1SrKufHnWAF87",
-    date: "August 09, 2026",
-    day: "Sunday",
-    time: "1:00 PM",
-    entourageTime: "2:00 PM",
-    guestsTime: "2:30 PM",
-    image: "/Details/ceremonyone.png",
+    location: "Lupit Church",
+    venue: "Lizares St, Bacolod, 6100 Negros Occidental",
+    map: "https://share.google/tSCddmm4PVDBL0Pzx",
+    date: "September 14, 2026",
+    day: "Monday",
+    time: "2:00 PM",
+    entourageTime: "1:00 PM",
+    guestsTime: "1:30 PM",
+    image: "/Details/ceremony.png",
   },
   reception: {
-    location: "Hacienda Angelita Nature Farm & Resort",
-    venue: "Hacienda Angelita Nature Farm & Resort, San Rafael, Bulacan",
-    map: "https://maps.app.goo.gl/VMCpWcYtihBPZxCJ6",
-    date: "August 09, 2026",
-    day: "Sunday",
-    time: "5:30 PM",
-    image: ["/Details/reception.png","/Details/receptiontwo.png"],
+    location: "Sugarland Hotel",
+    venue: "Araneta Street, Araneta Ave, Bacolod, 6100 Negros Occidental",
+    map: "https://share.google/DbU3HDxkZwDjASOml",
+    date: "September 14, 2026",
+    day: "Monday",
+    time: "6:00 PM",
+    image: ["/Details/reception.png","/Details/reception1.png"],
   },
   dressCode: {
       theme: "SEMI-FORMAL",
@@ -140,7 +141,7 @@ Now, as they prepare to say yes before God and the people they love most, Cather
   playlist: {
     title: "A Playlist from our hearts",
     subtitle: "Songs that have been part of our journey together",
-    playlistName: "Fatima & Mark Wedding",
+    playlistName: "Mae & Gregg Wedding",
     embedUrl:
       "https://open.spotify.com/embed/playlist/2FUZHCJs6Z5iBvP0rKvQdu?utm_source=generator",
     spotifyUrl: "https://open.spotify.com/playlist/2FUZHCJs6Z5iBvP0rKvQdu",

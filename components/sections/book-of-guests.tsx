@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { RefreshCw, TrendingUp, Users, MapPin, Calendar, Crown } from "lucide-react"
+import { InvitationCard } from "@/components/invitation-card"
 import { NameConnector } from "@/components/couple-name-text"
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { Cormorant_Garamond, Cinzel } from "next/font/google"
@@ -35,8 +36,23 @@ interface Guest {
 
 const CARDS_PER_VIEW = 4
 
-const GLASS_CARD_CLASS =
-  "relative overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-[2rem] border border-white/25 bg-white/15 backdrop-blur-lg shadow-[0_20px_70px_rgba(0,0,0,0.12)]"
+const CORNER_DECORATIONS = [
+  { src: "/decoration/top-right-corner.png", className: "right-0 top-0" },
+  { src: "/decoration/bottom-left-new.png", className: "bottom-0 left-0" },
+] as const
+
+const invitationText = {
+  accent: "text-[#BB8A3D]",
+  heading: "text-[#6B5335]",
+  body: "text-[#7A6248]",
+  muted: "text-[#8B7355]",
+}
+
+const INNER_CARD_CLASS =
+  "relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#BB8A3D]/30 bg-[#FDFBF7]/80 shadow-[0_4px_20px_rgba(139,111,71,0.12)]"
+
+const GUEST_CARD_CLASS =
+  "relative group rounded-xl border border-[#BB8A3D]/20 bg-[#F5EDE0]/60 p-2.5 transition-all duration-300 hover:border-[#BB8A3D]/35 hover:bg-[#F5EDE0]/80 hover:scale-[1.01] sm:rounded-2xl sm:p-4 md:p-6"
 
 function CoupleNameInline() {
   const { groomNickname, brideNickname } = useSiteConfig().couple
@@ -47,21 +63,6 @@ function CoupleNameInline() {
       <NameConnector size="sm">&</NameConnector>
       {brideNickname}
     </>
-  )
-}
-
-function GlassOverlay() {
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden>
-      <div
-        className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2"
-        style={{ background: "radial-gradient(circle at center, color-mix(in srgb, white 8%, transparent), transparent 60%)" }}
-      />
-      <div
-        className="absolute bottom-[-6rem] right-[-2rem] h-64 w-64"
-        style={{ background: "radial-gradient(circle at center, color-mix(in srgb, white 6%, transparent), transparent 60%)" }}
-      />
-    </div>
   )
 }
 
@@ -203,37 +204,48 @@ export function BookOfGuests() {
   }, [confirmedGuests.length])
 
   return (
-    <div className="relative w-full">
-    <div
+    <section
       id="guests"
-      className="relative z-10 overflow-hidden py-12 sm:py-16 md:py-20"
+      className="relative flex w-full justify-center px-4 py-8 sm:px-6 sm:py-10 md:py-12"
     >
+      <InvitationCard
+        decorations={CORNER_DECORATIONS}
+        className="w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px]"
+      >
+        <div className="space-y-6 sm:space-y-8">
       {/* Section Header */}
-      <div className="relative z-10 flex flex-col items-center gap-4 sm:gap-5 md:gap-6 text-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 px-3 sm:px-4">
+      <div className="flex flex-col items-center gap-3 text-center sm:gap-4 md:gap-5">
         <p
-          className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] sm:text-xs md:text-sm uppercase tracking-[0.28em] text-white/90`}
+          className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] uppercase tracking-[0.28em] sm:text-xs md:text-sm ${invitationText.accent}`}
         >
           <CoupleNameInline />
         </p>
 
-        <h2
-          className="font-[family-name:var(--font-safira-march)] flex flex-col items-center gap-2.5 sm:gap-3 text-[1.35rem] sm:text-[1.75rem] md:text-[2.15rem] lg:text-[2.5rem] leading-none tracking-[0.015em] sm:tracking-[0.01em] text-white px-2 sm:px-3 my-1 sm:my-1.5 [text-shadow:0_2px_14px_rgba(0,0,0,0.22)]"
+        <div
+          className="flex w-full max-w-[12rem] items-center justify-center gap-2 sm:max-w-[14rem] md:max-w-[16rem]"
+          aria-hidden="true"
         >
-          <span className="block">Book of Guests</span>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+          <div className="h-1 w-1 shrink-0 rounded-full bg-[#BB8A3D]/80" />
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#BB8A3D]/45 to-[#CDAC77]/55" />
+        </div>
+
+        <h2
+          className={`font-[family-name:var(--font-safira-march)] px-2 text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
+        >
+          Book of Guests
         </h2>
 
         <p
-          className={`${cormorant.className} text-xs sm:text-sm md:text-base italic text-white/90 max-w-lg mx-auto leading-relaxed px-2 sm:px-4 mt-0.5 sm:mt-1`}
+          className={`${cormorant.className} mx-auto max-w-lg px-2 text-xs italic leading-relaxed sm:px-4 sm:text-sm md:text-base ${invitationText.muted}`}
         >
           Meet the cherished souls joining us in celebration — your presence makes our day truly special
         </p>
       </div>
 
       {/* Guests content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-3 sm:px-5">
-        <div className={GLASS_CARD_CLASS}>
-          <GlassOverlay />
-          <div className="relative z-10 p-4 sm:p-5 md:p-6 lg:p-8">
+      <div className={INNER_CARD_CLASS}>
+          <div className="relative p-4 sm:p-5 md:p-6">
         {/* Stats */}
         <div className="text-center mb-6 sm:mb-8 md:mb-10">
           <div className="relative max-w-3xl mx-auto">
@@ -241,30 +253,30 @@ export function BookOfGuests() {
               <button
                 onClick={() => fetchGuests(true)}
                 disabled={isRefreshing}
-                className="absolute top-0 right-0 p-1.5 sm:p-2 rounded-full transition-all duration-300 disabled:opacity-50 group z-10 hover:scale-110 bg-white/15 border border-white/20"
+                className="group absolute right-0 top-0 z-10 rounded-full border border-[#BB8A3D]/30 bg-[#F5EDE0]/80 p-1.5 transition-all duration-300 hover:scale-110 disabled:opacity-50 sm:p-2"
                 title="Refresh counts"
               >
-                <RefreshCw className={`h-3.5 w-3.5 sm:h-4 sm:w-4 text-white transition-transform duration-500 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
+                <RefreshCw className={`h-3.5 w-3.5 text-[#BB8A3D] transition-transform duration-500 sm:h-4 sm:w-4 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
               </button>
 
               <div className="mb-1.5 sm:mb-2.5">
-                <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
-                  <h3 className={`${cinzel.className} text-xl sm:text-3xl md:text-4xl font-bold transition-all duration-500 text-white ${showIncrease ? "scale-110" : ""}`}>
+                <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+                  <h3 className={`${cinzel.className} text-xl font-bold transition-all duration-500 sm:text-3xl md:text-4xl ${invitationText.heading} ${showIncrease ? "scale-110" : ""}`}>
                     {totalGuests}
                   </h3>
                   {showIncrease && (
-                    <TrendingUp className="h-3.5 w-3.5 sm:h-5 sm:w-5 animate-bounce text-white/90" />
+                    <TrendingUp className={`h-3.5 w-3.5 animate-bounce sm:h-5 sm:w-5 ${invitationText.accent}`} />
                   )}
-                  <p className={`${cormorant.className} text-sm sm:text-lg md:text-xl font-medium leading-tight text-white/95`}>
+                  <p className={`${cormorant.className} text-sm font-medium leading-tight sm:text-lg md:text-xl ${invitationText.body}`}>
                     {totalGuests === 1 ? "Guest" : "Guests"} Celebrating With Us
                   </p>
                 </div>
               </div>
 
-              <p className={`${cormorant.className} text-xs sm:text-base mb-2 sm:mb-3 text-white/90`}>
+              <p className={`${cormorant.className} mb-2 text-xs sm:mb-3 sm:text-base ${invitationText.muted}`}>
                 {rsvpCount} {rsvpCount === 1 ? "RSVP entry" : "RSVP entries"}
               </p>
-              <p className={`${cormorant.className} text-[10px] sm:text-xs md:text-sm leading-tight text-white/85`}>
+              <p className={`${cormorant.className} text-[10px] leading-tight sm:text-xs md:text-sm ${invitationText.muted}`}>
                 Thank you for confirming your RSVP! Your presence means the world to us.
               </p>
             </div>
@@ -289,7 +301,7 @@ export function BookOfGuests() {
                 {getVisibleGuests().map((guest, index) => (
                   <div
                     key={`${guest.id}-${currentIndex}-${index}`}
-                    className={`relative group rounded-xl sm:rounded-2xl p-2.5 sm:p-4 md:p-6 transition-all duration-300 bg-white/10 backdrop-blur-sm hover:bg-white/15 hover:scale-[1.01] ${justEntered ? "animate-guest-roll-in" : ""}`}
+                    className={`${GUEST_CARD_CLASS} ${justEntered ? "animate-guest-roll-in" : ""}`}
                     style={{
                       ...(justEntered
                         ? {
@@ -302,9 +314,9 @@ export function BookOfGuests() {
                   <div className="flex items-start gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-2.5 md:mb-3">
                     <div className="relative flex-shrink-0">
                       <div
-                        className="w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-md bg-white/20 border border-white/30"
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#BB8A3D]/30 bg-[#FDFBF7] shadow-md sm:h-12 sm:w-12 md:h-14 md:w-14"
                       >
-                        <span className="font-semibold text-xs sm:text-base md:text-lg text-white">
+                        <span className={`text-xs font-semibold sm:text-base md:text-lg ${invitationText.heading}`}>
                           {getInitials(guest.name)}
                         </span>
                       </div>
@@ -319,11 +331,11 @@ export function BookOfGuests() {
 
                     <div className="flex-1 min-w-0">
                       <div className="mb-1 sm:mb-1.5">
-                        <h3 className={`${cinzel.className} text-xs sm:text-base md:text-lg font-semibold sm:font-bold leading-tight mb-0.5 text-white`}>
+                        <h3 className={`${cinzel.className} mb-0.5 text-xs font-semibold leading-tight sm:text-base sm:font-bold md:text-lg ${invitationText.heading}`}>
                           {guest.name}
                         </h3>
                         {guest.role && (
-                          <p className={`${cormorant.className} text-[9px] sm:text-[10px] md:text-xs font-medium text-white/80`}>
+                          <p className={`${cormorant.className} text-[9px] font-medium sm:text-[10px] md:text-xs ${invitationText.muted}`}>
                             {guest.role}
                           </p>
                         )}
@@ -337,19 +349,19 @@ export function BookOfGuests() {
                       )} */}
 
                       <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 md:gap-2 mb-1.5 sm:mb-2 md:mb-3">
-                        <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 md:px-2.5 py-0.5 sm:py-1 rounded-lg border border-white/20 bg-white/10">
-                          <Users className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 flex-shrink-0 text-white/80" />
-                          <span className={`${cormorant.className} text-[9px] sm:text-[10px] md:text-xs font-semibold text-white/95`}>
+                        <div className="flex items-center gap-0.5 rounded-lg border border-[#BB8A3D]/20 bg-[#FDFBF7]/70 px-1.5 py-0.5 sm:gap-1 sm:px-2 md:px-2.5 sm:py-1">
+                          <Users className={`h-2.5 w-2.5 flex-shrink-0 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 ${invitationText.accent}`} />
+                          <span className={`${cormorant.className} text-[9px] font-semibold sm:text-[10px] md:text-xs ${invitationText.body}`}>
                             {guest.allowedGuests} {guest.allowedGuests === 1 ? "Guest" : "Guests"}
                           </span>
                         </div>
-                        <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 md:px-2.5 py-0.5 sm:py-1 rounded-lg border border-white/20 bg-white/10">
-                          <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 flex-shrink-0 text-white/80" />
-                          <span className={`${cormorant.className} text-[9px] sm:text-[10px] md:text-xs font-semibold text-white/95`}>
+                        <div className="flex items-center gap-0.5 rounded-lg border border-[#BB8A3D]/20 bg-[#FDFBF7]/70 px-1.5 py-0.5 sm:gap-1 sm:px-2 md:px-2.5 sm:py-1">
+                          <MapPin className={`h-2.5 w-2.5 flex-shrink-0 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 ${invitationText.accent}`} />
+                          <span className={`${cormorant.className} text-[9px] font-semibold sm:text-[10px] md:text-xs ${invitationText.body}`}>
                             {guest.tableNumber && guest.tableNumber.trim() !== "" ? (
                               <>Table {guest.tableNumber}</>
                             ) : (
-                              <span className="text-white/65">Not Assigned</span>
+                              <span className={invitationText.muted}>Not Assigned</span>
                             )}
                           </span>
                         </div>
@@ -384,18 +396,18 @@ export function BookOfGuests() {
                       {guest.companions && guest.companions.length > 0 && (
                         <div className="pt-2 sm:pt-2.5 md:pt-3">
                           <div className="flex items-center gap-1 mb-1 sm:mb-1.5">
-                            <Users className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 text-white/80" />
-                            <span className={`${cormorant.className} text-[9px] sm:text-[10px] md:text-xs font-semibold text-white/95`}>Companions</span>
+                            <Users className={`h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 ${invitationText.accent}`} />
+                            <span className={`${cormorant.className} text-[9px] font-semibold sm:text-[10px] md:text-xs ${invitationText.body}`}>Companions</span>
                           </div>
                           <div className="flex flex-wrap gap-1 sm:gap-1.5">
                             {guest.companions.map((companion, idx) => (
                               <div
                                 key={idx}
-                                className="inline-flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 md:px-2.5 py-0.5 sm:py-1 rounded-lg border border-white/20 bg-white/10 transition-colors hover:bg-white/15"
+                                className="inline-flex items-center gap-1 rounded-lg border border-[#BB8A3D]/20 bg-[#FDFBF7]/70 px-1.5 py-0.5 transition-colors hover:bg-[#FDFBF7] sm:gap-1.5 sm:px-2 md:px-2.5 sm:py-1"
                               >
-                                <span className={`${cormorant.className} text-[9px] sm:text-[10px] md:text-xs font-medium whitespace-nowrap text-white/95`}>{companion.name}</span>
+                                <span className={`${cormorant.className} whitespace-nowrap text-[9px] font-medium sm:text-[10px] md:text-xs ${invitationText.body}`}>{companion.name}</span>
                                 {companion.relationship && companion.relationship.trim() !== "" && (
-                                  <span className={`${cormorant.className} text-[8px] sm:text-[9px] md:text-[10px] font-medium px-1.5 sm:px-2 py-0.5 rounded-full border border-white/20 bg-white/10 whitespace-nowrap text-white/85`}>
+                                  <span className={`${cormorant.className} whitespace-nowrap rounded-full border border-[#BB8A3D]/20 bg-[#F5EDE0]/80 px-1.5 py-0.5 text-[8px] font-medium sm:px-2 sm:text-[9px] md:text-[10px] ${invitationText.muted}`}>
                                     {companion.relationship}
                                   </span>
                                 )}
@@ -406,8 +418,8 @@ export function BookOfGuests() {
                       )}
 
                       <div className="flex items-center gap-1 pt-2 sm:pt-2.5 md:pt-3 mt-1.5 sm:mt-2 md:mt-2.5">
-                        <Calendar className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white/70" />
-                        <span className={`${cormorant.className} text-[8px] sm:text-[9px] md:text-[10px] text-white/75`}>
+                        <Calendar className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${invitationText.muted}`} />
+                        <span className={`${cormorant.className} text-[8px] sm:text-[9px] md:text-[10px] ${invitationText.muted}`}>
                           Confirmed {formatDate(guest.updatedAt)}
                         </span>
                       </div>
@@ -436,7 +448,7 @@ export function BookOfGuests() {
                             setTimeout(() => setJustEntered(false), 1100)
                           }, 600)
                         }}
-                        className={`h-2 rounded-full transition-all duration-300 hover:opacity-90 ${isActive ? "w-7 bg-white" : "w-2 bg-white/40"}`}
+                        className={`h-2 rounded-full transition-all duration-300 hover:opacity-90 ${isActive ? "w-7 bg-[#BB8A3D]" : "w-2 bg-[#BB8A3D]/40"}`}
                         aria-label={`Go to page ${idx + 1}`}
                       />
                     )
@@ -447,9 +459,9 @@ export function BookOfGuests() {
           </div>
         )}
           </div>
-        </div>
       </div>
-    </div>
-    </div>
+        </div>
+      </InvitationCard>
+    </section>
   )
 }

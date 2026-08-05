@@ -88,12 +88,12 @@
   --font-serif: "Great Vibes", "Great Vibes Fallback";
 
   /* ─── Motif palette — edit here, affects every component ─── */
-  --color-motif-deep:    #A02C1D; /* Midnight Blue */
---color-motif-medium:  #5F6E2D; /* Dusty Navy */
---color-motif-accent:  #F38013; /* Dusty Blue */
---color-motif-cream:   #FFFFFF; /* Soft Moonlight Cream */
---color-motif-soft:    #5A78AE; /* Misty Dusty Blue */
---color-motif-silver:  #EB3764; /* Silver Starlight */
+  --color-motif-deep:    #6B5335; /* Heading brown */
+  --color-motif-medium:  #7A6248; /* Body text */
+  --color-motif-accent:  #BB8A3D; /* Gold accent */
+  --color-motif-cream:   #FDFBF7; /* Invitation card cream */
+  --color-motif-soft:    #CDAC77; /* Light champagne gold */
+  --color-motif-silver:  #796347; /* Warm monogram brown */
   /* ─────────────────────────────────────────────────────────── */
   --font-imperial-script: "Imperial Script", cursive;
   --color-background: var(--background);
@@ -541,6 +541,70 @@ html {
 
   .album-flipbook-back {
     display: none;
+  }
+}
+
+/* Invitation card — single container with border + corner decor inside */
+.hero-invitation {
+  background: linear-gradient(145deg, #fdfbf7 0%, #f5ede0 42%, #fbf8f2 100%);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 6px 28px -6px rgba(139, 111, 71, 0.22),
+    0 2px 8px rgba(139, 111, 71, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.hero-invitation__corner {
+  width: 40%;
+  min-width: 96px;
+  max-width: 172px;
+  height: auto;
+}
+
+.hero-invitation__border-outer {
+  margin: 0.85rem 0.75rem;
+  padding: 0.55rem;
+  border: 1px solid rgba(187, 138, 61, 0.62);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 0 1px rgba(205, 172, 119, 0.12);
+}
+
+.hero-invitation__border-inner {
+  padding: 0.5rem;
+  border: 1px solid rgba(187, 138, 61, 0.38);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.hero-invitation__content {
+  padding: 0.4rem 0.15rem;
+}
+
+@media (min-width: 640px) {
+  .hero-invitation {
+    border-radius: 16px;
+  }
+
+  .hero-invitation__corner {
+    max-width: 195px;
+  }
+
+  .hero-invitation__border-outer {
+    margin: 1rem 0.9rem;
+    padding: 0.65rem;
+    border-radius: 11px;
+  }
+
+  .hero-invitation__border-inner {
+    padding: 0.6rem;
+    border-radius: 9px;
+  }
+
+  .hero-invitation__content {
+    padding: 0.55rem 0.25rem;
   }
 }
 
