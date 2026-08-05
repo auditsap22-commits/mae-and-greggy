@@ -53,7 +53,7 @@ const INNER_BOX_CLASS =
   "rounded-xl bg-[#F5EDE0]/60 border border-[#BB8A3D]/25 p-3 sm:p-4 md:p-5"
 
 const SUGGESTION_DROPDOWN_CLASS =
-  "fixed z-[9999] rounded-xl sm:rounded-2xl border border-[#BB8A3D]/25 bg-white shadow-[0_24px_64px_rgba(139,111,71,0.18),0_8px_24px_rgba(139,111,71,0.1)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200"
+  "fixed z-40 rounded-xl sm:rounded-2xl border border-[#BB8A3D]/25 bg-white shadow-[0_24px_64px_rgba(139,111,71,0.18),0_8px_24px_rgba(139,111,71,0.1)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200"
 
 function CoupleNameInline() {
   const { groomNickname, brideNickname } = useSiteConfig().couple
@@ -160,7 +160,8 @@ export function GuestList() {
 
   const showSuggestions = isSearching && filteredGuests.length > 0
   const showNotFound = Boolean(searchQuery.trim()) && filteredGuests.length === 0 && !isLoading
-  const showDropdown = showSuggestions || showNotFound
+  const showDropdown =
+    (showSuggestions || showNotFound) && !showModal && !showRequestModal
 
   useEffect(() => {
     setMounted(true)
@@ -661,6 +662,8 @@ export function GuestList() {
                 type="button"
                 onClick={() => {
                   setRequestFormData({ ...requestFormData, Name: searchQuery })
+                  setIsSearching(false)
+                  setDropdownPos(null)
                   setShowRequestModal(true)
                 }}
                 className="w-full bg-[#BB8A3D] hover:bg-[#A67A35] text-white py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold shadow-[0_8px_24px_rgba(187,138,61,0.35)] transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
