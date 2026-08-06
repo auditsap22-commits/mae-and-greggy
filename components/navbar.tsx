@@ -89,7 +89,7 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-out ${
+      className={`fixed top-0 left-0 right-0 z-50 pt-[env(safe-area-inset-top,0px)] transition-all duration-700 ease-out ${
         isScrolled
           ? "bg-motif-deep backdrop-blur-xl shadow-[0_10px_40px_rgba(91,102,85,0.35)] border-b border-motif-medium/70"
           : "bg-motif-deep/92 backdrop-blur-lg border-b border-motif-medium/60"
@@ -153,30 +153,26 @@ export function Navbar() {
             })}
           </div>
 
-          <div className="md:hidden flex items-center h-full">
-            {/* Decorative halo to improve tap target and visual affordance */}
-            <div className="relative">
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-motif-cream/20 via-motif-cream/10 to-transparent blur-md pointer-events-none" />
-              <StaggeredMenu
-                position="left"
-                items={menuItems}
-                socialItems={[]}
-                displaySocials={false}
-                menuButtonColor="var(--color-motif-cream)"
-                openMenuButtonColor="var(--color-motif-cream)"
-                changeMenuColorOnOpen={true}
-                colors={[
-                  "var(--color-motif-deep)",
-                  "var(--color-motif-deep)",
-                  "var(--color-motif-deep)",
-                  "var(--color-motif-deep)",
-                ]}
-                accentColor="var(--color-motif-soft)"
-                isFixed={true}
-                onMenuOpen={() => {}}
-                onMenuClose={() => {}}
-              />
-            </div>
+          <div className="relative z-[60] md:hidden flex items-center">
+            <StaggeredMenu
+              embedded
+              position="right"
+              items={menuItems}
+              socialItems={[]}
+              displaySocials={false}
+              menuButtonColor="var(--color-motif-cream)"
+              openMenuButtonColor="var(--color-motif-cream)"
+              changeMenuColorOnOpen={true}
+              colors={[
+                "var(--color-motif-deep)",
+                "var(--color-motif-deep)",
+                "var(--color-motif-deep)",
+                "var(--color-motif-deep)",
+              ]}
+              accentColor="var(--color-motif-soft)"
+              onMenuOpen={() => {}}
+              onMenuClose={() => {}}
+            />
           </div>
         </div>
 

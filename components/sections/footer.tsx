@@ -191,16 +191,7 @@ export function Footer() {
           >
             {/* Couple info + quote */}
             <motion.div className="space-y-4" variants={fadeInUp}>
-              <div className="space-y-2 sm:space-y-2.5">
-                <div className={`flex items-center gap-2 sm:gap-3 ${cormorant.className} ${invitationText.body}`}>
-                  <Calendar className={`h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5 ${invitationText.accent}`} />
-                  <span className="text-sm sm:text-base">{ceremonyDate}</span>
-                </div>
-                <div className={`flex items-center gap-2 sm:gap-3 ${cormorant.className} ${invitationText.body}`}>
-                  <MapPin className={`h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5 ${invitationText.accent}`} />
-                  <span className="text-xs leading-relaxed sm:text-sm">{toTitleCase(ceremonyVenue)}</span>
-                </div>
-              </div>
+           
 
               <motion.div className={INNER_PANEL_CLASS} whileHover={{ scale: 1.01 }} transition={{ duration: 0.3 }}>
                 <blockquote className={`${cormorant.className} min-h-[60px] text-sm italic leading-relaxed sm:min-h-[70px] sm:text-base md:text-lg ${invitationText.body}`}>
@@ -286,7 +277,7 @@ export function Footer() {
                     <Calendar className={`h-4 w-4 ${invitationText.accent}`} />
                   </div>
                   <h4 className={`${cinzel.className} text-sm font-semibold sm:text-base md:text-lg ${invitationText.heading}`}>
-                    RSVP Deadline
+                    RSVP 
                   </h4>
                 </div>
                 <div className={`space-y-2 ${cormorant.className} text-xs leading-relaxed sm:text-sm ${invitationText.body}`}>

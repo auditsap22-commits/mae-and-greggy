@@ -1,186 +1,173 @@
-'use client';
+"use client"
 
-import React, { useEffect, useRef, useState } from 'react';
-import { useSiteConfig } from '@/hooks/use-site-config';
-import Image from 'next/image';
+import React, { useEffect, useState } from "react"
+import Image from "next/image"
+import { useSiteConfig } from "@/hooks/use-site-config"
+import { GoldDust } from "@/components/loader/GoldDust"
 
 interface HeroProps {
-  onOpen: () => void;
-  visible: boolean;
+  onOpen: () => void
+  visible: boolean
 }
 
-const palette = {
-  cream: 'var(--color-motif-cream)',
-  soft: 'var(--color-motif-deep)',
-};
-
-const textColor = 'color-mix(in srgb, var(--color-motif-cream) 50%, white)';
-
-
-const BACKGROUND_VIDEO = '/background_music/Falling Autumn Leaves Background Loop - Backgrounds (720p).mp4';
+const textColor = "var(--color-motif-cream)"
 
 export const Hero: React.FC<HeroProps> = ({ onOpen, visible }) => {
-  const siteConfig = useSiteConfig();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [contentVisible, setContentVisible] = useState(false);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.muted = true;
-    const play = () => {
-      void video.play().catch(() => {});
-    };
-
-    play();
-    video.addEventListener('loadeddata', play);
-    return () => video.removeEventListener('loadeddata', play);
-  }, [visible]);
+  const siteConfig = useSiteConfig()
+  const [contentVisible, setContentVisible] = useState(false)
 
   useEffect(() => {
     if (visible) {
-      const timer = setTimeout(() => setContentVisible(true), 300);
-      return () => clearTimeout(timer);
-    } else {
-      setContentVisible(false);
+      const timer = setTimeout(() => setContentVisible(true), 200)
+      return () => clearTimeout(timer)
     }
-  }, [visible]);
-
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes gentleFloat {
-        0%, 100% {
-          transform: translateY(0px);
-        }
-        50% {
-          transform: translateY(-8px);
-        }
-      }
-    `;
-    document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
+    setContentVisible(false)
+  }, [visible])
 
   return (
-      <div className={`fixed inset-0 z-30 flex items-center justify-center overflow-hidden transition-opacity duration-500 ${visible ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-      {/* Background Video */}
-      <div className="absolute inset-0 z-0">
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          className="absolute inset-0 h-full w-full object-cover"
-          src={BACKGROUND_VIDEO}
-          aria-hidden
-        />
-      </div>
+    <div
+      className={`invite-gate-backdrop fixed inset-0 z-30 flex items-center justify-center overflow-hidden transition-opacity duration-700 ${
+        visible ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+      }`}
+    >
+      <GoldDust />
+      <div className="invite-gate-vignette pointer-events-none absolute inset-0" aria-hidden />
 
-      {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center text-center p-6 w-full max-w-md mx-auto h-full">
-        
-        {/* Top Logo/Monogram */}
-        <div 
-          className={`mb-auto mt-8 transition-all duration-1000 ease-out ${
-            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'
+      {/* Champagne floral corners */}
+      <Image
+        src="/decoration/top-left-corner.png"
+        alt=""
+        width={901}
+        height={1186}
+        className="absolute top-0 left-0 pointer-events-none select-none w-28 opacity-80 sm:w-40 md:w-48 lg:w-56"
+        aria-hidden
+      />
+      <Image
+        src="/decoration/top-right-corner.png"
+        alt=""
+        width={901}
+        height={1186}
+        className="absolute top-0 right-0 pointer-events-none select-none w-28 opacity-80 sm:w-40 md:w-48 lg:w-56"
+        aria-hidden
+      />
+      <Image
+        src="/decoration/bottom-left-corner.png"
+        alt=""
+        width={901}
+        height={1186}
+        className="absolute bottom-0 left-0 pointer-events-none select-none w-28 opacity-70 sm:w-40 md:w-48 lg:w-56"
+        aria-hidden
+      />
+      <Image
+        src="/decoration/bottom-right-corner.png"
+        alt=""
+        width={901}
+        height={1186}
+        className="absolute bottom-0 right-0 pointer-events-none select-none w-28 opacity-70 sm:w-40 md:w-48 lg:w-56"
+        aria-hidden
+      />
+
+      {/* Content */}
+      <div className="relative z-10 flex h-full w-full max-w-md flex-col items-center justify-center px-6 py-10 text-center">
+        {/* Monogram */}
+        <div
+          className={`mb-8 transition-all duration-1000 ease-out sm:mb-10 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"
           }`}
         >
-          <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 flex items-center justify-center">
-            {/* Monogram Image with subtle animation */}
-            <div 
-              className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 transition-transform duration-700 ease-out hover:scale-105"
+          <div className="relative mx-auto h-20 w-20 sm:h-24 sm:w-24">
+            <Image
+              src={siteConfig.couple.monogram}
+              alt="Monogram"
+              fill
+              className="object-contain"
+              priority
               style={{
-                animation: contentVisible ? 'gentleFloat 3s ease-in-out infinite' : 'none'
+                filter:
+                  "brightness(0) saturate(100%) invert(88%) sepia(18%) saturate(650%) hue-rotate(1deg) drop-shadow(0 6px 18px rgba(0,0,0,0.35))",
               }}
-            >
-              <Image
-                src={siteConfig.couple.monogram}
-                alt="Monogram"
-                fill
-                className="object-contain"
-                priority
-                style={{
-                  filter: 'brightness(0) saturate(100%) invert(100%) drop-shadow(0 8px 20px color-mix(in srgb, var(--color-motif-soft) 55%, transparent))',
-                }}
-              />
-            </div>
+            />
           </div>
         </div>
 
-        <div className="flex-1" />
+        <h2
+          className={`text-5xl transform -rotate-6 transition-all duration-1000 ease-out delay-100 sm:text-6xl md:text-7xl ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{
+            fontFamily: '"Great Vibes", cursive',
+            fontWeight: 400,
+            color: textColor,
+            textShadow: "0 2px 14px rgba(0,0,0,0.35)",
+          }}
+        >
+          You are
+        </h2>
 
-        <div className="flex flex-col items-center justify-end w-full gap-5 sm:gap-6 pb-14 sm:pb-16 md:pb-20">
-          <h2
-            className={`text-6xl md:text-8xl transform -rotate-6 transition-all duration-1000 ease-out delay-200 ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{
-              fontFamily: '"Great Vibes", cursive',
-              fontWeight: 400,
-              color: textColor,
-              textShadow: '0 2px 10px color-mix(in srgb, var(--color-motif-soft) 40%, transparent)',
-            }}
-          >
-            You are
-          </h2>
-          
-          <h1
-            className={`text-5xl md:text-7xl font-bold tracking-wider uppercase transition-all duration-1000 ease-out delay-300 ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{
-              fontFamily: '"Cinzel", serif',
-              fontWeight: 700,
-              color: textColor,
-              textShadow: '0 2px 12px color-mix(in srgb, var(--color-motif-soft) 45%, transparent)',
-              letterSpacing: '0.05em',
-            }}
-          >
-            Invited!
-          </h1>
+        <h1
+          className={`mt-2 text-4xl font-bold tracking-[0.12em] uppercase transition-all duration-1000 ease-out delay-200 sm:mt-3 sm:text-5xl md:text-6xl ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{
+            fontFamily: '"Cinzel", serif',
+            fontWeight: 700,
+            color: textColor,
+            textShadow: "0 2px 16px rgba(0,0,0,0.4)",
+          }}
+        >
+          Invited
+        </h1>
 
-          <button 
-            onClick={() => {
-              onOpen();
-            }}
-            className={`px-10 py-4 font-serif text-sm tracking-[0.2em] uppercase rounded-sm border transition-all duration-500 ease-out delay-500 shadow-lg hover:shadow-xl ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{
-              backgroundColor: palette.soft,
-              borderColor: palette.cream,
-              color: textColor,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = palette.cream;
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.borderColor = palette.soft;
-              e.currentTarget.style.color = palette.soft;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = palette.soft;
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = palette.cream;
-              e.currentTarget.style.color = textColor;
-            }}
-          >
-            <span
-              style={{ fontFamily: '"Cinzel", serif', fontWeight: 500, letterSpacing: '0.18em' }}
-            >
-              Open Invitation
-            </span>
-          </button>
+        {/* Motif divider */}
+        <div
+          className={`my-6 flex items-center justify-center gap-2 transition-all duration-1000 ease-out delay-300 sm:my-8 ${
+            contentVisible ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="h-px w-10 rounded-full bg-motif-accent/60 sm:w-14" />
+          <div className="flex gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-80" />
+            <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-50" />
+            <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-80" />
+          </div>
+          <span className="h-px w-10 rounded-full bg-motif-accent/60 sm:w-14" />
         </div>
 
-        {/* Bottom Spacer */}
-        <div className="h-4" />
+        <p
+          className={`mb-8 text-[11px] font-medium tracking-[0.28em] uppercase transition-all duration-1000 ease-out delay-300 sm:mb-10 sm:text-xs sm:tracking-[0.32em] ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+          style={{ color: textColor, opacity: contentVisible ? 0.8 : 0 }}
+        >
+          <span>{siteConfig.ceremony.day}</span>
+          <span className="mx-2" style={{ opacity: 0.5 }} aria-hidden>·</span>
+          <span className="tabular-nums">{siteConfig.wedding.date}</span>
+        </p>
+
+        <button
+          onClick={onOpen}
+          className={`group relative overflow-hidden rounded-sm border px-10 py-4 font-serif text-sm tracking-[0.2em] uppercase shadow-lg transition-all duration-500 ease-out delay-500 hover:shadow-xl ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{
+            backgroundColor: "color-mix(in srgb, var(--color-motif-accent) 90%, transparent)",
+            borderColor: "var(--color-motif-cream)",
+            color: "var(--color-motif-deep)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--color-motif-cream)"
+            e.currentTarget.style.transform = "translateY(-2px)"
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "color-mix(in srgb, var(--color-motif-accent) 90%, transparent)"
+            e.currentTarget.style.transform = "translateY(0)"
+          }}
+        >
+          <span style={{ fontFamily: '"Cinzel", serif', fontWeight: 500, letterSpacing: "0.18em" }}>
+            Open Invitation
+          </span>
+        </button>
       </div>
     </div>
-  );
-};
+  )
+}

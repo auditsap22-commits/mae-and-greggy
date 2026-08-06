@@ -534,17 +534,17 @@ export function GuestList() {
 
         <div className="mx-auto flex max-w-xl flex-col gap-3 px-2 sm:gap-4 sm:px-4">
           <p className={`${cormorant.className} text-sm font-light leading-relaxed sm:text-base md:text-lg ${invitationText.body}`}>
-            To help us plan a beautiful{" "}
-            <NameConnector size="sm">and</NameConnector>{" "}
-            intimate celebration, we kindly ask that you confirm your attendance. Please search for your name below to confirm your presence at our special day.
+            We kindly ask you to confirm your attendance on or before{" "}
+            <span className={`font-semibold ${invitationText.heading}`}>
+              {siteConfig.details.rsvp.deadline}
+            </span>
+            .
           </p>
           <p className={`${cormorant.className} text-sm font-light leading-relaxed sm:text-base md:text-lg ${invitationText.body}`}>
-            If we do not receive your response by the deadline, we will assume you are unable to attend. Thank you for your love{" "}
-            <NameConnector size="sm">and</NameConnector>{" "}
-            support. We truly look forward to celebrating this special day with you.
+            Kindly search for your name below to confirm your presence on our special day.
           </p>
-          <p className={`${cormorant.className} text-sm font-semibold leading-relaxed tracking-[0.08em] sm:text-base sm:tracking-[0.1em] md:text-lg ${invitationText.accent}`}>
-            RSVP Deadline: {siteConfig.details.rsvp.deadline}
+          <p className={`${cormorant.className} text-sm font-light leading-relaxed sm:text-base md:text-lg ${invitationText.body}`}>
+            Thank you for your love and support. We truly look forward to celebrating this special day with you.
           </p>
         </div>
       </div>

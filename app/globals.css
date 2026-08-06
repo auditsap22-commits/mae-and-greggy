@@ -550,9 +550,12 @@ html {
   border-radius: 14px;
   overflow: hidden;
   box-shadow:
+    0 22px 60px -18px rgba(107, 83, 53, 0.32),
     0 6px 28px -6px rgba(139, 111, 71, 0.22),
-    0 2px 8px rgba(139, 111, 71, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    0 2px 8px rgba(139, 111, 71, 0.1),
+    0 0 0 1px rgba(187, 138, 61, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transition: box-shadow 0.5s ease-out, transform 0.5s ease-out;
 }
 
 .hero-invitation__corner {
@@ -606,6 +609,40 @@ html {
   .hero-invitation__content {
     padding: 0.55rem 0.25rem;
   }
+}
+
+/* ── Invitation gate (loading + "open invitation" screens) ──────────────── */
+
+/* Deep espresso-to-bronze curtain — same motif palette as the rest of the
+   site, just inverted to dark so the champagne floral corners and gold
+   type read as a luxury moment before the light invitation is revealed. */
+.invite-gate-backdrop {
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--color-motif-soft) 22%, transparent) 0%, transparent 62%),
+    linear-gradient(165deg, #2F2416 0%, var(--color-motif-deep) 48%, #4C3A26 100%);
+}
+
+.invite-gate-vignette {
+  background: radial-gradient(60% 55% at 50% 42%, transparent 0%, rgba(20, 15, 8, 0.55) 100%);
+}
+
+/* Soft edge vignette over the Silk backdrop — keeps focus on the invitation
+   card and adds a touch of editorial depth without changing the palette. */
+.site-vignette {
+  background: radial-gradient(120% 85% at 50% 8%, transparent 45%, rgba(74, 56, 33, 0.16) 100%);
+}
+
+@keyframes loader-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+.animate-loader-shimmer {
+  animation: loader-shimmer 1.8s ease-in-out infinite;
 }
 
 body.dg-scroll-lock {

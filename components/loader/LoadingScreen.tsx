@@ -1,9 +1,11 @@
 "use client"
 
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import { Cormorant_Garamond, Cinzel } from "next/font/google"
 import { siteConfig } from "@/content/site"
+import { GoldDust } from "@/components/loader/GoldDust"
+import { CoupleNames } from "@/components/couple-name-text"
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -15,16 +17,11 @@ const cinzel = Cinzel({
   weight: ["400", "600"],
 })
 
-const playlistScriptStyle = {
-  fontFamily: "var(--font-playlist-script)",
-  fontWeight: 400,
-} as const
-
 interface LoadingScreenProps {
   onComplete: () => void
 }
 
-/** Splits a date string like "May 8, 2026" into ["05", "08", "26"] */
+/** Splits a date string like "September 14, 2026" into ["09", "14", "26"] */
 function getDateSegments(dateStr: string): string[] {
   const d = new Date(dateStr)
   return [
@@ -36,149 +33,49 @@ function getDateSegments(dateStr: string): string[] {
 
 const GHOST_NUMBERS = getDateSegments(siteConfig.wedding.date)
 
-// ── Canvas particle system ──────────────────────────────────────────────────
+const MIN_LOAD_MS = 8000
+const FADE_MS = 700
 
-interface Particle {
-  x: number
-  y: number
-  vx: number
-  vy: number
-  radius: number
-  opacity: number
-  twinklePhase: number
-  twinkleSpeed: number
-  colorIdx: number
-}
-
-/** Motif palette — matches proposal page silk background */
-const PARTICLE_COLORS = [
-  "39,  58,  90",   // --color-motif-deep
-  "65,  93,  141",  // --color-motif-medium
-  "136, 158, 182",  // --color-motif-accent
-  "216, 222, 230",  // --color-motif-silver
-]
-
-function createParticles(width: number, height: number): Particle[] {
-  const count = Math.min(45, Math.max(20, Math.floor((width * height) / 15000)))
-  return Array.from({ length: count }, () => ({
-    x: Math.random() * width,
-    y: Math.random() * height,
-    vx: (Math.random() - 0.5) * 0.25,
-    vy: -(Math.random() * 0.18 + 0.06),   // slow upward drift
-    radius: Math.random() * 1.8 + 0.4,
-    opacity: Math.random() * 0.35 + 0.20,
-    twinklePhase: Math.random() * Math.PI * 2,
-    twinkleSpeed: Math.random() * 0.012 + 0.004,
-    colorIdx: Math.floor(Math.random() * PARTICLE_COLORS.length),
-  }))
-}
-
-// ── Component ───────────────────────────────────────────────────────────────
+const loaderNameClass =
+  "font-[family-name:var(--font-safira-march)] text-[clamp(2.85rem,14vw,5.75rem)] sm:text-7xl md:text-8xl leading-none tracking-[0.01em] text-[var(--color-motif-cream)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35)]"
 
 export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
-  const [fadeOut, setFadeOut]           = useState(false)
-  const [progress, setProgress]         = useState(0)
-  // phase gates: 0=hidden · 1=names · 2=divider · 3=date · 4=progress
-  const [phase, setPhase]               = useState(0)
-
-  const canvasRef     = useRef<HTMLCanvasElement>(null)
-  const animFrameRef  = useRef<number>(0)
-  const particlesRef  = useRef<Particle[]>([])
-
-  const TOTAL_LOAD_MS = 12000
-  const FADE_MS       = 700
-
-  // ── Canvas particle animation ────────────────────────────────────────────
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const resize = () => {
-      canvas.width  = window.innerWidth
-      canvas.height = window.innerHeight
-      particlesRef.current = createParticles(canvas.width, canvas.height)
-    }
-    resize()
-    window.addEventListener("resize", resize)
-
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    let running = true
-
-    const draw = () => {
-      if (!running) return
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      particlesRef.current.forEach((p) => {
-        // Gentle twinkle
-        p.twinklePhase += p.twinkleSpeed
-        const twinkle   = (Math.sin(p.twinklePhase) + 1) * 0.5
-        const alpha     = p.opacity * (0.3 + twinkle * 0.7)
-        const color     = PARTICLE_COLORS[p.colorIdx]
-        const blurR     = p.radius * 3.5
-
-        // Soft glow circle via radial gradient
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, blurR)
-        g.addColorStop(0,   `rgba(${color}, ${alpha})`)
-        g.addColorStop(0.4, `rgba(${color}, ${alpha * 0.45})`)
-        g.addColorStop(1,   `rgba(${color}, 0)`)
-
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, blurR, 0, Math.PI * 2)
-        ctx.fillStyle = g
-        ctx.fill()
-
-        // Drift
-        p.x += p.vx
-        p.y += p.vy
-
-        // Wrap
-        const { width, height } = canvas
-        if (p.y < -20)          { p.y = height + 10; p.x = Math.random() * width }
-        if (p.x < -20)            p.x = width + 20
-        if (p.x > width + 20)     p.x = -20
-      })
-
-      animFrameRef.current = requestAnimationFrame(draw)
-    }
-
-    draw()
-
-    return () => {
-      running = false
-      cancelAnimationFrame(animFrameRef.current)
-      window.removeEventListener("resize", resize)
-    }
-  }, [])
+  const [fadeOut, setFadeOut] = useState(false)
+  const [progress, setProgress] = useState(0)
+  // phase gates: 0=hidden · 1=monogram · 2=names · 3=divider · 4=date · 5=progress
+  const [phase, setPhase] = useState(0)
 
   // ── Staggered content reveal ─────────────────────────────────────────────
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 150),
-      setTimeout(() => setPhase(2), 460),
-      setTimeout(() => setPhase(3), 760),
-      setTimeout(() => setPhase(4), 990),
+      setTimeout(() => setPhase(1), 180),
+      setTimeout(() => setPhase(2), 520),
+      setTimeout(() => setPhase(3), 960),
+      setTimeout(() => setPhase(4), 1400),
+      setTimeout(() => setPhase(5), 1840),
     ]
     return () => timers.forEach(clearTimeout)
   }, [])
 
-  // ── Progress counter ─────────────────────────────────────────────────────
+  // ── Progress counter (minimum 8 seconds) ─────────────────────────────────
   useEffect(() => {
     let rafId = 0
-    const start        = performance.now()
+    const start = performance.now()
     const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
 
     const tick = (now: number) => {
-      const t    = Math.min(1, (now - start) / TOTAL_LOAD_MS)
+      const t = Math.min(1, (now - start) / MIN_LOAD_MS)
       const next = Math.round(easeOutCubic(t) * 100)
       setProgress((prev) => (next > prev ? next : prev))
       if (t < 1) rafId = requestAnimationFrame(tick)
     }
     rafId = requestAnimationFrame(tick)
 
-    const fadeTimer = setTimeout(() => setFadeOut(true), TOTAL_LOAD_MS - FADE_MS)
-    const doneTimer = setTimeout(() => { setProgress(100); onComplete() }, TOTAL_LOAD_MS)
+    const fadeTimer = setTimeout(() => setFadeOut(true), MIN_LOAD_MS - FADE_MS)
+    const doneTimer = setTimeout(() => {
+      setProgress(100)
+      onComplete()
+    }, MIN_LOAD_MS)
 
     return () => {
       cancelAnimationFrame(rafId)
@@ -187,71 +84,65 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     }
   }, [onComplete])
 
-  // Helper: CSS transition classes based on phase gate
   const vis = (minPhase: number) =>
     phase >= minPhase
       ? "opacity-100 translate-y-0 transition-all duration-700 ease-out"
       : "opacity-0 translate-y-5 transition-all duration-700 ease-out"
 
-  // ── Render ───────────────────────────────────────────────────────────────
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity duration-700 ease-out ${
+      className={`invite-gate-backdrop fixed inset-0 z-50 flex flex-col overflow-hidden transition-opacity ease-out ${
         fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
+      style={{ transitionDuration: `${FADE_MS}ms` }}
       role="progressbar"
       aria-valuenow={progress}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-label="Loading invitation"
     >
-      {/* Canvas particle field — silk background is provided by the page root */}
-      <canvas
-        ref={canvasRef}
-        className="pointer-events-none absolute inset-0"
-        style={{ mixBlendMode: "screen" }}
-        aria-hidden
-      />
+      <GoldDust />
+      <div className="invite-gate-vignette pointer-events-none absolute inset-0" aria-hidden />
 
-      {/* ── Layer 5: Corner floral decorations ── */}
+      {/* Champagne floral corners */}
       <Image
-        src="/decoration/top-left.png"
+        src="/decoration/top-left-corner.png"
         alt=""
-        width={280}
-        height={280}
-        className="absolute top-0 left-0 pointer-events-none select-none w-36 sm:w-48 md:w-60 lg:w-64"
+        width={901}
+        height={1186}
+        className="absolute top-0 left-0 pointer-events-none select-none w-28 opacity-80 sm:w-40 md:w-48 lg:w-56"
         aria-hidden
         priority
       />
       <Image
-        src="/decoration/top-rightn.png"
+        src="/decoration/top-right-corner.png"
         alt=""
-        width={280}
-        height={280}
-        className="absolute top-0 right-0 pointer-events-none select-none w-36 sm:w-48 md:w-60 lg:w-64"
+        width={901}
+        height={1186}
+        className="absolute top-0 right-0 pointer-events-none select-none w-28 opacity-80 sm:w-40 md:w-48 lg:w-56"
         aria-hidden
         priority
       />
       <Image
-        src="/decoration/bottom-left.png"
+        src="/decoration/bottom-left-corner.png"
         alt=""
-        width={280}
-        height={280}
-        className="absolute bottom-0 left-0 pointer-events-none select-none w-36 sm:w-48 md:w-60 lg:w-64"
+        width={901}
+        height={1186}
+        className="absolute bottom-0 left-0 pointer-events-none select-none w-28 opacity-70 sm:w-40 md:w-48 lg:w-56"
         aria-hidden
       />
       <Image
-        src="/decoration/right-bottom.png"
+        src="/decoration/bottom-right-corner.png"
         alt=""
-        width={280}
-        height={280}
-        className="absolute bottom-0 right-0 pointer-events-none select-none w-36 sm:w-48 md:w-60 lg:w-64"
+        width={901}
+        height={1186}
+        className="absolute bottom-0 right-0 pointer-events-none select-none w-28 opacity-70 sm:w-40 md:w-48 lg:w-56"
         aria-hidden
       />
 
-      {/* ── Layer 6: Ghost wedding-date watermark (right side) ── */}
+      {/* Ghost wedding-date watermark */}
       <div
-        className="absolute inset-0 pointer-events-none flex flex-col items-end justify-center pr-4 sm:pr-8 md:pr-12 lg:pr-16 select-none"
+        className="absolute inset-0 pointer-events-none flex flex-col items-end justify-center pr-3 max-[380px]:pr-2 sm:pr-8 md:pr-12 lg:pr-16 select-none"
         aria-hidden
       >
         {GHOST_NUMBERS.map((num, i) => (
@@ -259,8 +150,8 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
             key={`ghost-${num}-${i}`}
             className={`${cinzel.className} leading-[0.82]`}
             style={{
-              fontSize: "clamp(5rem, 14vw, 12rem)",
-              color: "color-mix(in srgb, var(--color-motif-silver) 12%, transparent)",
+              fontSize: "clamp(3.75rem, 12vw, 12rem)",
+              color: "color-mix(in srgb, var(--color-motif-soft) 14%, transparent)",
               letterSpacing: "-0.04em",
               opacity: phase >= 1 ? 1 : 0,
               transition: `opacity 1.6s ease-out ${i * 150}ms`,
@@ -271,70 +162,74 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
         ))}
       </div>
 
-      {/* ── Main content ── */}
-      <div className={`${cormorant.className} relative z-10 mx-auto w-full max-w-2xl px-6 text-center sm:px-8`}>
-        {/* Couple names — playlist script, same as proposal page */}
-        <h1
-          className={`leading-none ${vis(1)}`}
-          style={{ ...playlistScriptStyle, color: "var(--color-motif-cream)", transitionDelay: "60ms" }}
+      {/* Three-zone layout: top monogram · center names · bottom progress */}
+      <div className={`${cormorant.className} relative z-10 flex min-h-0 flex-1 flex-col`}>
+        {/* Top — monogram */}
+        <header
+          className={`flex shrink-0 justify-center pt-[max(2.75rem,env(safe-area-inset-top))] sm:pt-14 md:pt-16 ${vis(1)}`}
         >
-          <span className="block text-[clamp(4rem,20vw,6.5rem)] sm:text-8xl md:text-9xl lg:text-[10rem]">
-            {siteConfig.couple.brideNickname.trim()}
-          </span>
-
-          <span
-            className="relative my-1 block text-3xl opacity-70 sm:my-2 sm:text-4xl md:text-5xl"
-            style={{ color: "var(--color-motif-accent)" }}
-          >
-            +
-          </span>
-
-          <span className="block text-[clamp(4rem,20vw,6.5rem)] sm:text-8xl md:text-9xl lg:text-[10rem]">
-            {siteConfig.couple.groomNickname.trim()}
-          </span>
-        </h1>
-
-        {/* Motif divider — matches proposal page */}
-        <div className={`mt-5 mb-2 flex items-center justify-center gap-2 ${vis(2)}`}>
-          <span className="h-px w-10 rounded-full bg-motif-accent/60 sm:w-14" />
-          <div className="flex gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-80" />
-            <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-50" />
-            <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-80" />
+          <div className="relative h-12 w-12 opacity-90 max-[380px]:h-11 max-[380px]:w-11 sm:h-16 sm:w-16">
+            <Image
+              src={siteConfig.couple.monogram}
+              alt=""
+              fill
+              className="object-contain"
+              style={{
+                filter:
+                  "brightness(0) saturate(100%) invert(88%) sepia(18%) saturate(650%) hue-rotate(1deg) drop-shadow(0 4px 14px rgba(0,0,0,0.35))",
+              }}
+              aria-hidden
+              priority
+            />
           </div>
-          <span className="h-px w-10 rounded-full bg-motif-accent/60 sm:w-14" />
+        </header>
+
+        {/* Center — names + date */}
+        <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-5 text-center sm:px-8">
+          <div className={vis(2)} role="heading" aria-level={1} style={{ transitionDelay: "60ms" }}>
+            <CoupleNames
+              groomName={siteConfig.couple.brideNickname.trim()}
+              brideName={siteConfig.couple.groomNickname.trim()}
+              connector="and"
+              layout="stacked"
+              className={loaderNameClass}
+              connectorClassName="text-[var(--color-motif-accent)] opacity-90"
+            />
+          </div>
+
+          <div className={`mt-4 mb-2 flex items-center justify-center gap-2 sm:mt-6 sm:mb-3 ${vis(3)}`}>
+            <span className="h-px w-10 rounded-full bg-motif-accent/60 sm:w-14" />
+            <div className="flex gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-80" />
+              <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-50" />
+              <span className="h-1.5 w-1.5 rounded-full bg-motif-accent opacity-80" />
+            </div>
+            <span className="h-px w-10 rounded-full bg-motif-accent/60 sm:w-14" />
+          </div>
+
+          <p
+            className={`text-[9px] leading-relaxed font-medium tracking-[0.24em] uppercase max-[380px]:tracking-[0.2em] sm:text-xs sm:tracking-[0.32em] ${vis(4)}`}
+            style={{ color: "var(--color-motif-cream)", opacity: 0.85 }}
+            aria-label={`${siteConfig.ceremony.day}, ${siteConfig.wedding.date} · ${siteConfig.ceremony.time}`}
+          >
+            <span>{siteConfig.ceremony.day}</span>
+            <span className="mx-2" style={{ opacity: 0.5 }} aria-hidden>
+              ·
+            </span>
+            <span className="tabular-nums">{siteConfig.wedding.date}</span>
+            <span className="mx-2" style={{ opacity: 0.5 }} aria-hidden>
+              ·
+            </span>
+            <span className="tabular-nums">{siteConfig.ceremony.time}</span>
+          </p>
         </div>
 
-        {/* Supporting line */}
-        {/* <p
-          className={`${vis(3)}`}
-          style={{
-            fontFamily: '"Great Vibes", cursive',
-            fontSize: "clamp(1.3rem, 4vw, 1.7rem)",
-            color: "rgba(255, 255, 255, 0.48)",
-            transitionDelay: "80ms",
-          }}
+        {/* Bottom — progress */}
+        <footer
+          className={`shrink-0 px-5 pb-[max(2.25rem,env(safe-area-inset-bottom))] text-center sm:px-8 sm:pb-[max(2.75rem,env(safe-area-inset-bottom))] ${vis(5)}`}
         >
-          Together with their families
-        </p> */}
-
-        {/* Wedding date */}
-        <p
-          className={`mt-3 mb-9 text-[10px] leading-relaxed font-medium tracking-[0.28em] uppercase sm:text-xs sm:tracking-[0.32em] ${vis(3)}`}
-          style={{ color: "var(--color-motif-cream)" }}
-          aria-label={`${siteConfig.ceremony.day}, ${siteConfig.wedding.date} · ${siteConfig.ceremony.time}`}
-        >
-          <span>{siteConfig.ceremony.day}</span>
-          <span className="mx-2" style={{ opacity: 0.5 }} aria-hidden>·</span>
-          <span className="tabular-nums">{siteConfig.wedding.date}</span>
-          <span className="mx-2" style={{ opacity: 0.5 }} aria-hidden>·</span>
-          <span className="tabular-nums">{siteConfig.ceremony.time}</span>
-        </p>
-
-        {/* Progress section */}
-        <div className={`${vis(4)}`}>
           <p
-            className={`${cinzel.className} mb-3.5 text-[10px] font-medium tracking-[0.22em] uppercase sm:text-[11px] sm:tracking-[0.26em]`}
+            className={`${cinzel.className} mb-3 text-[9px] font-medium tracking-[0.2em] uppercase sm:mb-3.5 sm:text-[11px] sm:tracking-[0.26em]`}
             style={{ color: "var(--color-motif-cream)", opacity: 0.9 }}
           >
             Preparing your invitation
@@ -348,7 +243,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
             <div
               className="absolute inset-0 rounded-full"
               style={{
-                backgroundColor: "color-mix(in srgb, var(--color-motif-accent) 25%, transparent)",
+                backgroundColor: "color-mix(in srgb, var(--color-motif-soft) 30%, transparent)",
               }}
             />
             <div
@@ -357,7 +252,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                 width: `${Math.max(progress, 2)}%`,
                 transition: "width 200ms linear",
                 background:
-                  "linear-gradient(to right, var(--color-motif-soft), var(--color-motif-medium))",
+                  "linear-gradient(to right, var(--color-motif-soft), var(--color-motif-accent))",
               }}
             >
               <div
@@ -365,20 +260,31 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                 style={{
                   width: "50px",
                   background:
-                    "linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--color-motif-cream) 55%, transparent) 50%, transparent 100%)",
+                    "linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--color-motif-cream) 65%, transparent) 50%, transparent 100%)",
                 }}
               />
             </div>
+            <div
+              className="absolute top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full"
+              style={{
+                left: `${Math.max(progress, 2)}%`,
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "var(--color-motif-cream)",
+                boxShadow:
+                  "0 0 8px 2px color-mix(in srgb, var(--color-motif-accent) 70%, transparent)",
+                transition: "left 200ms linear",
+              }}
+            />
           </div>
 
           <p
-            className={`${cinzel.className} mt-4 tabular-nums text-[10px] tracking-[0.3em] sm:text-[11px]`}
+            className={`${cinzel.className} mt-3 tabular-nums text-[9px] tracking-[0.28em] sm:mt-4 sm:text-[11px] sm:tracking-[0.3em]`}
             style={{ color: "var(--color-motif-cream)" }}
             aria-live="polite"
           >
             {progress}%
           </p>
-        </div>
+        </footer>
       </div>
     </div>
   )

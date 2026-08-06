@@ -1,4 +1,5 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 
 export interface StaggeredMenuItem {
@@ -20,7 +21,9 @@ export interface StaggeredMenuProps {
   menuButtonColor?: string;
   openMenuButtonColor?: string;
   accentColor?: string;
-  isFixed: boolean;
+  /** Inline toggle in navbar; full-screen panel is portaled to body when open */
+  embedded?: boolean;
+  isFixed?: boolean;
   changeMenuColorOnOpen?: boolean;
   onMenuOpen?: () => void;
   onMenuClose?: () => void;
@@ -42,11 +45,13 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   openMenuButtonColor = MENU_TEXT,
   changeMenuColorOnOpen = true,
   accentColor = HERO_ACCENT,
+  embedded = false,
   isFixed = false,
   onMenuOpen,
   onMenuClose
 }: StaggeredMenuProps) => {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const openRef = useRef(false);
 
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -67,7 +72,21 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
   const itemEntranceTweenRef = useRef<gsap.core.Tween | null>(null);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!embedded || !open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [embedded, open]);
+
   useLayoutEffect(() => {
+    if (embedded && !mounted) return;
     const ctx = gsap.context(() => {
       const panel = panelRef.current;
       const preContainer = preLayersRef.current;
@@ -89,7 +108,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       if (toggleBtnRef.current) gsap.set(toggleBtnRef.current, { color: menuButtonColor });
     });
     return () => ctx.revert();
-  }, [menuButtonColor, position]);
+  }, [menuButtonColor, position, embedded, mounted]);
 
   const buildOpenTimeline = useCallback(() => {
     const panel = panelRef.current;
@@ -320,153 +339,145 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     [onMenuClose, playClose, animateColor, animateText]
   );
 
-  return (
-    <div
-      className={`sm-scope z-40 ${isFixed ? 'fixed top-0 left-0 w-screen h-screen overflow-hidden' : 'w-full h-full'}`}
-      data-open={open || undefined}
+  const toggleButton = (
+    <button
+      ref={toggleBtnRef}
+      className="sm-toggle relative inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-[0.3rem] bg-transparent border-0 cursor-pointer text-sm font-medium leading-none overflow-visible"
+      style={{ color: open ? openMenuButtonColor : menuButtonColor }}
+      aria-label={open ? 'Close menu' : 'Open menu'}
+      aria-expanded={open}
+      aria-controls="staggered-menu-panel"
+      onClick={toggleMenu}
+      type="button"
     >
-      <div
-        className={(className ? className + ' ' : '') + 'staggered-menu-wrapper relative w-full h-full z-40'}
-        style={accentColor ? ({ ['--sm-accent' as any]: accentColor } as React.CSSProperties) : undefined}
-        data-position={position}
-        data-open={open || undefined}
-        aria-hidden={!open}
+      <span
+        ref={textWrapRef}
+        className="sm-toggle-textWrap relative inline-block h-[1em] overflow-hidden whitespace-nowrap w-[var(--sm-toggle-width,auto)] min-w-[var(--sm-toggle-width,auto)]"
+        aria-hidden="true"
       >
-        <div
-          ref={preLayersRef}
-          className="sm-prelayers absolute top-0 right-0 bottom-0 pointer-events-none z-[5]"
-          aria-hidden="true"
-        >
-          {(() => {
-            const raw =
-              colors && colors.length
-                ? colors.slice(0, 4)
-                : [
-                    'var(--color-motif-deep)',
-                    'var(--color-motif-deep)',
-                    'var(--color-motif-deep)',
-                    'var(--color-motif-deep)',
-                  ];
-            let arr = [...raw];
-            if (arr.length >= 3) {
-              const mid = Math.floor(arr.length / 2);
-              arr.splice(mid, 1);
-            }
-            return arr.map((c, i) => (
-              <div
-                key={i}
-                className="sm-prelayer absolute top-0 right-0 h-full w-full translate-x-0"
-                style={{ background: c }}
-              />
-            ));
-          })()}
-        </div>
-
-        <header
-          className="staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-end p-[2em] bg-transparent pointer-events-none z-20"
-          aria-label="Main navigation header"
-        >
-          <button
-            ref={toggleBtnRef}
-            className="sm-toggle relative inline-flex items-center gap-[0.3rem] bg-transparent border-0 cursor-pointer font-medium leading-none overflow-visible pointer-events-auto"
-            style={{ color: open ? openMenuButtonColor : menuButtonColor }}
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            aria-controls="staggered-menu-panel"
-            onClick={toggleMenu}
-            type="button"
-          >
-            <span
-              ref={textWrapRef}
-              className="sm-toggle-textWrap relative inline-block h-[1em] overflow-hidden whitespace-nowrap w-[var(--sm-toggle-width,auto)] min-w-[var(--sm-toggle-width,auto)]"
-              aria-hidden="true"
-            >
-              <span ref={textInnerRef} className="sm-toggle-textInner flex flex-col leading-none">
-                {textLines.map((l, i) => (
-                  <span className="sm-toggle-line block h-[1em] leading-none" key={i}>
-                    {l}
-                  </span>
-                ))}
-              </span>
+        <span ref={textInnerRef} className="sm-toggle-textInner flex flex-col leading-none">
+          {textLines.map((l, i) => (
+            <span className="sm-toggle-line block h-[1em] leading-none" key={i}>
+              {l}
             </span>
-          </button>
-        </header>
+          ))}
+        </span>
+      </span>
+    </button>
+  );
 
-        <aside
-          id="staggered-menu-panel"
-          ref={panelRef}
-          className="staggered-menu-panel absolute top-0 right-0 h-full flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-10"
-          style={{ background: MENU_PANEL_BG, WebkitBackdropFilter: 'blur(12px)' }}
-          aria-hidden={!open}
-        >
-          <div className="sm-panel-inner flex-1 flex flex-col gap-6">
-            <ul
-              className="sm-panel-list list-none m-0 p-0 flex flex-col gap-3"
-              role="list"
-            >
-              {items && items.length ? (
-                items.map((it, idx) => (
-                  <li className="sm-panel-itemWrap relative overflow-hidden leading-none" key={it.label + idx}>
-                    <a
-                      className="sm-panel-item relative font-semibold cursor-pointer leading-none tracking-[-2px] uppercase transition-[color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
-                      style={{ color: MENU_TEXT }}
-                      href={it.link}
-                      onClick={(e) => handleItemClick(e, it.link)}
-                      aria-label={it.ariaLabel}
-                    >
-                      <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
-                        {it.label}
-                      </span>
-                    </a>
-                  </li>
-                ))
-              ) : (
-                <li className="sm-panel-itemWrap relative overflow-hidden leading-none" aria-hidden="true">
-                    <span className="sm-panel-item relative font-semibold text-[4rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]" style={{ color: MENU_TEXT }}>
-                    <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
-                      No items
-                    </span>
-                  </span>
-                </li>
-              )}
-            </ul>
-
-            {displaySocials && socialItems && socialItems.length > 0 && (
-              <div className="sm-socials mt-auto pt-8 flex flex-col gap-3" aria-label="Social links">
-                <h3 className="sm-socials-title m-0 text-base font-medium" style={{ color: MENU_TEXT }}>
-                  Socials
-                </h3>
-                <ul
-                  className="sm-socials-list list-none m-0 p-0 flex flex-row items-center gap-5 flex-wrap"
-                  role="list"
-                >
-                  {socialItems.map((s, i) => (
-                    <li key={s.label + i} className="sm-socials-item">
-                      <a
-                        href={s.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="sm-socials-link font-medium no-underline relative inline-block py-[2px] transition-[color,opacity] duration-300 ease-linear"
-                        style={{ color: MENU_TEXT }}
-                        onClick={(e) => handleItemClick(e, s.link)}
-                      >
-                        {s.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </aside>
+  const menuPanel = (
+    <>
+      <div
+        ref={preLayersRef}
+        className="sm-prelayers absolute top-0 right-0 bottom-0 pointer-events-none z-[5]"
+        aria-hidden="true"
+      >
+        {(() => {
+          const raw =
+            colors && colors.length
+              ? colors.slice(0, 4)
+              : [
+                  'var(--color-motif-deep)',
+                  'var(--color-motif-deep)',
+                  'var(--color-motif-deep)',
+                  'var(--color-motif-deep)',
+                ];
+          let arr = [...raw];
+          if (arr.length >= 3) {
+            const mid = Math.floor(arr.length / 2);
+            arr.splice(mid, 1);
+          }
+          return arr.map((c, i) => (
+            <div
+              key={i}
+              className="sm-prelayer absolute top-0 right-0 h-full w-full translate-x-0"
+              style={{ background: c }}
+            />
+          ));
+        })()}
       </div>
 
-      <style>{`
+      <aside
+        id="staggered-menu-panel"
+        ref={panelRef}
+        className="staggered-menu-panel absolute top-0 right-0 h-full flex flex-col overflow-y-auto z-10"
+        style={{ background: MENU_PANEL_BG, WebkitBackdropFilter: 'blur(12px)' }}
+        aria-hidden={!open}
+      >
+        <div className="sm-panel-inner flex-1 flex flex-col gap-6">
+          <ul className="sm-panel-list list-none m-0 p-0 flex flex-col gap-3" role="list">
+            {items && items.length ? (
+              items.map((it, idx) => (
+                <li className="sm-panel-itemWrap relative overflow-hidden leading-none" key={it.label + idx}>
+                  <a
+                    className="sm-panel-item relative font-semibold cursor-pointer leading-none tracking-[-2px] uppercase transition-[color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
+                    style={{ color: MENU_TEXT }}
+                    href={it.link}
+                    onClick={(e) => handleItemClick(e, it.link)}
+                    aria-label={it.ariaLabel}
+                  >
+                    <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
+                      {it.label}
+                    </span>
+                  </a>
+                </li>
+              ))
+            ) : (
+              <li className="sm-panel-itemWrap relative overflow-hidden leading-none" aria-hidden="true">
+                <span
+                  className="sm-panel-item relative font-semibold text-[4rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
+                  style={{ color: MENU_TEXT }}
+                >
+                  <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
+                    No items
+                  </span>
+                </span>
+              </li>
+            )}
+          </ul>
+
+          {displaySocials && socialItems && socialItems.length > 0 && (
+            <div className="sm-socials mt-auto pt-8 flex flex-col gap-3" aria-label="Social links">
+              <h3 className="sm-socials-title m-0 text-base font-medium" style={{ color: MENU_TEXT }}>
+                Socials
+              </h3>
+              <ul
+                className="sm-socials-list list-none m-0 p-0 flex flex-row items-center gap-5 flex-wrap"
+                role="list"
+              >
+                {socialItems.map((s, i) => (
+                  <li key={s.label + i} className="sm-socials-item">
+                    <a
+                      href={s.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="sm-socials-link font-medium no-underline relative inline-block py-[2px] transition-[color,opacity] duration-300 ease-linear"
+                      style={{ color: MENU_TEXT }}
+                      onClick={(e) => handleItemClick(e, s.link)}
+                    >
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
+  );
+
+  const menuStyles = (
+    <style>{`
 .sm-scope .staggered-menu-wrapper { position: relative; width: 100%; height: 100%; z-index: 40; }
-.sm-scope:not([data-open]) { z-index: 0; pointer-events: none; }
-.sm-scope:not([data-open]) .staggered-menu-header { pointer-events: none; }
-.sm-scope:not([data-open]) .staggered-menu-panel { pointer-events: none; visibility: hidden; }
-.sm-scope:not([data-open]) .sm-prelayers { pointer-events: none; visibility: hidden; }
+.sm-scope:not(.sm-scope--embedded):not([data-open]) { z-index: 0; pointer-events: none; }
+.sm-scope:not(.sm-scope--embedded):not([data-open]) .staggered-menu-header { pointer-events: none; }
+.sm-scope:not(.sm-scope--embedded):not([data-open]) .staggered-menu-panel { pointer-events: none; visibility: hidden; }
+.sm-scope:not(.sm-scope--embedded):not([data-open]) .sm-prelayers { pointer-events: none; visibility: hidden; }
+.sm-scope--overlay:not([data-open]) { pointer-events: none; }
+.sm-scope--overlay:not([data-open]) .staggered-menu-panel { pointer-events: none; visibility: hidden; }
+.sm-scope--overlay:not([data-open]) .sm-prelayers { pointer-events: none; visibility: hidden; }
 .sm-scope .staggered-menu-header { position: absolute; top: 0; left: 0; width: 100%; display: flex; align-items: center; justify-content: flex-end; padding: 2em; background: transparent; pointer-events: none; z-index: 20; }
 .sm-scope .staggered-menu-header > * { pointer-events: auto; }
 .sm-scope .sm-toggle { position: relative; display: inline-flex; align-items: center; gap: 0.3rem; background: transparent; border: none; cursor: pointer; color: var(--color-motif-deep); font-weight: 500; line-height: 1; overflow: visible; }
@@ -507,13 +518,71 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 @media (min-width: 1024px) { .sm-scope .sm-panel-item { font-size: 4.1rem; letter-spacing: -2px; } }
 .sm-scope .sm-panel-itemLabel { display: inline-block; will-change: transform; transform-origin: 50% 100%; }
 .sm-scope .sm-panel-item:hover { color: var(--sm-accent, var(--color-motif-cream)); }
-@media (max-width: 1024px) { .sm-scope .staggered-menu-panel { width: 100%; left: 0; right: 0; } .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); } }
+@media (max-width: 1024px) { .sm-scope .staggered-menu-panel { width: 100%; left: 0; right: 0; } .sm-scope .sm-prelayers { width: 100%; left: 0; right: 0; } .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); } }
 @media (max-width: 640px) {
   .sm-scope .staggered-menu-header { padding: 1rem; }
-  .sm-scope .staggered-menu-panel { width: 100%; left: 0; right: 0; padding: 4.5em 1.5em 1.75em 1.5em; }
+  .sm-scope .staggered-menu-panel { width: 100%; left: 0; right: 0; padding: calc(3.25rem + env(safe-area-inset-top, 0px)) 1.5em 1.75em 1.5em; }
   .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); }
 }
       `}</style>
+  );
+
+  if (embedded) {
+    return (
+      <>
+        <div
+          className="sm-scope sm-scope--embedded relative z-[60] inline-flex items-center"
+          data-open={open || undefined}
+        >
+          {toggleButton}
+        </div>
+        {mounted &&
+          createPortal(
+            <div
+              className={`sm-scope sm-scope--overlay fixed inset-0 z-[40] overflow-hidden ${open ? '' : 'pointer-events-none'}`}
+              data-open={open || undefined}
+              aria-hidden={!open}
+              style={accentColor ? ({ ['--sm-accent' as any]: accentColor } as React.CSSProperties) : undefined}
+            >
+              <div
+                className={(className ? className + ' ' : '') + 'staggered-menu-wrapper relative h-full w-full'}
+                data-position={position}
+                data-open={open || undefined}
+              >
+                {menuPanel}
+              </div>
+              {menuStyles}
+            </div>,
+            document.body
+          )}
+        {!mounted && menuStyles}
+      </>
+    );
+  }
+
+  return (
+    <div
+      className={`sm-scope z-40 ${isFixed ? 'fixed top-0 left-0 w-screen h-screen overflow-hidden' : 'w-full h-full'}`}
+      data-open={open || undefined}
+    >
+      <div
+        className={(className ? className + ' ' : '') + 'staggered-menu-wrapper relative w-full h-full z-40'}
+        style={accentColor ? ({ ['--sm-accent' as any]: accentColor } as React.CSSProperties) : undefined}
+        data-position={position}
+        data-open={open || undefined}
+        aria-hidden={!open}
+      >
+        {menuPanel}
+
+        <header
+          className="staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-end p-[2em] bg-transparent pointer-events-none z-20"
+          aria-label="Main navigation header"
+        >
+          {toggleButton}
+        </header>
+      </div>
+
+      {menuStyles}
     </div>
   );
 };

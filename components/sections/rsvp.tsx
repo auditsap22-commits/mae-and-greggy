@@ -118,19 +118,21 @@ export function RSVP({ onSuccess }: RSVPFormProps) {
               {/* Decorative Background */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#BB8A3D]/10 via-[#CDAC77]/15 to-[#FFF6E7]/5 rounded-2xl blur-xl -z-10"></div>
               
-              <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 sm:p-10 md:p-12 border border-[#BB8A3D]/30 shadow-2xl">
-                <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
-  
-                  <h3 className="text-xl sm:text-3xl md:text-4xl font-sans font-bold text-[#402921]">
-                    We Reserved Seats for You
-                  </h3>
-                </div>
-                
+              <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 sm:p-10 md:p-12 border border-[#BB8A3D]/30 shadow-2xl space-y-4 sm:space-y-5">
                 <p className="text-sm sm:text-lg md:text-xl text-[#402921]/80 font-sans font-light leading-relaxed">
-                  The favor of your reply is kindly requested on or before{" "}
-                  <span className="font-semibold text-[#402921] bg-[#402921]/10 px-2 py-1 rounded-lg text-sm md:text-base">
+                  We kindly ask you to confirm your attendance on or before{" "}
+                  <span className="font-semibold text-[#402921]">
                     {siteConfig.details.rsvp.deadline}
                   </span>
+                  .
+                </p>
+
+                <p className="text-sm sm:text-lg md:text-xl text-[#402921]/80 font-sans font-light leading-relaxed">
+                  Kindly search for your name below to confirm your presence on our special day.
+                </p>
+
+                <p className="text-sm sm:text-lg md:text-xl text-[#402921]/80 font-sans font-light leading-relaxed">
+                  Thank you for your love and support. We truly look forward to celebrating this special day with you.
                 </p>
               </div>
             </div>

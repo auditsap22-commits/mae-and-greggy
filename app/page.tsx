@@ -1,8 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import Silk from "@/components/silk"
+import { LoadingScreen } from "@/components/loader/LoadingScreen"
+import { Hero as InvitationGate } from "@/components/loader/Hero"
 import { Hero as MainHero } from "@/components/sections/hero"
 import { Welcome } from "@/components/sections/welcome"
 import { Countdown } from "@/components/sections/countdown"
@@ -24,14 +26,18 @@ import { CoupleVideo } from "@/components/sections/couple-video"
 
 const GuestList = dynamic(() => import("@/components/sections/guest-list").then(mod => ({ default: mod.GuestList })), { ssr: false })
 
+type AppState = "loading" | "gate" | "open"
+
 export default function Home() {
   const enableDecor = process.env.NEXT_PUBLIC_ENABLE_DECOR !== "false"
+  const [appState, setAppState] = useState<AppState>("loading")
 
-  // When returning from /gallery, scroll to the hash in the URL
+  // When returning from /gallery, skip the ceremony and scroll to the hash in the URL
   useEffect(() => {
     const returning = sessionStorage.getItem("returnFromGallery")
     if (returning === "true") {
       sessionStorage.removeItem("returnFromGallery")
+      setAppState("open")
     }
     const hash = window.location.hash
     if (!hash) return
@@ -42,9 +48,13 @@ export default function Home() {
     return () => clearTimeout(id)
   }, [])
 
+  const handleLoadingComplete = () => setAppState("gate")
+
+  const handleOpen = () => setAppState("open")
+
   return (
       <div
-        className={`relative min-h-screen overflow-hidden font-sans text-charcoal selection:bg-birch selection:text-nut ${
+        className={`relative min-h-screen overflow-x-hidden font-sans text-charcoal selection:bg-birch selection:text-nut ${
           enableDecor ? "bg-transparent" : "bg-[#E2CBAE]"
         }`}
       >
@@ -57,29 +67,39 @@ export default function Home() {
               noiseIntensity={0.8}
               rotation={0.3}
             />
+            <div className="site-vignette absolute inset-0" aria-hidden />
           </div>
         )}
 
-        <main className="relative w-full h-full">
-          <div className="relative z-10">
+        {appState === "loading" && <LoadingScreen onComplete={handleLoadingComplete} />}
+        {appState !== "open" && <InvitationGate visible={appState === "gate"} onOpen={handleOpen} />}
+
+        {appState === "open" && (
+          <>
             <Navbar />
-            {/* Spacer so content starts below fixed navbar (h-12 sm:h-14 md:h-16) */}
-            <div className="h-12 sm:h-14 md:h-16" aria-hidden />
-            <MainHero />
-            <Welcome />             
-            <Countdown />
- {/*  */}
-            <Entourage />
-            <Details />
-            <GuestList />
-            <BookOfGuests /> 
-            <Messages />
-            <FAQ />
-            {/* <Registry /> */}
-            <SnapShare />
-            <Footer />
-          </div>
-        </main>
+            <main className="relative w-full min-h-screen animate-in fade-in duration-700">
+              <div className="relative z-10">
+                {/* Spacer for fixed navbar + safe area */}
+                <div
+                  className="h-[calc(3rem+env(safe-area-inset-top,0px))] sm:h-[calc(3.5rem+env(safe-area-inset-top,0px))] md:h-[calc(4rem+env(safe-area-inset-top,0px))]"
+                  aria-hidden
+                />
+                <MainHero />
+              <Welcome />
+              <Countdown />
+              <Entourage />
+              <Details />
+              <GuestList />
+              <BookOfGuests />
+              <Messages />
+              <FAQ />
+              {/* <Registry /> */}
+              <SnapShare />
+              <Footer />
+            </div>
+          </main>
+          </>
+        )}
       </div>
   )
 }

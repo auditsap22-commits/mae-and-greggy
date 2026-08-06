@@ -65,7 +65,7 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
     },
     {
       question: "Where will the ceremony and reception take place?",
-      answer: `The ceremony and reception will be held at ${siteConfig.ceremony.location}, ${siteConfig.ceremony.venue}. You can find detailed directions, addresses, and maps in the Details Section above`,
+      answer: `Ceremony: ${siteConfig.ceremony.location}, ${siteConfig.ceremony.venue}.\n\nReception: ${siteConfig.reception.location}, ${siteConfig.reception.venue}.\n\nYou can find detailed directions, addresses, and maps in the Details section above.`,
     },
     {
       question: "How do I RSVP?",

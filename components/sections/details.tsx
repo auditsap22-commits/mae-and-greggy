@@ -49,6 +49,41 @@ const INNER_CARD_CLASS =
 const INNER_BOX_CLASS =
   "rounded-xl bg-[#F5EDE0]/60 border border-[#BB8A3D]/25 p-3 sm:p-4 md:p-5"
 
+const ATTIRE_PALETTE = [
+  { name: "champagne", color: "#e3ccb2" },
+  { name: "gold", color: "#b48c41" },
+  { name: "ivory", color: "#f2eee7" },
+  { name: "cream", color: "#f5f4f0" },
+  { name: "taupe", color: "#c5b9ad" },
+  { name: "beige", color: "#eadfd4" },
+] as const
+
+function AttireColorPalette() {
+  return (
+    <div className="mx-auto max-w-2xl">
+      <p
+        className={`${cinzel.className} mb-5 text-center text-xs tracking-[0.32em] uppercase sm:mb-6 sm:text-sm ${invitationText.heading}`}
+      >
+        Color Palette
+      </p>
+      <ul className="flex flex-wrap items-end justify-center gap-x-3 gap-y-5 sm:gap-x-5 md:gap-x-6">
+        {ATTIRE_PALETTE.map(({ name, color }) => (
+          <li key={name} className="flex flex-col items-center gap-2">
+            <div
+              className="h-[3.25rem] w-[3.25rem] rounded-full border border-[#BB8A3D]/25 shadow-[0_2px_8px_rgba(107,83,53,0.12)] sm:h-[3.75rem] sm:w-[3.75rem] md:h-16 md:w-16"
+              style={{ backgroundColor: color }}
+              aria-hidden
+            />
+            <span className={`${cormorant.className} text-xs italic capitalize sm:text-sm ${invitationText.body}`}>
+              {name}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 const BTN_PRIMARY =
   "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2 sm:py-2.5 md:py-3 bg-[#BB8A3D] hover:bg-[#A67A35] text-[#FDFBF7] rounded-lg font-[family-name:var(--font-crimson)] font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_16px_rgba(139,111,71,0.2)]"
 
@@ -441,21 +476,14 @@ export function Details() {
 
       <div className={INNER_CARD_CLASS}>
           <div className="space-y-6 px-4 py-5 sm:space-y-8 sm:px-6 sm:py-7 md:px-8">
+            <AttireColorPalette />
+
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
               <div>
                 <h4 className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
                   Principal Sponsors
                 </h4>
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#BB8A3D]/25 sm:rounded-xl">
-                  <Image
-                    src="/Details/sponsors.png"
-                    alt="Principal sponsors attire guide"
-                    fill
-                    className="object-contain bg-[#FFF7F6]/50 p-2 sm:p-3"
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                  />
-                </div>
-                <div className={`${INNER_BOX_CLASS} mt-3 px-3 py-3 sm:mt-4 sm:px-4 sm:py-3.5`}>
+                <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
                   <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base ${invitationText.body}`}>
                     Ninang in beige or champagne dress. Ninong in Classic Barong Tagalog with white undershirt{" "}
                     <NameConnector size="sm">and</NameConnector>{" "}
@@ -468,18 +496,9 @@ export function Details() {
                 <h4 className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
                   Guests
                 </h4>
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#BB8A3D]/25 sm:rounded-xl">
-                  <Image
-                    src="/Details/debutAttire.png"
-                    alt="Guest attire guide"
-                    fill
-                    className="object-contain bg-[#FFF7F6]/50 p-2 sm:p-3"
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                  />
-                </div>
-                <div className={`${INNER_BOX_CLASS} mt-3 px-3 py-3 sm:mt-4 sm:px-4 sm:py-3.5`}>
+                <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
                   <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base ${invitationText.body}`}>
-                    Semi-formal attire. Ladies: dress with comfortable footwear. Gentlemen: long sleeves or polo with pants—no denim or open-toe shoes.
+                    Semi-formal attire in any shade from our color palette above. Ladies: dress with comfortable footwear. Gentlemen: long sleeves or polo with pants—no denim or open-toe shoes.
                   </p>
                 </div>
               </div>

@@ -6,10 +6,10 @@ import {
 export const siteConfig = {
   couple: {
     bride: "Ruby Mae G. Vergara", //Noenyl Bryle M. Gonzaga
-    brideNickname: "Mae", //Ltryl
+    brideNickname: "Khey", //Khey
     groom: "Khey Greggy P. Moyani",
-    groomNickname: "Greggy",
-    monogram:"/monogram/monogram.png" ,//Ltryl
+    groomNickname: "Ruby",
+    monogram:"/monogram/new-monogram.png" ,//Ltryl
     backgroundMusic:"/background_music/Haley Reinhart - Can't Help Falling In Love (Official Audio).mp3"
   },
   googleAPI:{
@@ -67,7 +67,7 @@ export const siteConfig = {
   },
   ceremony: {
     location: "Lupit Church",
-    venue: "Lizares St, Bacolod, 6100 Negros Occidental",
+    venue: "Lizares Ave, Bacolod City, Negros Occidental 6100 Philippines",
     map: "https://share.google/tSCddmm4PVDBL0Pzx",
     date: "September 14, 2026",
     day: "Monday",
