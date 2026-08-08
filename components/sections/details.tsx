@@ -527,6 +527,31 @@ export function Details() {
             <div className="border-t border-[#BB8A3D]/20 pt-6 sm:pt-8">
               <div className="mb-4 flex flex-col items-center sm:mb-5">
                 <p className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
+                  Reminders
+                </p>
+              </div>
+              <div className={`${INNER_BOX_CLASS} space-y-4 px-3 py-4 sm:space-y-5 sm:px-4 sm:py-5`}>
+                <p className={`text-center font-[family-name:var(--font-safira-march)] text-[1.05rem] leading-none tracking-[0.01em] sm:text-[1.2rem] md:text-[1.35rem] ${invitationText.heading}`}>
+                  Can I bring someone?
+                </p>
+                <div className={`${cinzel.className} space-y-3 text-left text-[0.65rem] leading-relaxed tracking-[0.08em] uppercase sm:text-xs sm:leading-relaxed md:text-sm ${invitationText.body}`}>
+                  <p>
+                    Unfortunately, due to space and seating constraints, we kindly ask for your understanding that we cannot accommodate our lovely guest to bring a guest of their own.
+                  </p>
+                  <p>
+                    Therefore, we request our guest not to bring plus one, unless they are specifically named on the invitation.
+                  </p>
+                  <p>Thank you so much for understanding!</p>
+                </div>
+                <p className={`${cormorant.className} text-center text-xs italic leading-relaxed sm:text-sm md:text-base ${invitationText.muted}`}>
+                  &quot;When the time is right, I, the Lord, will make it happen.&quot;
+                </p>
+              </div>
+            </div>
+
+            <div className="border-t border-[#BB8A3D]/20 pt-6 sm:pt-8">
+              <div className="mb-4 flex flex-col items-center sm:mb-5">
+                <p className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
                   Friendly Reminder
                 </p>
                 <Image

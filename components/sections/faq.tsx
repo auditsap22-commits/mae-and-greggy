@@ -109,6 +109,11 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
       ),
     },
     {
+      question: "Can I bring someone?",
+      answer:
+        "Unfortunately, due to space and seating constraints, we kindly ask for your understanding that we cannot accommodate our lovely guest to bring a guest of their own.\n\nTherefore, we request our guest not to bring plus one, unless they are specifically named on the invitation.\n\nThank you so much for understanding!",
+    },
+    {
       question: "Can I sit anywhere at the reception?",
       answer:
         "Please don't. We kindly ask our guests to follow the seating arrangement prepared for the reception.\n\nA great deal of thought and care went into planning the seating so that everyone will feel comfortable and be seated with friends, family, or guests who share similar connections. Each seat was thoughtfully arranged with every guest in mind. Our reception team will gladly assist you in finding your assigned table.",
