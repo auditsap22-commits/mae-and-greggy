@@ -497,7 +497,7 @@ export function Details() {
                 </h4>
                 <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
                   <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base ${invitationText.body}`}>
-                    Semi-formal attire in any shade from our color palette above. Ladies: dress with comfortable footwear. Gentlemen: long sleeves or polo with pants—no denim or open-toe shoes.
+                    Semi-formal attire in any shade from our color palette above. Ladies: should wear long satin dress. Gentlemen: should wear long sleeves or collared shirt—strictly no denim or open-toe shoes.
                   </p>
                 </div>
               </div>
