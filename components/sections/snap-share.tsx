@@ -200,7 +200,7 @@ export function SnapShare() {
             </div>
 
             <h2
-              className={`flex flex-col items-center gap-2 px-2 font-[family-name:var(--font-safira-march)] text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:gap-2.5 sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
+              className={`flex flex-col items-center gap-2 px-2 font-[family-name:var(--font-safira-march)] text-[clamp(1.1rem,4.6vw,1.45rem)] leading-none tracking-[0.015em] sm:gap-2.5 sm:text-[1.5rem] sm:tracking-[0.01em] md:text-[2.1rem] lg:text-[2.65rem] ${invitationText.heading}`}
             >
               <span className="block">Capture</span>
               <span className="inline-flex flex-wrap items-baseline justify-center gap-y-1.5">

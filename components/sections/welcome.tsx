@@ -54,7 +54,7 @@ export function Welcome() {
               </div>
 
               <h2
-                className={`mx-auto flex max-w-[14rem] flex-col items-center gap-3 px-1 font-[family-name:var(--font-safira-march)] text-[1.05rem] leading-none tracking-[0.015em] sm:max-w-[22rem] sm:gap-2 sm:px-0 sm:text-[1.85rem] sm:tracking-[0.01em] md:max-w-none md:gap-2.5 md:text-[2.65rem] lg:text-[3.35rem] xl:text-[4rem] ${invitationText.heading}`}
+                className={`mx-auto flex max-w-[14rem] flex-col items-center gap-3 px-1 font-[family-name:var(--font-safira-march)] text-[0.95rem] leading-none tracking-[0.015em] sm:max-w-[22rem] sm:gap-2 sm:px-0 sm:text-[1.5rem] sm:tracking-[0.01em] md:max-w-none md:gap-2.5 md:text-[2.1rem] lg:text-[2.65rem] xl:text-[3.2rem] ${invitationText.heading}`}
               >
                 <span className="block">Welcome to our</span>
                 <span className="block">forever</span>

@@ -46,6 +46,7 @@ export function CoupleNames({
   className = coupleNameTextClass,
   connectorClassName = "",
   layout = "inline",
+  nameOrder = "groom-first",
 }: {
   groomName: string
   brideName: string
@@ -53,17 +54,21 @@ export function CoupleNames({
   className?: string
   connectorClassName?: string
   layout?: "inline" | "stacked"
+  nameOrder?: "groom-first" | "bride-first"
 }) {
   if (layout === "stacked") {
+    const [firstName, secondName] =
+      nameOrder === "bride-first" ? [brideName, groomName] : [groomName, brideName]
+
     return (
       <div
         className={`flex flex-col items-center gap-y-2 px-2 sm:gap-y-2.5 sm:px-3 md:gap-y-3 ${className}`}
       >
-        <StyledName name={groomName} />
+        <StyledName name={firstName} />
         <NameConnector stacked className={connectorClassName}>
           {connector}
         </NameConnector>
-        <StyledName name={brideName} />
+        <StyledName name={secondName} />
       </div>
     )
   }

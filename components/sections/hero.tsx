@@ -70,15 +70,16 @@ export function Hero() {
           <p
             className={`${cormorant.className} mx-auto max-w-xs px-2 text-[0.75rem] italic leading-relaxed sm:text-sm md:text-base ${invitationText.muted}`}
           >
-            By the grace of God and with the blessing of our parents
+            By the grace of God and with the blessings of our dear parents
           </p>
 
           <div className="py-1 sm:py-1.5">
             <CoupleNames
-              groomName={brideName}
-              brideName={groomName}
+              groomName={groomName}
+              brideName={brideName}
               connector="and"
               layout="stacked"
+              nameOrder="groom-first"
               className={heroNameClass}
             />
           </div>

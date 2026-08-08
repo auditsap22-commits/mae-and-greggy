@@ -124,9 +124,6 @@ const ROLE_CATEGORY_ORDER = [
 /** Categories with dedicated combined layouts below — not the default single-title block. */
 const HIDDEN_ROLE_CATEGORIES = new Set<string>([
   "Matron of Honor",
-  "Ring Bearer",
-  "Bible Bearer",
-  "Coin Bearer",
 ])
 
 function normalizeRoleCategory(category: string): string {
@@ -137,12 +134,18 @@ function normalizeRoleCategory(category: string): string {
   return normalized
 }
 
+const ROMAN_NUMERAL_WORD = /^(i{1,3}|iv|vi{0,3}|ix|xi{0,3}|xiv|xvi{0,3}|xix|xx)$/i
+
 /** Title case per word; uses Unicode letters so ñe → Ñe (not ñE from ASCII-only `/\b\w/g`). */
 function toTitleCaseDisplayName(name: string): string {
   const lower = name.toLocaleLowerCase("es")
-  return lower.replace(
+  const titleCased = lower.replace(
     /(^|[\s'\-])(\p{L})/gu,
     (_, sep: string, letter: string) => sep + letter.toLocaleUpperCase("es")
+  )
+
+  return titleCased.replace(/\b(\p{L}+)\b/gu, (word) =>
+    ROMAN_NUMERAL_WORD.test(word) ? word.toUpperCase() : word
   )
 }
 
@@ -485,17 +488,17 @@ export function Entourage() {
               <div key="TheCouple">
                 <TwoColumnLayout singleTitle="The Couple" centerContent={true}>
                   <div className="px-1.5 sm:px-2 md:px-2.5">
-                    <NameItem member={coupleGroom} align="right" />
+                    <NameItem member={coupleBride} align="right" />
                   </div>
                   <div className="px-1.5 sm:px-2 md:px-2.5">
-                    <NameItem member={coupleBride} align="left" />
+                    <NameItem member={coupleGroom} align="left" />
                   </div>
                 </TwoColumnLayout>
               </div>
 
               {hasParentsSection && (
                 <div key="Parents">
-                  <TwoColumnLayout leftTitle="Groom’s Parents" rightTitle="Bride’s Parents">
+                  <TwoColumnLayout leftTitle="Bride’s Parents" rightTitle="Groom’s Parents">
                     {(() => {
                       const maxLen = Math.max(parentsGroom.length, parentsBride.length)
                       const rows = []

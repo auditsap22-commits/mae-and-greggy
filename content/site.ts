@@ -6,9 +6,9 @@ import {
 export const siteConfig = {
   couple: {
     bride: "Ruby Mae G. Vergara", //Noenyl Bryle M. Gonzaga
-    brideNickname: "Khey", //Khey
+    brideNickname: "Ruby", //Khey
     groom: "Khey Greggy P. Moyani",
-    groomNickname: "Ruby",
+    groomNickname: "Khey",
     monogram:"/monogram/new-monogram.png" ,//Ltryl
     backgroundMusic:"/background_music/Haley Reinhart - Can't Help Falling In Love (Official Audio).mp3"
   },

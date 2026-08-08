@@ -54,7 +54,6 @@ const ATTIRE_PALETTE = [
   { name: "gold", color: "#b48c41" },
   { name: "ivory", color: "#f2eee7" },
   { name: "cream", color: "#f5f4f0" },
-  { name: "taupe", color: "#c5b9ad" },
   { name: "beige", color: "#eadfd4" },
 ] as const
 

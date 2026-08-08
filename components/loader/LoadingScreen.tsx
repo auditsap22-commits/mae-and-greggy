@@ -188,10 +188,11 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
         <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-5 text-center sm:px-8">
           <div className={vis(2)} role="heading" aria-level={1} style={{ transitionDelay: "60ms" }}>
             <CoupleNames
-              groomName={siteConfig.couple.brideNickname.trim()}
-              brideName={siteConfig.couple.groomNickname.trim()}
+              groomName={siteConfig.couple.groomNickname.trim()}
+              brideName={siteConfig.couple.brideNickname.trim()}
               connector="and"
               layout="stacked"
+              nameOrder="groom-first"
               className={loaderNameClass}
               connectorClassName="text-[var(--color-motif-accent)] opacity-90"
             />
