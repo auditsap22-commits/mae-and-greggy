@@ -559,9 +559,9 @@ html {
 }
 
 .hero-invitation__corner {
-  width: 40%;
-  min-width: 96px;
-  max-width: 172px;
+  width: 30%;
+  min-width: 72px;
+  max-width: 118px;
   height: auto;
 }
 
@@ -583,7 +583,7 @@ html {
 }
 
 .hero-invitation__content {
-  padding: 0.4rem 0.15rem;
+  padding: 0.75rem 0.5rem 0.4rem;
 }
 
 @media (min-width: 640px) {
@@ -592,6 +592,8 @@ html {
   }
 
   .hero-invitation__corner {
+    width: 40%;
+    min-width: 96px;
     max-width: 195px;
   }
 

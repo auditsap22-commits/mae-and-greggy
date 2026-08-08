@@ -109,9 +109,9 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
       ),
     },
     {
-      question: "Can I bring someone?",
+      question: "Can I bring children or tag along someone?",
       answer:
-        "Unfortunately, due to space and seating constraints, we kindly ask for your understanding that we cannot accommodate our lovely guest to bring a guest of their own.\n\nTherefore, we request our guest not to bring plus one, unless they are specifically named on the invitation.\n\nThank you so much for understanding!",
+        "Unfortunately, due to space and seating constraints, we kindly ask for your understanding that we cannot accommodate our lovely guest to bring a guest of their own.\n\nTherefore, we request our guest not to bring plus one, unless they are specifically named on the invitation.\n\nWe adore your little ones — truly. However, we have lovingly planned this as an adults-only celebration so that every guest, including you, can fully relax, enjoy the program, and be present in the moment. We kindly ask that you make childcare arrangements for the day.\n\nThank you so much for understanding!",
     },
     {
       question: "Can I sit anywhere at the reception?",
@@ -147,11 +147,6 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
       question: "When is the appropriate time to leave?",
       answer:
         "It took us some time to plan for a heartfelt wedding that everyone would hopefully enjoy. We humbly request that you celebrate with us until the program ends. Let's laugh, take pictures, sing, and have fun!",
-    },
-    {
-      question: "Can I bring my children to the wedding?",
-      answer:
-        "We adore your little ones — truly. However, we have lovingly planned this as an adults-only celebration so that every guest, including you, can fully relax, enjoy the program, and be present in the moment.\n\nWe kindly ask that you make childcare arrangements for the day. We hope you understand, and we are so grateful that you are celebrating this milestone with us.",
     },
     {
       question: "How can I help the couple have a great time during their wedding?",

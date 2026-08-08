@@ -185,13 +185,13 @@ export function Details() {
     >
       <InvitationCard
         decorations={CORNER_DECORATIONS}
-        className="w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px]"
+        className="w-full max-w-[440px] md:max-w-[500px] lg:max-w-[540px] [&_.hero-invitation__content]:px-3 [&_.hero-invitation__content]:pt-10 sm:[&_.hero-invitation__content]:px-4 sm:[&_.hero-invitation__content]:pt-8 md:[&_.hero-invitation__content]:pt-6"
       >
         <div className="space-y-8 sm:space-y-10 md:space-y-12">
       {/* Header */}
-      <div className="flex flex-col items-center gap-3 text-center sm:gap-4 md:gap-5">
+      <div className="flex flex-col items-center gap-3 px-6 text-center sm:gap-4 sm:px-8 md:gap-5 md:px-10">
         <p
-          className={`${cormorant.className} inline-flex flex-wrap items-baseline justify-center gap-y-1 text-[0.7rem] uppercase tracking-[0.28em] sm:text-xs md:text-sm ${invitationText.accent}`}
+          className={`${cormorant.className} inline-flex max-w-[14rem] flex-wrap items-baseline justify-center gap-y-1 text-[0.65rem] uppercase tracking-[0.16em] sm:max-w-none sm:text-[0.7rem] sm:tracking-[0.28em] md:text-sm ${invitationText.accent}`}
         >
           <CoupleNameInline />
         </p>
@@ -206,9 +206,10 @@ export function Details() {
         </div>
 
         <h2
-          className={`font-[family-name:var(--font-safira-march)] px-2 text-[clamp(1.4rem,5.8vw,1.8rem)] leading-none tracking-[0.015em] sm:text-[2.25rem] sm:tracking-[0.01em] md:text-[2.85rem] lg:text-[3.35rem] ${invitationText.heading}`}
+          className={`flex flex-col items-center gap-1 font-[family-name:var(--font-safira-march)] px-2 text-[clamp(1rem,4.2vw,1.35rem)] leading-[1.25] tracking-[0.015em] sm:text-[1.5rem] sm:leading-none sm:tracking-[0.01em] md:text-[2.1rem] lg:text-[2.65rem] ${invitationText.heading}`}
         >
-          Event Details
+          <span className="block">Event</span>
+          <span className="block">Details</span>
         </h2>
 
         <p
@@ -256,17 +257,17 @@ export function Details() {
                 </p>
 
                 <div className="mb-2 sm:mb-4">
-                  <p className={`${cinzel.className} text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-none ${invitationText.accent}`}>
+                  <p className={`${cinzel.className} text-lg leading-none sm:text-2xl md:text-3xl lg:text-4xl ${invitationText.accent}`}>
                   {new Date(siteConfig.ceremony.date).toLocaleString('default', { month: 'long' })}
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-7">
-                  <p className={`${cinzel.className} text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal leading-none ${invitationText.heading}`}>
+                <div className="flex items-center justify-center gap-1.5 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-7">
+                  <p className={`${cinzel.className} text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal leading-none ${invitationText.heading}`}>
                   {new Date(siteConfig.ceremony.date).getDate()}
                   </p>
-                  <div className="h-10 sm:h-12 md:h-16 lg:h-20 w-[2px] bg-gradient-to-b from-[#BB8A3D]/30 via-[#BB8A3D]/70 to-[#BB8A3D]/30" />
-                  <p className={`${cinzel.className} text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light leading-none ${invitationText.heading}`}>
+                  <div className="h-8 sm:h-12 md:h-16 lg:h-20 w-[2px] bg-gradient-to-b from-[#BB8A3D]/30 via-[#BB8A3D]/70 to-[#BB8A3D]/30" />
+                  <p className={`${cinzel.className} text-lg sm:text-2xl md:text-3xl lg:text-4xl font-light leading-none ${invitationText.heading}`}>
                   {new Date(siteConfig.ceremony.date).getFullYear()}
                   </p>
                 </div>
@@ -468,7 +469,7 @@ export function Details() {
         <div className="mb-4 flex items-center justify-center sm:mb-5">
           <Shirt className={`h-5 w-5 sm:h-6 sm:w-6 ${invitationText.accent}`} aria-hidden />
         </div>
-        <h3 className={`font-[family-name:var(--font-safira-march)] text-[1.2rem] leading-none tracking-[0.01em] sm:text-[1.45rem] md:text-[1.65rem] ${invitationText.heading}`}>
+        <h3 className={`px-4 font-[family-name:var(--font-safira-march)] text-[1.05rem] leading-[1.2] tracking-[0.01em] sm:text-[1.45rem] sm:leading-none md:text-[1.65rem] ${invitationText.heading}`}>
           Attire Guide
         </h3>
       </div>
@@ -479,7 +480,7 @@ export function Details() {
 
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
               <div>
-                <h4 className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
+                <h4 className={`mb-3 px-2 text-center font-[family-name:var(--font-safira-march)] text-[0.95rem] leading-[1.2] tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] sm:leading-none md:text-[1.3rem] ${invitationText.heading}`}>
                   Principal Sponsors
                 </h4>
                 <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
@@ -492,7 +493,7 @@ export function Details() {
               </div>
 
               <div>
-                <h4 className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
+                <h4 className={`mb-3 px-2 text-center font-[family-name:var(--font-safira-march)] text-[0.95rem] leading-[1.2] tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] sm:leading-none md:text-[1.3rem] ${invitationText.heading}`}>
                   Guests
                 </h4>
                 <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
@@ -505,7 +506,7 @@ export function Details() {
 
             <div className="border-t border-[#BB8A3D]/20 pt-6 sm:pt-8">
               <div className="mb-4 flex flex-col items-center sm:mb-5">
-                <p className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
+                <p className={`mb-3 px-2 text-center font-[family-name:var(--font-safira-march)] text-[0.95rem] leading-[1.2] tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] sm:leading-none md:text-[1.3rem] ${invitationText.heading}`}>
                   Gift Guide
                 </p>
                 <Image
@@ -526,7 +527,7 @@ export function Details() {
 
             <div className="border-t border-[#BB8A3D]/20 pt-6 sm:pt-8">
               <div className="mb-4 flex flex-col items-center sm:mb-5">
-                <p className={`mb-3 text-center font-[family-name:var(--font-safira-march)] text-[1rem] leading-none tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] md:text-[1.3rem] ${invitationText.heading}`}>
+                <p className={`mb-3 px-2 text-center font-[family-name:var(--font-safira-march)] text-[0.95rem] leading-[1.2] tracking-[0.01em] sm:mb-4 sm:text-[1.15rem] sm:leading-none md:text-[1.3rem] ${invitationText.heading}`}>
                   Friendly Reminder
                 </p>
                 <Image
@@ -548,8 +549,10 @@ export function Details() {
                   </p>
                 </div>
                 <div className={`${INNER_BOX_CLASS} space-y-3 px-3 py-3 sm:space-y-4 sm:px-4 sm:py-3.5`}>
-                  <p className={`text-center font-[family-name:var(--font-safira-march)] text-[1.05rem] leading-none tracking-[0.01em] sm:text-[1.2rem] md:text-[1.35rem] ${invitationText.heading}`}>
-                    Can I bring someone?
+                  <p className={`mx-auto flex max-w-[12.5rem] flex-col items-center gap-2 px-1 text-center font-[family-name:var(--font-safira-march)] text-[0.78rem] leading-[1.35] tracking-[0.01em] sm:max-w-[16rem] sm:text-[0.95rem] sm:leading-snug md:max-w-none md:text-[1.1rem] ${invitationText.heading}`}>
+                    <span className="block">Can I bring children</span>
+                    <span className="block">or tag along</span>
+                    <span className="block">someone?</span>
                   </p>
                   <div className={`${cormorant.className} space-y-3 text-left text-sm leading-snug sm:text-base sm:leading-relaxed ${invitationText.body}`}>
                     <p>
@@ -557,6 +560,9 @@ export function Details() {
                     </p>
                     <p>
                       Therefore, we request our guest not to bring plus one, unless they are specifically named on the invitation.
+                    </p>
+                    <p>
+                      We adore your little ones — truly. However, we have lovingly planned this as an adults-only celebration so that every guest, including you, can fully relax, enjoy the program, and be present in the moment. We kindly ask that you make childcare arrangements for the day.
                     </p>
                     <p>Thank you so much for understanding!</p>
                   </div>
