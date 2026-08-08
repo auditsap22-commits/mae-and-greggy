@@ -87,7 +87,7 @@ export function Hero() {
           <p
             className={`${cormorant.className} mx-auto max-w-xs px-2 text-[0.75rem] italic leading-relaxed sm:text-sm md:text-base ${invitationText.muted}`}
           >
-            Joyfully invite you to the celebration of their love and marriage
+            Joyfully invite you to the celebration of our love and marriage
           </p>
 
           <Divider />
