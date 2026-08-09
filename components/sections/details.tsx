@@ -65,15 +65,15 @@ function AttireColorPalette() {
       >
         Color Palette
       </p>
-      <ul className="flex flex-wrap items-end justify-center gap-x-3 gap-y-5 sm:gap-x-5 md:gap-x-6">
+      <ul className="flex flex-nowrap items-end justify-center gap-x-1.5 sm:flex-wrap sm:gap-x-5 sm:gap-y-5 md:gap-x-6">
         {ATTIRE_PALETTE.map(({ name, color }) => (
-          <li key={name} className="flex flex-col items-center gap-2">
+          <li key={name} className="flex min-w-0 flex-1 flex-col items-center gap-1 sm:flex-none sm:gap-2">
             <div
-              className="h-[3.25rem] w-[3.25rem] rounded-full border border-[#BB8A3D]/25 shadow-[0_2px_8px_rgba(107,83,53,0.12)] sm:h-[3.75rem] sm:w-[3.75rem] md:h-16 md:w-16"
+              className="h-10 w-10 shrink-0 rounded-full border border-[#BB8A3D]/25 shadow-[0_2px_8px_rgba(107,83,53,0.12)] sm:h-[3.75rem] sm:w-[3.75rem] md:h-16 md:w-16"
               style={{ backgroundColor: color }}
               aria-hidden
             />
-            <span className={`${cormorant.className} text-xs italic capitalize sm:text-sm ${invitationText.body}`}>
+            <span className={`${cormorant.className} text-[0.625rem] leading-tight italic capitalize sm:text-sm ${invitationText.body}`}>
               {name}
             </span>
           </li>
@@ -485,7 +485,7 @@ export function Details() {
                 </h4>
                 <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
                   <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base ${invitationText.body}`}>
-                    Ninang in beige or champagne dress. Ninong in Classic Barong Tagalog with white undershirt{" "}
+                    Ninang in beige or champagne dress or gown. Ninong in Classic Barong Tagalog with white undershirt{" "}
                     <NameConnector size="sm">and</NameConnector>{" "}
                     black slacks.
                   </p>
@@ -498,7 +498,7 @@ export function Details() {
                 </h4>
                 <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
                   <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base ${invitationText.body}`}>
-                    Semi-formal attire in any shade from our color palette above. Ladies: should wear long satin dress. Gentlemen: should wear long sleeves or collared shirt—strictly no denim or open-toe shoes.
+                    Semi-formal attire in any shade from our color palette above. Ladies should wear long satin dress. Gentlemen should wear long sleeves or collared shirt—strictly no denim or open-toe shoes.
                   </p>
                 </div>
               </div>

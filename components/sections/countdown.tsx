@@ -194,12 +194,12 @@ export function Countdown() {
 
           {/* Header */}
           <div className="flex flex-col items-center gap-3 sm:gap-4 md:gap-5">
-            <CoupleNames
+            {/* <CoupleNames
               groomName={groomNickname}
               brideName={brideNickname}
               connector="and"
               className="font-[family-name:var(--font-safira-march)] text-[0.75rem] leading-none tracking-[0.04em] text-[#6B5335] sm:text-[0.8rem] sm:tracking-[0.05em] md:text-[0.85rem] lg:text-[0.9rem]"
-            />
+            /> */}
 
             <div
               className="flex w-full max-w-[12rem] items-center justify-center gap-2 sm:max-w-[14rem] md:max-w-[16rem]"
