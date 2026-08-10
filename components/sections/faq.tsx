@@ -68,6 +68,11 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
       answer: `Ceremony: ${siteConfig.ceremony.location}, ${siteConfig.ceremony.venue}.\n\nReception: ${siteConfig.reception.location}, ${siteConfig.reception.venue}.\n\nYou can find detailed directions, addresses, and maps in the Details section above.`,
     },
     {
+      question: "What should I wear?",
+      answer:
+        "Semi-formal attire in any shade from our color palette above. Ladies should wear long satin dresses. Gentlemen should wear long-sleeved or collared shirts paired with black or khaki pants — strictly no denim or open-toe shoes.",
+    },
+    {
       question: "How do I RSVP?",
       answer: (
         <>

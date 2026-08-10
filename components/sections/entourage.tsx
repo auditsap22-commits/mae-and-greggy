@@ -488,17 +488,17 @@ export function Entourage() {
               <div key="TheCouple">
                 <TwoColumnLayout singleTitle="The Couple" centerContent={true}>
                   <div className="px-1.5 sm:px-2 md:px-2.5">
-                    <NameItem member={coupleBride} align="right" />
+                    <NameItem member={coupleGroom} align="right" />
                   </div>
                   <div className="px-1.5 sm:px-2 md:px-2.5">
-                    <NameItem member={coupleGroom} align="left" />
+                    <NameItem member={coupleBride} align="left" />
                   </div>
                 </TwoColumnLayout>
               </div>
 
               {hasParentsSection && (
                 <div key="Parents">
-                  <TwoColumnLayout leftTitle="Bride’s Parents" rightTitle="Groom’s Parents">
+                  <TwoColumnLayout leftTitle="Groom's Parents" rightTitle="Bride's Parents">
                     {(() => {
                       const maxLen = Math.max(parentsGroom.length, parentsBride.length)
                       const rows = []

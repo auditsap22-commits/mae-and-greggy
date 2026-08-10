@@ -51,7 +51,7 @@ const INNER_BOX_CLASS =
 
 const ATTIRE_PALETTE = [
   { name: "champagne", color: "#e3ccb2" },
-  { name: "gold", color: "#b48c41" },
+  { name: "white", color: "#ffffff" },
   { name: "ivory", color: "#f2eee7" },
   { name: "cream", color: "#f5f4f0" },
   { name: "beige", color: "#eadfd4" },
@@ -498,7 +498,7 @@ export function Details() {
                 </h4>
                 <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
                   <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base ${invitationText.body}`}>
-                    Semi-formal attire in any shade from our color palette above. Ladies should wear long satin dress. Gentlemen should wear long sleeves or collared shirt—strictly no denim or open-toe shoes.
+                    Semi-formal attire in any shade from our color palette above. Ladies should wear long satin dresses. Gentlemen should wear long-sleeved or collared shirts paired with black or khaki pants — strictly no denim or open-toe shoes.
                   </p>
                 </div>
               </div>
@@ -540,36 +540,12 @@ export function Details() {
                   aria-hidden
                 />
               </div>
-              <div className="space-y-4 sm:space-y-5">
-                <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
-                  <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base sm:leading-relaxed ${invitationText.body}`}>
-                    We warmly invite you to capture special moments of our wedding. As the ceremony begins, we kindly ask that phones{" "}
-                    <NameConnector size="sm">and</NameConnector>{" "}
-                    cameras remain out of the aisle. Feel free to take photos discreetly from your seat, allowing our photographers to capture each moment without obstruction.
-                  </p>
-                </div>
-                <div className={`${INNER_BOX_CLASS} space-y-3 px-3 py-3 sm:space-y-4 sm:px-4 sm:py-3.5`}>
-                  <p className={`mx-auto flex max-w-[12.5rem] flex-col items-center gap-2 px-1 text-center font-[family-name:var(--font-safira-march)] text-[0.78rem] leading-[1.35] tracking-[0.01em] sm:max-w-[16rem] sm:text-[0.95rem] sm:leading-snug md:max-w-none md:text-[1.1rem] ${invitationText.heading}`}>
-                    <span className="block">Can I bring children</span>
-                    <span className="block">or tag along</span>
-                    <span className="block">someone?</span>
-                  </p>
-                  <div className={`${cormorant.className} space-y-3 text-left text-sm leading-snug sm:text-base sm:leading-relaxed ${invitationText.body}`}>
-                    <p>
-                      Unfortunately, due to space and seating constraints, we kindly ask for your understanding that we cannot accommodate our lovely guest to bring a guest of their own.
-                    </p>
-                    <p>
-                      Therefore, we request our guest not to bring plus one, unless they are specifically named on the invitation.
-                    </p>
-                    <p>
-                      We adore your little ones — truly. However, we have lovingly planned this as an adults-only celebration so that every guest, including you, can fully relax, enjoy the program, and be present in the moment. We kindly ask that you make childcare arrangements for the day.
-                    </p>
-                    <p>Thank you so much for understanding!</p>
-                  </div>
-                  <p className={`${cormorant.className} text-center text-xs italic leading-relaxed sm:text-sm md:text-base ${invitationText.muted}`}>
-                    &quot;When the time is right, I, the Lord, will make it happen.&quot;
-                  </p>
-                </div>
+              <div className={`${INNER_BOX_CLASS} px-3 py-3 sm:px-4 sm:py-3.5`}>
+                <p className={`${cormorant.className} text-left text-sm leading-snug sm:text-base sm:leading-relaxed ${invitationText.body}`}>
+                  We warmly invite you to capture special moments of our wedding. As the ceremony begins, we kindly ask that phones{" "}
+                  <NameConnector size="sm">and</NameConnector>{" "}
+                  cameras remain out of the aisle. Feel free to take photos discreetly from your seat, allowing our photographers to capture each moment without obstruction.
+                </p>
               </div>
             </div>
           </div>
