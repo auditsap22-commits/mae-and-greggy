@@ -177,9 +177,9 @@ export function Footer() {
               <p className={`${cormorant.className} mt-2 text-sm tracking-[0.08em] sm:mt-3 sm:text-base md:text-lg ${invitationText.body}`}>
                 {ceremonyDate}
               </p>
-              <p className={`${cormorant.className} mt-1 text-xs sm:text-sm md:text-base ${invitationText.muted}`}>
+              {/* <p className={`${cormorant.className} mt-1 text-xs sm:text-sm md:text-base ${invitationText.muted}`}>
                 {combinedVenue ?? ceremonyVenue}
-              </p>
+              </p> */}
             </div>
           </div>
 
